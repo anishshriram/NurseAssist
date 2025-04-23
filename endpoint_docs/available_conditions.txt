@@ -1,0 +1,1307 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]A
+     * [70]B
+     * [71]C
+     * [72]D
+     * [73]E
+     * [74]F
+     * [75]G
+     * [76]H
+     * [77]I
+     * [78]J
+     * [79]K
+     * [80]L
+     * [81]M
+     * [82]N
+     * [83]O
+     * [84]P
+     * [85]Q
+     * [86]R
+     * [87]S
+     * [88]T
+     * [89]U
+     * [90]V
+     * [91]W
+     * [92]Y
+     * [93]Z
+
+   [94]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Overview
+   [95]Medical Content
+   Conditions
+
+Available conditions
+
+   Check out the conditions available in our knowledge base. Every
+   condition has assigned both internal ID and ICD-10 code (if available).
+   Remember, that you can also download the current list of conditions
+   using the /concepts?types=condition endpoint.
+   ¹
+
+   Browse through all available conditions and symptoms
+
+   Conditions: [96]Adults -> [97]Pediatrics ->
+
+   Symptoms: [98]Adults -> [99]Pediatrics ->
+
+   Risk factors: [100]Adults -> [101]Pediatrics ->
+
+A
+
+     * Abdominal aortic aneurysm (c_764, I71.4)
+     * Abdominal aortic dissection (c_885, I71.0, I71.3, I71.4, I71.5,
+       I71.6, I71.8)
+     * Abdominal or pelvic mass (c_1585, R19.0)
+     * Abdominal pain, unspecified (c_969, R10.4)
+     * Abducens nerve palsy (c_547, H49.2)
+     * Abnormal vaginal bleeding in adolescence (c_1123, N92.1, N92.2,
+       N93.8)
+     * ACE inhibitor-induced cough (c_926, R05, T88.7, Y52.4)
+     * Acetaminophen poisoning (c_306, T39.1)
+     * Achalasia (c_1, K22.0)
+     * Achilles tendinitis (c_803, M76.6)
+     * Achilles tendon rupture (c_806, S86.1)
+     * Acne (c_111, L70.0, L70.1, L70.2, L70.3, L70.5, L70.8, L70.9,
+       L73.0)
+     * Acromegaly (c_163, E22.0)
+     * Actinic keratosis (c_1592, L57.0)
+     * Acute and transient psychotic disorder (c_1361, F23)
+     * Acute angle-closure glaucoma (c_996, H40.2)
+     * Acute anticholinergic syndrome (c_296, T44.3)
+     * Acute bacterial rhinosinusitis (c_1172, J01, J01.0, J01.1, J01.2,
+       J01.3, J01.4, J01.8, J01.9)
+     * Acute bronchitis (c_72, J20, J20.9, J68.0)
+     * Acute cannabinoid intoxication (c_1291, T40.7)
+     * Acute cholangitis (c_1303, K83.0)
+     * Acute cystitis (c_184, N30.0)
+     * Acute endometritis (c_1436, N71.0)
+     * Acute heart failure (c_1005, I50.9)
+     * Acute hepatitis B (c_478, B16, B16.9)
+     * Acute hepatitis C (c_1279, B17.1)
+     * Acute HIV infection (c_665, B23.0)
+     * Acute hypnotic toxicity (c_191, F13.0)
+     * Acute intestinal ischemia (c_697, K55.0)
+     * Acute laryngitis (c_123, J04.0)
+     * Acute liver failure (c_507, K72.0)
+     * Acute lower gastrointestinal hemorrhage (c_705, K62.5, K92.2)
+     * Acute lower limb ischemia (c_1097, I74.3)
+     * Acute lymphoblastic leukemia (c_70, C91.0)
+     * Acute mastoiditis (c_526, H70.0)
+     * Acute myeloid leukemia (c_71, C92.0)
+     * Acute opioid toxicity (c_193, T50.7)
+     * Acute otitis media (c_130, H66.0, H66.4, H66.9)
+     * Acute pancreatitis (c_73, K85)
+     * Acute porphyria (c_168, E80.2)
+     * Acute radiation cystitis (c_1596, N30.4)
+     * Acute rheumatic fever (c_331, I00, I01)
+     * Acute stimulant overdose (c_194, F15.0, F15.1, T43.6)
+     * Acute streptococcal pharyngitis (c_249, J02.0, J03.0)
+     * Acute stress reaction (c_1098, F43.0)
+     * Acute thyroiditis (c_430, E06.0)
+     * Acute upper gastrointestinal bleeding (c_703, K92.2)
+     * Acute upper limb ischemia (c_1099, I74.2)
+     * Acute urticaria (c_77, L50)
+     * Acute viral pharyngitis (c_121, J02, J02.8, J02.9, J03.8, J03.9)
+     * Acute viral rhinosinusitis (c_1166, J01, J01.0, J01.1, J01.2,
+       J01.3, J01.4, J01.8, J01.9)
+     * Addison's disease (c_57, E27.1)
+     * Adenomyosis (c_868, N80.0)
+     * Adenoviral enteritis (c_1298, A08.2)
+     * Adenoviral respiratory disease (c_1292, B34.0, B97.0, J12.0)
+     * Adhesive capsulitis of shoulder (c_947, M75.0)
+     * Adjustment disorder (c_270, F43.2)
+     * Adverse event following immunization (c_1217, T88.1)
+     * African trypanosomiasis (c_535, B56)
+     * Alcohol intoxication (c_667, T51.0)
+     * Alcohol use disorder (c_5, F10.2)
+     * Alcohol withdrawal syndrome (c_227, F10.3, F10.4)
+     * Alcohol-associated cirrhosis of the liver (c_1514, K70.2, K70.3)
+     * Alcohol-associated steatotic liver disease (c_1513, K70.0)
+     * Alcohol-induced mental and behavioral disorders (c_1626, F10.8,
+       F10.9)
+     * Alcoholic cerebellar degeneration (c_622, G31.2)
+     * Alcoholic hepatitis (c_1512, K70.1)
+     * Allergic bronchopulmonary aspergillosis (c_578, B44.1, B44.8,
+       B44.9)
+     * Allergic conjunctivitis (c_3, H10.1)
+     * Allergic reactions to insect bite or sting (c_1305, R21)
+     * Allergic rhinitis (c_4, J30.1, J30.2, J30.3, J30.4)
+     * Alopecia (c_802, L65.9)
+     * Alzheimer's disease (c_16, G30)
+     * Amebiasis (c_522, A06)
+     * American trypanosomiasis (c_243, B57)
+     * Ampullary cancer (c_874, C24.1)
+     * Amyloidosis (c_291, E85)
+     * Amyotrophic lateral sclerosis (c_396, G12.2)
+     * Anal cancer (c_276, C21)
+     * Anal fissure (c_275, K60)
+     * Anal fistula (c_866, K60.3)
+     * Anaphylaxis (c_700, T78.2)
+     * Anemia of chronic disease (c_372, D63)
+     * Angioedema (c_715, T78.3)
+     * Ankle contusion (c_1049, S90.0)
+     * Ankle joint dislocation (c_1026, S93.0)
+     * Ankle osteoarthritis (c_222, M19.0)
+     * Ankylosing spondylitis (c_149, M45)
+     * Anogenital warts (c_12, A63.0)
+     * Anorexia nervosa (c_7, F50.0, F50.1)
+     * Antibiotic associated diarrhea (c_708, K52.1)
+     * Antiphospholipid syndrome (c_198, D68.6)
+     * Aphthous stomatitis (c_1248, K12.0)
+     * Aplastic anemia (c_382, D61)
+     * Appendicitis (c_132, K35, K36, K37)
+     * Arginine vasopressin disorder (c_407, E23.2)
+     * Arm contusion (c_1039, S40.0)
+     * Ascariasis (c_289, B77)
+     * Asthma (c_8, J45, J45.0, J45.1, J45.8, J45.9)
+     * Asthma exacerbation (c_972, J45, J45.0, J45.1, J45.8, J45.9, J46)
+     * Atopic dermatitis (c_2, L20)
+     * Atrial fibrillation (c_48, I48)
+     * Atrophic vaginitis (c_928, N95.2)
+     * Attention deficit hyperactivity disorder, hyperactive type (c_1366,
+       F90, F90.0, F90.1, F90.8, F90.9)
+     * Attention deficit hyperactivity disorder, inattentive type (c_1365,
+       F90, F90.0)
+     * Atypical pneumonia (c_1118, J15.7, J16.0)
+     * Autism spectrum disorder (c_863, F84, F84.0, F84.1, F84.2, F84.3,
+       F84.4, F84.5, F84.8, F84.9)
+     * Autoimmune hepatitis (c_485, K75.4)
+     * Avoidant restrictive food intake disorder (c_1538, F50.8)
+
+B
+
+     * Back or pelvic contusion (c_1050, S30.0)
+     * Bacterial gastroenteritis (c_1077, A04, A04.9, A09, K52.8, K52.9)
+     * Bacterial meningitis (c_563, G00, G01)
+     * Bacterial vaginitis (c_128, N76.0)
+     * Baker's cyst (c_910, M71.2)
+     * Balanoposthitis (c_134, N48.1)
+     * Bartholin's abscess (c_751, N75.1)
+     * Bartholin's cyst (c_110, N75.0)
+     * Battered child syndrome (c_1178, T74, T74.1, Y07, Y07.1, Y07.2,
+       Y07.3, Y07.8, Y07.9)
+     * Beeturia (c_1205, R89.9)
+     * Behçet's disease (c_531, M35.2)
+     * Benign essential blepharospasm (c_1577, G24.5)
+     * Benign paroxysmal positional vertigo (c_871, H81.1)
+     * Benign prostatic hyperplasia (c_81, N40)
+     * Binge eating disorder (c_1325, F50.9)
+     * Bipolar disorder (c_273, F31)
+     * Bladder cancer (c_185, C67)
+     * Blepharitis (c_769, H01.0)
+     * Bloating after certain types of food (c_1242, R14)
+     * Blunt abdominal trauma (c_1095, S39.0, S39.6, S39.7, S39.8, S39.9)
+     * Botulism (c_432, A05.1)
+     * Brain abscess (c_680, A06.6, B43.1, G06.0)
+     * Brain tumor (c_333, C71, D33.0, D33.1, D33.2)
+     * Braincase fracture (c_1018, S02.0, S02.1, S02.7)
+     * Breast asymmetry in adolescence (c_1121, N64, N64.5, N64.9)
+     * Breast cancer (c_93, C50)
+     * Brucellosis (c_235, A23)
+     * Bruxism (c_999, F45.8, G47)
+     * Budd-Chiari syndrome (c_524, I82.0)
+     * Bulimia nervosa (c_14, F50.2, F50.3)
+     * Burn (c_845, T29, T30, T30.1, T30.2, T30.3, T30.4, T30.5, T30.6,
+       T30.7)
+     * Burnout (c_1362, Z73.0)
+     * Bursitis (c_712, M71.9)
+
+C
+
+     * Cannabinoid-induced mental and behavioral disorders (c_1637, F12.8,
+       F12.9)
+     * Carbon monoxide poisoning (c_161, T58, X47, X67, Y17)
+     * Carcinoid syndrome (c_415, E34.0)
+     * Cardiac syncope (c_1219, R55)
+     * Cardiac tamponade (c_649, I31.4, I31.9)
+     * Cardiac tumor (c_1624, C38.0, D15.1)
+     * Cardiogenic shock (c_677, R57.0)
+     * Carotid artery dissection (c_381, I72.0)
+     * Carpal tunnel syndrome (c_212, G56.0)
+     * Cat-scratch disease (c_242, A28.1)
+     * Cataract (c_176, H25, H26.0)
+     * Cauda equina syndrome (c_1126, G83.4)
+     * Cavernous sinus thrombosis (c_614, G08)
+     * Celiac disease (c_15, K90.0)
+     * Cellulitis (c_1421, L03)
+     * Cerebellar stroke (c_379, G46.4)
+     * Cerebellopontine angle syndrome (c_471, D43.1)
+     * Cervical acceleration-deceleration syndrome (c_899, S13.4)
+     * Cervical radiculopathy (c_1108, M54.1)
+     * Cervical strain (c_975, M43.6, S13.6)
+     * Cervical tumor (c_1672, C53, N84.1)
+     * Cervical vertebra fracture (c_1024, S12.0, S12.1, S12.2, S12.7,
+       S12.9)
+     * Cervicitis (c_129, N72)
+     * Chalazion (c_171, H00.1)
+     * Chemotherapy-induced peripheral neuropathy (c_1594, G62.0)
+     * Chickenpox (c_68, B01.9)
+     * Chikungunya virus infection (c_902, A92.0)
+     * Chlamydial genitourinary infection (c_1101, A56)
+     * Cholecystitis (c_215, K81.0)
+     * Cholecystolithiasis (c_38, K80.2)
+     * Choledocholithiasis (c_952, K80.5)
+     * Cholera (c_254, A00)
+     * Cholestasis of pregnancy (c_1071, O26.6)
+     * Cholesteatoma (c_1322, H71)
+     * Cholinergic crisis (c_187, T44.0, T44.1)
+     * Chronic constipation (c_674, K59.0)
+     * Chronic fatigue syndrome (c_668, F48.0, R53)
+     * Chronic heart failure (c_1003, I11.0, I50)
+     * Chronic heart failure exacerbation (c_1295, I50.9)
+     * Chronic HIV infection (c_1345, B20, B21, B22, B23, B24)
+     * Chronic intestinal ischemia (c_494, K55.1)
+     * Chronic kidney disease (c_180, N18)
+     * Chronic lymphocytic leukemia (c_82, C91.1)
+     * Chronic myelogenous leukemia (c_83, C92.1)
+     * Chronic obstructive pulmonary disease (c_76, J44, J44.8, J44.9)
+     * Chronic obstructive pulmonary disease exacerbation (c_973, J44.0,
+       J44.1)
+     * Chronic pancreatitis (c_86, K86.0, K86.1)
+     * Chronic sinusitis (c_269, J32, J32.1, J32.2, J32.3, J32.4, J32.8,
+       J32.9, J33, J33.9)
+     * Chronic tonsillitis (c_669, J35.0)
+     * Chronic urticaria (c_1112, L50)
+     * Chronic venous insufficiency (c_84, I87.2)
+     * Churg-Strauss syndrome (c_267, M30.1)
+     * Cirrhosis of the liver (c_503, K74.6)
+     * Clavicle fracture (c_1051, S42.0)
+     * Clostridium difficile-associated disease (c_704, A04.7)
+     * Cluster headaches (c_39, G44.0)
+     * Cold urticaria (c_837, L50.2)
+     * Colon cancer (c_90, C18, C78.5)
+     * Common cold (c_87, J00)
+     * Complicated ovarian cyst (c_1265, N83.2)
+     * Complication of chemotherapy (c_1588, T45.1)
+     * Compulsive sexual behaviour disorder (c_1548, F52.7)
+     * Concussion (c_672, S06.0)
+     * Conduct disorder (c_1170, F91, F91.0, F91.1, F91.2)
+     * Conjunctivitis (c_172, B30.1, B30.3, B30.8, B30.9, H10, H13.1,
+       H13.2)
+     * Conn's syndrome (c_449, E26.0)
+     * Constipation, unspecified (c_1246, K59.0)
+     * Contact dermatitis (c_670, L25)
+     * Contusion of lower leg (c_1443, S80.1, S89)
+     * Convergent strabismus (c_1639, H50.0)
+     * Corneal abrasion (c_174, S05.0)
+     * Corneal ulceration (c_175, H16.0)
+     * Corns and callosities (c_847, L84)
+     * Costochondritis (c_746, M94.0)
+     * Cough caused by airway irritants (c_1658, J68)
+     * Cough, unspecified (c_971, R05)
+     * COVID-19 (c_1105, B34.2, U07.1, U07.2)
+     * Crohn's disease (c_17, K50)
+     * Crohn's disease exacerbation (c_1208, K50, K50.8, K50.9)
+     * Cruciate ligament injury (c_811, S83.5)
+     * Cushing's syndrome (c_141, E24)
+     * Cutaneous cyst (c_820, L72.0)
+     * Cyclothymic disorder (c_1336, F34.0)
+     * Cystic fibrosis (c_188, E84)
+     * Cysticercosis (c_434, B69)
+
+D
+
+     * De Quervain syndrome (c_927, M65.4)
+     * De Quervain's thyroiditis (c_431, E06.1)
+     * Death cap poisoning (c_303, T62.0)
+     * Decompensated cirrhosis of liver (c_1486, K70.3, K74.6)
+     * Decompression sickness (c_891, T70.3)
+     * Decreased fetal movements (c_1415, O36.8)
+     * Deep vein thrombosis (c_148, I80.2)
+     * Degenerative disc disease of the cervical spine (c_576, M50.1,
+       M50.2, M50.3, M50.8, M50.9)
+     * Degenerative disc disease of the lumbar and sacral spine (c_30,
+       M51.1, M51.2, M51.3, M51.8, M51.9)
+     * Degenerative disc disease of the thoracic spine (c_577, M51.2,
+       M51.3, M51.8, M51.9)
+     * Dehydration (c_298, E86)
+     * Delayed onset muscle soreness (c_1204, M79.1)
+     * Delusional disorder (c_1359, F22, F22.0, F22.8, F22.9)
+     * Dementia (c_260, F02, F03)
+     * Demodicosis (c_1622, B88.0)
+     * Dengue fever (c_245, A97)
+     * Dental abscess (c_1260, K04.7)
+     * Dental caries (c_79, K02)
+     * Dental fluorosis (c_1197, K00.3)
+     * Dental pulp gangrene (c_146, K04.1)
+     * Dental trauma (c_963, S02.5, S03.2)
+     * Dentin hypersensitivity (c_1213, K03.8)
+     * Depersonalization-derealization disorder (c_754, F48.1)
+     * Depressed mood, unspecified (c_1467, F32.9)
+     * Depressive disorder (c_26, F32.0, F32.1, F32.2, F32.8, F32.9,
+       F33.0, F33.1, F33.2, F33.8, F33.9)
+     * Depressive disorder with psychotic features (c_318, F32.3, F33.3)
+     * Dermatomyositis (c_315, M33)
+     * Diabetes mellitus type 1 (c_404, E10)
+     * Diabetes mellitus type 2 (c_405, E11)
+     * Diabetic foot infection (c_1191, E11.5, E11.6)
+     * Diabetic ketoacidosis (c_634, E10.1, E11.1, E12.1, E13.1, E14.1,
+       E87.2)
+     * Diabetic nephropathy (c_753, N08.3)
+     * Diabetic neuropathy (c_439, E10.4, E11.4, E12.4, E13.4, E14.4,
+       G59.0, G63.2)
+     * Diabetic retinopathy (c_771, H36.0)
+     * Diarrhea, unspecified (c_965, K52.8, K52.9, R19.4)
+     * Dilated cardiomyopathy (c_759, I42.0)
+     * Disorder of the skin and subcutaneous tissue, unspecified (c_967,
+       L30.9, R23.8)
+     * Disulfiram-like reaction (c_190, F10.9)
+     * Divergent strabismus (c_1645, H50.1)
+     * Diverticulitis (c_186, K57)
+     * Diverticulosis (c_113, K57)
+     * Drug-induced liver injury (c_1516, K71)
+     * Dry eye disease (c_998, H04.1)
+     * Dysthymia (c_1335, F34.1)
+
+E
+
+     * Ear barotrauma (c_688, T70.0)
+     * Early Lyme disease (c_1323, A69.2)
+     * Earwax blockage (c_808, H61.2)
+     * Echinococcosis (c_435, B67)
+     * Eclampsia (c_985, O15)
+     * Ectopic pregnancy (c_627, O00)
+     * Edema in pregnancy (c_991, O12.0)
+     * Elbow contusion (c_1041, S50.0)
+     * Elbow dislocation (c_1025, S53.0, S53.1)
+     * Electrical injury (c_1109, T75.0, T75.4)
+     * Elevated mood, unspecified (c_1468, F39)
+     * Encephalitis (c_671, A83, A85, A86, B01.1, B02.0, G04.0)
+     * Endometrial polyp (c_940, N84.0)
+     * Endometrial tumor (c_88, C54.1)
+     * Endometriosis (c_31, N80)
+     * Enterobiasis (c_166, B80)
+     * Epicondylitis (c_894, M77.0, M77.1)
+     * Epiglottitis (c_1078, J05.1)
+     * Epilepsy (c_74, G40)
+     * Epilepsy with loss of consciousness (c_1075, G40.3, G40.4, G40.6)
+     * Epilepsy without loss of consciousness (c_1074, G40.0, G40.1,
+       G40.2, G40.7)
+     * Epistaxis (c_983, R04.0)
+     * Erectile dysfunction (c_1550, N48.4)
+     * Erysipelas (c_169, A46)
+     * Erythema nodosum (c_1224, L52)
+     * Erythroderma (c_1216, L53.9)
+     * Esophageal cancer (c_94, C15)
+     * Esophageal diverticula (c_496, K22.5, Q39.6)
+     * Essential thrombocytosis (c_421, D47.3)
+     * Essential tremor (c_29, G25.0)
+     * Exanthematic typhus (c_238, A75, A77.9)
+     * External ear injury (c_1054, S00.4, S01.3)
+     * Eye burn (c_1630, T26.6)
+     * Eyelid injury (c_1620, S00.1, S00.2)
+     * Eyelid myokymia (c_1574, H02.8)
+
+F
+
+     * Facial bones fracture (c_1015, S02)
+     * Facial contusion (c_1046, S00.8, S00.9)
+     * Facial nerve palsy (c_467, G51)
+     * Falls (c_1445, W01)
+     * Fasciolosis (c_426, B66.9)
+     * Fatigue (c_80, R53)
+     * Female orgasmic disorder (c_1553, F52.3)
+     * Femur fracture (c_1055, S72)
+     * Fetal alcohol syndrome (c_1167, P04.3, Q86.0)
+     * Fibroadenoma of breast (c_778, D24)
+     * Fibrocystic breasts (c_739, N60.1)
+     * Fibromyalgia (c_598, M79.7)
+     * Finger contusion (c_1044, S60.1)
+     * Finger dislocation (c_1029, S63.1)
+     * Finger fracture (c_1012, S62.6)
+     * First trimester pregnancy (c_1405, Z32.0)
+     * Flatfoot (c_814, M21.4)
+     * Folate-deficiency anemia (c_592, D52, D52.9, E53.8)
+     * Food allergy (c_832, T78.1)
+     * Food poisoning (c_138, A05)
+     * Foot bones fracture (c_1019, S92)
+     * Foot contusion (c_1056, S90.3)
+     * Foot osteoarthritis (c_223, M19)
+     * Forearm bones fracture (c_1057, S52)
+     * Forearm contusion (c_1035, S50.1, S50.7, S50.8, S50.9)
+     * Foreign body aspiration (c_887, T17)
+     * Foreign body in anus (c_1430, T18.5)
+     * Foreign body in ear (c_1187, T16)
+     * Foreign body in nose (c_1184, T17.0)
+     * Foreign body in vulva or vagina (c_1408, T19.2)
+     * Foreign body ingestion (c_1504, T18)
+     * Frostbite (c_842, T35)
+     * Frostnip (c_1485, T33)
+     * Functional dyspepsia (c_815, K30)
+     * Functional ovarian cyst (c_915, N83.0)
+     * Furuncles, carbuncles and cutaneous abscesses (c_723, H60.0, L02)
+
+G
+
+     * Gallbladder tumor (c_1518, C23)
+     * Gambling addiction (c_992, F63.0, Z72.6)
+     * Ganglion cyst (c_917, M67.4)
+     * Gastritis (c_515, K29.0, K29.1)
+     * Gastroesophageal reflux disease (c_101, K21)
+     * Gastrointestinal complaints after iron intake (c_1234, K92)
+     * Gender dysphoria (c_1539, F64)
+     * Generalized anxiety disorder (c_225, F41.1)
+     * Generalized neoplastic disease (c_1633, C80)
+     * Genital herpes (c_534, A60)
+     * Genital injury (c_960, S30.2, S38.0, S38.2)
+     * Geographic tongue (c_1210, K14.1)
+     * Gestational diabetes (c_532, O24)
+     * Giardiasis (c_165, A07.1)
+     * Gilbert's syndrome (c_34, E80.4)
+     * Gingivitis (c_120, K05)
+     * Gitelman syndrome (c_447, N25.8)
+     * Glomerulonephritis (c_374, N00, N01, N02, N03, N05)
+     * Glossitis (c_247, K14.0)
+     * Goiter (c_734, E04, E04.9)
+     * Gonorrhea (c_159, A54)
+     * Goodpasture's syndrome (c_464, M31.0)
+     * Gout (c_27, M10)
+     * Granuloma annulare (c_824, L92.0)
+     * Granulomatosis with polyangiitis (c_264, M31.3)
+     * Graves' disease (c_427, E05.0)
+     * Greater trochanteric pain syndrome (c_938, M70.6)
+     * Growing pains (c_1135, R29)
+     * Guillain-Barré syndrome (c_314, G61.0)
+     * Gynecomastia, unspecified (c_1181, N62)
+
+H
+
+     * Hallux valgus (c_1203, M20.1)
+     * Hand bones fracture (c_1016, S62)
+     * Hand foot and mouth disease (c_1087, B08.4)
+     * Hand osteoarthritis (c_219, M19)
+     * Hangover (c_137, F10.0)
+     * Harmful pattern of use of alcohol (c_1502, F10.1)
+     * Hashimoto's thyroiditis (c_428, E06.3)
+     * Hazardous alcohol use (c_1501, F10.8)
+     * Head or neck injury, unspecified location (c_1040, S09.9)
+     * Head or neck mass (c_1584, C76.0)
+     * Hearing loss, unspecified (c_1263, H91.0, H91.3, H91.8, H91.9)
+     * Heart valve disease (c_897, I05, I06, I07, I08, I09.8, I34, I35,
+       I36, I37)
+     * Heat and sun-related illness (c_424, T67)
+     * Heavy menstrual bleeding (c_1528, N92.0)
+     * Heavy metal poisoning (c_1202, T56, T56.0, T56.1, T56.3, T57.0)
+     * HELLP syndrome (c_986, O14.2)
+     * Hemochromatosis (c_328, E83.1)
+     * Hemolytic anemia (c_60, D55, D58, D59)
+     * Hemolytic crisis (c_1369, D55, D58, D59)
+     * Hemolytic-uremic syndrome (c_606, D59.3)
+     * Hemophagocytic lymphohistiocytosis (c_514, D76.1)
+     * Hemophilia (c_1145, D68)
+     * Hemorrhagic anemia (c_371, D62)
+     * Hemorrhagic stroke (c_709, I61, I61.9)
+     * Hemorrhoids (c_147, K64)
+     * Hepatic abscess (c_590, K75.0)
+     * Hepatic encephalopathy (c_443, K72)
+     * Hepatitis A (c_477, B15.9)
+     * Hepatitis E (c_1483, B17.2)
+     * Herbicide poisoning (c_294, T60.3)
+     * Herpangina (c_1183, B08.5)
+     * Herpetic gingivostomatitis (c_1293, B00.2)
+     * Heterochromia (c_1259, Q13.2)
+     * High altitude sickness (c_465, T70.2)
+     * Hip contusion (c_1047, S70.0)
+     * Hip dislocation (c_1031, S73.0)
+     * Hip osteoarthritis (c_221, M16)
+     * Hodgkin lymphoma (c_181, C81)
+     * Hookworm infection (c_290, B76)
+     * Hormonal IUD-related complications (c_1521, Z97.5)
+     * Horner's syndrome (c_287, G90.2)
+     * Human bite (c_1600, W50, Y04)
+     * Humerus fracture (c_1070, S42.2, S42.3, S42.4)
+     * Hydrocele testis (c_525, N43)
+     * Hydrocephalus (c_1496, G91)
+     * Hypercalcemia of malignancy (c_1589, E83.52)
+     * Hyperemesis gravidarum (c_921, O21.0, O21.1)
+     * Hyperparathyroidism (c_51, E21.0, E21.1, E21.2, E21.3)
+     * Hyperprolactinemia (c_920, E22.1)
+     * Hypertension (c_50, I10, I15)
+     * Hypertensive crisis (c_461, H35.0, I11.0, I12.0, I67.4)
+     * Hypertensive encephalopathy (c_462, I67.4)
+     * Hypertensive urgency (c_995, I10)
+     * Hyperthyroidism (c_52, E05)
+     * Hyperventilation syndrome (c_571, R06.4)
+     * Hypnic jerks (c_1243, G25.3)
+     * Hypoactive sexual desire disorder (c_1546, F52.0)
+     * Hypoparathyroidism (c_58, E20)
+     * Hypopituitarism (c_196, E23.0)
+     * Hypotension (c_35, I95.0)
+     * Hypothyroidism (c_59, E01, E02, E03, E03.9)
+     * Hypovolemic shock (c_956, R57.1)
+
+I
+
+     * Idiopathic pulmonary fibrosis (c_489, J84.1)
+     * IgA vasculitis (c_463, D69.0)
+     * Immune thrombocytopenia (c_628, D69.3)
+     * Impacted wisdom tooth (c_139, K01.1)
+     * Impetigo contagiosa (c_42, L01)
+     * Improper use of sleeping pills and sedatives (c_195, F13.1)
+     * Incarcerated inguinal hernia (c_551, K40.0, K40.1, K40.3, K40.4)
+     * Incomplete induced abortion (c_1566, O04.3, O04.4, O05.3, O05.4)
+     * Increased intracranial pressure (c_332, G93.2)
+     * Infection under plaster cast (c_1676, T84.7)
+     * Infectious arthritis (c_36, M00)
+     * Infectious mononucleosis (c_200, B27)
+     * Infective endocarditis (c_206, I33.0)
+     * Influenza (c_33, J09, J10, J11)
+     * Ingrown fingernail (c_836, L60.0)
+     * Ingrown toenail (c_978, L60.0)
+     * Inguinal hernia (c_550, K40.2, K40.9)
+     * Inhalation injury (c_1461, T27)
+     * Insecticide poisoning (c_295, T60.0, T60.1, T60.2)
+     * Insomnia (c_721, F51.0, G47.0)
+     * Insulinoma (c_408, C25.4, D13.7)
+     * Intercostal neuralgia (c_520, G58.0)
+     * Intestinal obstruction (c_694, K56)
+     * Intra-amniotic infection (c_990, O41)
+     * Intracranial hematoma (c_1319, I62.0, S06.4, S06.5)
+     * Iron deficiency anemia (c_62, D50, D50.8, D50.9)
+     * Irregular menstruation in adolescence (c_1124, N91, N91.3, N92.6)
+     * Irritable bowel syndrome (c_142, K58)
+     * Ischemic stroke (c_114, I63)
+
+J
+
+     * Japanese encephalitis (c_1288, A83.0)
+     * Joint pain, unspecified (c_1083, M25.5)
+     * Juvenile idiopathic arthritis (c_1565, M08)
+
+K
+
+     * Kawasaki disease (c_1132, M30.3)
+     * Keloid (c_1188, L91.0)
+     * Keratitis (c_892, H16, H19.1, H19.2, H19.3)
+     * Klüver-Bucy bitemporal syndrome (c_420, F07.0)
+     * Knee bursitis (c_720, M70.4, M70.5)
+     * Knee contusion (c_1442, S80.0)
+     * Knee dislocation (c_1030, S83.1)
+     * Knee osteoarthritis (c_220, M17)
+     * Korsakoff's syndrome (c_347, F10.6)
+
+L
+
+     * Labour (c_982, O80.9)
+     * Labyrinthitis (c_162, H83.0)
+     * Lactational mastitis (c_727, O91, O91.1, O91.2)
+     * Lactose intolerance (c_735, E73.0, E73.1, E73.8, E73.9)
+     * Laryngeal cancer (c_91, C32)
+     * Laryngopharyngeal reflux (c_1304, K21.9)
+     * Lassa fever (c_246, A96.2)
+     * Late Lyme disease (c_1328, A69.2, M01.2)
+     * Lateral medullary syndrome (c_553, G46.4, I66.3)
+     * Legionellosis (c_272, A48.1)
+     * Leptospirosis (c_256, A27)
+     * Leriche's syndrome (c_313, I74.0)
+     * Leukoplakia (c_841, K13.2)
+     * Limb injury, unspecified location (c_1053)
+     * Limbic encephalitis (c_585, G04.8, G04.9)
+     * Lip injury (c_1111, S00.5, S01.5)
+     * Lipoma (c_834, D17)
+     * Liver cancer (c_99, C22)
+     * Lochia (c_1555, O72)
+     * Loose plaster cast (c_1667, Z46.7)
+     * Lower limb injury, unspecified location (c_1038, T13.9)
+     * Lower limb pain, unspecified (c_1581, M79.6)
+     * Lower limb tumor (c_1609, C76.5)
+     * Lumbar vertebra fracture (c_1022, S32.0)
+     * Lumbosacral radiculopathy (c_1448, M54.5)
+     * Lung cancer (c_64, C34, C78.0)
+     * Lymphadenopathy of unknown origin (c_1593, R59)
+
+M
+
+     * Malaria (c_413, B50, B51, B52, B53, B54)
+     * Male orgasmic disorder (c_1552, F52.3)
+     * Malignant tumor of kidney (c_92, C64)
+     * Malignant tumor of stomach (c_66, C16)
+     * Malnutrition (c_1220, E40, E41, E42, E43, E44, E45, E46)
+     * Mandible fracture (c_1060, S02.6)
+     * Marine animal injury (c_1308, T63.5, T63.6, W56)
+     * Mastocytosis (c_513, Q82.2)
+     * Measles (c_286, B05)
+     * Mechanical back pain (c_981, M54, M54.5, M54.6, M54.8, M54.9)
+     * Median rhomboid glossitis (c_1275, K14.2)
+     * Mediastinal tumor (c_1634, C38.3)
+     * Medulloblastoma (c_620, C71)
+     * Melanoma (c_25, C43)
+     * Ménétrier's disease (c_164, K29)
+     * Ménière's disease (c_203, H81.0)
+     * Menopause (c_45, N95.1)
+     * Metabolic dysfunction-associated steatotic liver disease (c_644,
+       K76.0)
+     * Meteorosensitivity and meteoropathy (c_1236, T70, T70.8, T70.9)
+     * Methanol poisoning (c_619, T51.1)
+     * Microscopic polyangiitis (c_510, M31.7)
+     * Migraine (c_49, G43)
+     * Mild cognitive impairment (c_41, F06.7)
+     * Mild hypoglycemia (c_1257, E16.2)
+     * Minor eye injury (c_1641, S05)
+     * Minor head injury (c_984, S00, S01)
+     * Mixed connective tissue disease (c_511, M35.1)
+     * Molluscum contagiosum (c_1122, B08.1)
+     * Monkeypox (c_1296, B04)
+     * Mononeuritis multiplex (c_575, G58.7)
+     * Motion sickness (c_1231, T75.3)
+     * Multiple myeloma (c_179, C90.0)
+     * Multiple sclerosis (c_108, G35)
+     * Multisystem inflammatory syndrome in children (c_1156, U07.3,
+       U10.9)
+     * Mumps (c_192, B26)
+     * Muscular dystrophy (c_1139, G71.0)
+     * Myasthenia gravis (c_46, G70.0)
+     * Myelofibrosis (c_423, C94.4)
+     * Myocardial infarction (c_140, I21, I22)
+     * Myocarditis (c_210, I40)
+     * Myometrial tumor (c_1603, D25)
+
+N
+
+     * Nail injury (c_979, S60.1, S90.2)
+     * Narcolepsy (c_1230, G47.4)
+     * Nasal septum deviation (c_810, J34.2)
+     * Nasolacrimal duct obstruction (c_799, H04.5)
+     * Nausea and vomiting in pregnancy (c_710, O21.2, O21.8, O21.9)
+     * Neck contusion (c_1454, S10)
+     * Nephrolithiasis (c_37, N20, N20.0, N20.1, N20.2, N23)
+     * Nephrotic syndrome (c_265, N04)
+     * Neurasthenia (c_375, F48.0)
+     * Neuroborreliosis (c_1439, A69.2)
+     * Neuroleptic malignant syndrome (c_1612, G21.0)
+     * Neutropenic fever (c_1616, D70)
+     * Nicotine dependence (c_63, F17)
+     * Nipple changes due to breastfeeding (c_1476, O92.1)
+     * Nocturnal emission (c_1252, N50.8, Z70.8)
+     * Nocturnal enuresis (c_1143, F98.0, N39.4)
+     * Non-allergic non-infectious rhinitis (c_666, J30.0)
+     * Non-asthmatic eosinophilic bronchitis (c_1646, J82)
+     * Non-celiac gluten sensitivity (c_1674, K90.4)
+     * Non-Hodgkin lymphoma (c_583, C82, C83, C84, C85, C86, C88, C90,
+       C91)
+     * Non-hormonal IUD-related complications (c_1522, Z97.5)
+     * Non-lactational mastitis (c_801, N61)
+     * Non-melanoma skin cancer (c_797, C44)
+     * Non-specific chest pain (c_1406, R07.4)
+     * Non-traumatic vertebral fracture (c_1177, M48.5, M80)
+     * Normal course of abortion (c_1568, O04.4, O05.4)
+     * Nose injury (c_780, S00.3, S01.2, S02.2, S03.1)
+
+O
+
+     * Obsessive-compulsive disorder (c_118, F42)
+     * Obstructive jaundice (c_248, K83.1)
+     * Obstructive sleep apnea (c_711, G47.3)
+     * Oculomotor nerve palsy (c_549, H49.0)
+     * Olecranon bursitis (c_937, M70.2)
+     * Onychomycosis (c_888, B35.1)
+     * Open-angle glaucoma (c_997, H40.1)
+     * Opioid withdrawal syndrome (c_1218, F11.3)
+     * Oppositional defiant disorder (c_1381, F91, F91.3)
+     * Oral candidiasis (c_698, B37.0)
+     * Oral herpes (c_67, B00.1, B00.9)
+     * Oral lichen planus (c_1270, L43)
+     * Oral lichenoid reaction (c_1605, L43.2, L43.8)
+     * Oral mucocele (c_1276, K11.6)
+     * Orbital cellulitis (c_1131, H05.0)
+     * Orbital tumor (c_1598, C69)
+     * Orchitis and epididymitis (c_125, N45)
+     * Organic mental disorder (c_350, F06)
+     * Orthorexia nervosa (c_1557, F50.8)
+     * Osgood-Schlatter disease (c_1551, M92.5)
+     * Osteomalacia (c_337, M83)
+     * Osteomyelitis (c_533, M86)
+     * Osteoporosis (c_69, M81)
+     * Otitis externa (c_131, H60, H62.0, H62.1, H62.2, H62.3, H62.4)
+     * Ovarian hyperstimulation syndrome (c_1547, N98.1)
+     * Ovarian torsion (c_1267, N83.5)
+     * Ovarian tumor (c_89, C56, D27)
+     * Overdose of prescribed medication, unspecified (c_1665, T50.9)
+
+P
+
+     * Paget's disease of bone (c_321, M88)
+     * Painful ovulation (c_923, N94.0)
+     * Pancoast tumor (c_617, C34.1)
+     * Pancreatic cancer (c_98, C25)
+     * Panic disorder (c_183, F41.0)
+     * Paranoid schizophrenia (c_310, F20.0)
+     * Paraphimosis (c_1106, N47)
+     * Parkinson's disease (c_19, G20)
+     * Paronychia of the fingernail (c_1435, L03.0)
+     * Paronychia of the toenail (c_1438, L03.0)
+     * Paroxysmal nocturnal hemoglobinuria (c_445, D59.5)
+     * Patella fracture (c_1013, S82.0)
+     * Patellofemoral pain syndrome (c_939, M22.2)
+     * Pediculosis capitis (c_633, B85.0)
+     * Pelvic inflammatory disease (c_160, N70, N71.0, N72, N73.0)
+     * Pelvic organ prolapse (c_880, N81, N81.0, N81.1, N81.2, N81.3,
+       N81.4, N81.5, N81.6, N81.8, N81.9)
+     * Pelvis fracture (c_1020, S32.1, S32.2, S32.3, S32.4, S32.5, S32.8)
+     * Penetrating abdominal trauma (c_1096, S39, S39.0, S39.6, S39.7,
+       S39.8)
+     * Penile tumor (c_1618, C60, D07.4, D29.0)
+     * Peptic ulcer (c_20, K25, K26, K27, K28)
+     * Pericarditis (c_126, I30)
+     * Perimenopause (c_772, N95.9)
+     * Periodontitis (c_75, K05.3)
+     * Perioral dermatitis (c_1478, L71.0)
+     * Periorbital cellulitis (c_957, H05.0, L03.2)
+     * Peripheral vascular disease (c_85, I73.9)
+     * Peritonitis (c_660, K65.0)
+     * Peritonsillar abscess (c_686, J36)
+     * Pernicious anemia (c_324, D51.0)
+     * Peroneal mononeuropathy (c_949, G57.3)
+     * Perthes disease (c_1140, M91.8)
+     * Pertussis (c_724, A37)
+     * Pheochromocytoma (c_207, C74.1, D35.0)
+     * Phimosis (c_1107, N47)
+     * Physical injury of unknown location (c_1065, T14.8, T14.9)
+     * Pilonidal cyst (c_1168, L05, L05.0, L05.9)
+     * Piriformis syndrome (c_954, G57.0)
+     * Pituitary tumor (c_334, C75.1, D35.2, D44.3)
+     * Pityriasis rosea (c_1200, L42)
+     * Placenta previa (c_924, O44)
+     * Placental abruption (c_989, O45)
+     * Plague (c_271, A20)
+     * Plaster cast concerns (c_1677, Z48.9)
+     * Plugged milk duct (c_1254, O92)
+     * Pneumocystis jirovecii pneumonia (c_798, B59)
+     * Pneumonia (c_127, J12, J13, J14, J15, J16, J17, J18)
+     * Pneumothorax (c_661, J93, S27.0)
+     * Polyarteritis nodosa (c_458, M30.0)
+     * Polycystic ovary syndrome (c_145, E28.2)
+     * Polycythemia vera (c_251, D45)
+     * Polymyositis (c_317, M33.2)
+     * Poorly controlled hypertension (c_1306, I10)
+     * Portal hypertension (c_695, K76.6)
+     * Possibly benign liver mass (c_1510, D13.4)
+     * Possibly malignant liver mass (c_1492, C22.9)
+     * Post-concussion syndrome (c_351, F07.2)
+     * Post-COVID-19 syndrome (c_1182, U09.9)
+     * Post-traumatic seizures (c_1179, G40.8, R56, R56.8)
+     * Post-traumatic stress disorder (c_299, F43.1)
+     * Postinfectious cough (c_1628, R05)
+     * Postpartum blues (c_1315, F53.8)
+     * Postpartum depression (c_309, F53.0)
+     * Postpartum endometritis (c_1432, O85, O86)
+     * Postpartum psychosis (c_1316, F53.1)
+     * Postpartum sexual dysfunction (c_1601, F52.9)
+     * Pre-eclampsia (c_369, O14)
+     * Premature ejaculation (c_1563, F52.4)
+     * Premature rupture of membranes (c_1431, O42)
+     * Premenstrual syndrome (c_143, N94.3)
+     * Prerenal acute renal failure (c_508, N17.8, N17.9)
+     * Presbycusis (c_681, H91.1)
+     * Preterm labour (c_1434, O60)
+     * Primary biliary cholangitis (c_486, K74.3)
+     * Primary ciliary dyskinesia (c_1452, Q34.8)
+     * Primary dysmenorrhoea (c_1173, N94.4)
+     * Primary sclerosing cholangitis (c_488, K83.0)
+     * Primary syphilis (c_775, A51.0, A51.1, A51.2, A51.5, A51.9)
+     * Prinzmetal's angina (c_497, I20.1)
+     * Proctitis (c_728, K51.2, K62.7, K62.8)
+     * Progressive supranuclear palsy (c_397, G23.1)
+     * Prolactin-releasing pituitary tumor (c_543, D35.2, E22.1)
+     * Prolonged postinfectious cough (c_1629, R05)
+     * Prostate tumor (c_335, C61, D29.1, D40.0)
+     * Prostatitis (c_122, N41.0)
+     * Protracted bacterial bronchitis (c_1453, J42)
+     * Pseudo gout (c_587, M11)
+     * Pseudobulbar palsy (c_390, G12.2)
+     * Psittacosis (c_263, A70)
+     * Psoriasis (c_43, L40)
+     * Psoriasis exacerbation (c_1100, L40, L40.0, L40.1, L40.2, L40.4,
+       L40.9)
+     * Psoriatic arthritis (c_953, L40.5)
+     * Psychological abuse (c_1214, T74, T74.3, Y07)
+     * Psychological crisis of adolescence (c_1457, F98.9)
+     * Pulmonary edema (c_288, J81)
+     * Pulmonary embolism (c_136, I26)
+     * Pulmonary hypertension (c_493, I27.0, I27.2)
+     * Pulmonary tuberculosis (c_32, A15, A16)
+     * Pulpitis (c_124, K04.0)
+     * Pyelonephritis (c_284, N10, N12)
+
+Q
+
+     * Q fever (c_241, A78)
+
+R
+
+     * Rabies (c_579, A82)
+     * Radial nerve neuropathy (c_950, G56.3)
+     * Radiation-induced dermatitis (c_1591, L58.0)
+     * Ramsay Hunt syndrome type II (c_468, B02.2)
+     * Raynaud's disease (c_209, I73.0)
+     * Reactive arthritis (c_100, M02)
+     * Reflex syncope (c_980, G90.8)
+     * Relapsing fever (c_237, A68)
+     * Respiratory diphtheria (c_687, A36.0, A36.1, A36.2, A36.9)
+     * Restless legs syndrome (c_748, G25.8)
+     * Retinal detachment (c_596, H33)
+     * Retinopathy (c_593, H35.2, H36)
+     * Retrograde ejaculation (c_1562, N48.8)
+     * Rheumatoid arthritis (c_104, M05)
+     * Rib fracture (c_889, S22.3)
+     * Rickets (c_336, E55.0)
+     * Rift Valley fever (c_252, A92.4)
+     * Rocky Mountain spotted fever (c_239, A77.0)
+     * Rosacea (c_849, L71.9)
+     * Ross River disease (c_1282, B33.1)
+     * Rotator cuff syndrome (c_931, M75.1)
+     * Rotavirus infection (c_812, A08.0)
+     * Rubella (c_189, B06)
+
+S
+
+     * Salicylate poisoning (c_307, T39.0, T49.0, T49.4)
+     * Sarcoidosis (c_105, D86)
+     * Scabies (c_589, B86)
+     * Scapula fracture (c_1021, S42.1)
+     * Scarlet fever (c_676, A38)
+     * Schizoaffective disorder (c_1357, F25)
+     * Sciatica (c_102, M54.3, M54.4)
+     * Scoliosis (c_675, M41, M41.9, M96.5)
+     * Scrub typhus (c_257, A75.3)
+     * Seasonal affective disorder (c_320, F33)
+     * Seborrheic dermatitis (c_453, L21)
+     * Second trimester pregnancy (c_1403, Z34.9)
+     * Secondary amenorrhea (c_1404, N91.1)
+     * Secondary postpartum hemorrhage (c_1425, O72.2)
+     * Secondary syphilis (c_766, A51.3)
+     * Sedatives withdrawal syndrome (c_278, F13.3)
+     * Separation anxiety disorder (c_1171, F93.0)
+     * Sepsis (c_645, A41.9)
+     * Septic abortion (c_1567, O04.5, O05.5)
+     * Serious eye injury (c_1642, S05)
+     * Serious overdose of prescribed medication (c_1664, T50.9)
+     * Serotonin syndrome (c_1613, T43.2)
+     * Severe abdominal trauma (c_1471, S36)
+     * Severe chest trauma (c_1472, S27)
+     * Severe hypoglycemia (c_1256, E16.2)
+     * Sexual pain disorder (c_1549, N94.1)
+     * Shigellosis (c_521, A03)
+     * Shingles (c_78, B02)
+     * Shingles on the face (c_1503, B02)
+     * Shoulder bursitis (c_932, M75.5)
+     * Shoulder contusion (c_1037, S40.0)
+     * Shoulder dislocation (c_1028, S43.0)
+     * Shoulder impingement syndrome (c_948, M75.4)
+     * Sickle cell anemia (c_588, D57)
+     * Sjögren's syndrome (c_144, M35.0)
+     * Skin injury (c_1495, S01, S11, S21, S31, S41, S51, S61, S71, S81,
+       S91)
+     * Sleep related leg cramps (c_1232, G47.8)
+     * Small intestinal bacterial overgrowth (c_466, K90.8)
+     * Snake bite (c_1281, T63.0)
+     * Social anxiety disorder (c_308, F40.1)
+     * Solar lentigo (c_826, L81.4)
+     * Specific learning disability (c_1180, F81, F81.0, F81.1, F81.2,
+       F81.3, F81.8, F81.9)
+     * Specific phobia (c_370, F40.2)
+     * Spider bite (c_1283, T63.3)
+     * Spinal osteoarthritis (c_218, M47)
+     * Splenic injury (c_755, S36.0)
+     * Sprained ankle (c_689, S93.4)
+     * Sprained elbow (c_817, S53.4)
+     * Sprained finger (c_1034, S63.6)
+     * Sprained hip (c_828, S73.1)
+     * Sprained knee (c_829, S83.4, S83.5, S83.6)
+     * Sprained shoulder (c_830, S43.4)
+     * Sprained wrist (c_818, S63.5)
+     * Stable angina pectoris (c_663, I20.8)
+     * Stable bradyarrhythmia (c_1134, R00.1)
+     * Stable tachyarrhythmia (c_1128, I47.2, I48.3, I48.4, I49.1, I49.2,
+       I49.3, I49.4)
+     * Status epilepticus (c_1426, G41)
+     * Stevens-Johnson syndrome (c_1389, L51.1)
+     * Stress fracture of foot (c_1175, M84.3)
+     * Stress fracture of lower leg (c_1176, M84.3)
+     * Stress urinary incontinence (c_116, N39.3)
+     * Stye (c_170, H00.0)
+     * Subarachnoid hemorrhage (c_685, I60)
+     * Subconjunctival haemorrhage (c_1621, H11.3)
+     * Sudden sensorineural hearing loss (c_673, H91.2)
+     * Suicidal tendencies (c_1130, R45.8)
+     * Sun allergy (c_819, L56.3, L56.4, L56.8, L56.9)
+     * Sunburn (c_962, L55)
+     * Superficial thrombophlebitis (c_135, I80.0)
+     * Superior vena cava syndrome (c_616, I87.1)
+     * Suspicious mole (c_970, D22, D22.1, D22.2, D22.3, D22.4, D22.5,
+       D22.6, D22.7, D22.9)
+     * Symptomatic apical periodontitis (c_1261, K04.4)
+     * Syndrome of inappropriate antidiuretic hormone secretion (c_505,
+       E22.2)
+     * Systemic lupus erythematosus (c_109, M32, M32.0, M32.1, M32.8,
+       M32.9)
+     * Systemic scleroderma (c_112, M34)
+
+T
+
+     * Taeniasis (c_437, B68)
+     * Takayasu's disease (c_452, M31.4)
+     * Temporal giant cell arteritis (c_459, M31.6)
+     * Temporomandibular joint disorders (c_152, K07.6)
+     * Tension-type headaches (c_55, G44.2)
+     * Tertiary syphilis (c_774, A52.9)
+     * Testicular cancer (c_519, C62)
+     * Testicular torsion (c_523, N44)
+     * Tetanus (c_255, A35)
+     * Tetany (c_208, R29.0)
+     * Thalassemia (c_1094, D56)
+     * Thigh contusion (c_1048, S70.1)
+     * Third trimester pregnancy (c_1466, Z34)
+     * Thoracic aortic aneurysm (c_765, I71.2)
+     * Thoracic aortic dissection (c_884, I71.0)
+     * Thoracic mass (c_1586, C76.1, D21.3)
+     * Thoracic outlet syndrome (c_618, G54.0)
+     * Thoracic radiculopathy (c_1444, M54.6)
+     * Thoracic vertebra fracture (c_1023, S22.0, S22.1)
+     * Thorax contusion (c_1061, S20.2)
+     * Threatened miscarriage (c_925, O20.0)
+     * Thrombocytopathy (c_392, D69.1)
+     * Thrombotic thrombocytopenic purpura (c_597, M31.1)
+     * Thyroid cancer (c_97, C73)
+     * Thyrotoxic crisis with thyrotoxicosis (c_429, E05.5)
+     * Thyrotropin releasing pituitary adenoma (c_546, D35.2, E05.8)
+     * Tibiofibular fracture (c_1014, S82.1, S82.2, S82.3, S82.4)
+     * Tick bite (c_1311, W57)
+     * Tick-borne encephalitis (c_648, A84, A84.0, A84.1, A84.8, A84.9)
+     * Tinea capitis (c_835, B35.0)
+     * Tinea corporis (c_833, B35.4)
+     * Tinea cruris (c_912, B35.6)
+     * Tinea pedis (c_857, B35.3)
+     * Tinea versicolor (c_786, B36.0)
+     * Toe contusion (c_1045, S90.1)
+     * Toe dislocation (c_1032, S93.1)
+     * Toe fracture (c_1062, S92.5)
+     * Tonic-clonic seizure (c_1427, R56.8)
+     * Tonsillar hypertrophy (c_1195, J35.1)
+     * Too tight plaster cast (c_1668, Z46.7)
+     * Toxocariasis (c_436, B83.0)
+     * Toxoplasmosis (c_729, B58)
+     * Trachoma (c_1294, A71, A71.0, A71.1, A71.9)
+     * Transient ischemic attack (c_378, G45)
+     * Transient tic disorder (c_1376, F95.0)
+     * Traumatic oral ulcer (c_1262, K13.7)
+     * Trichilemmal cyst (c_1356, L72.1)
+     * Trichinosis (c_433, B75)
+     * Trichomoniasis (c_103, A59)
+     * Trichuriasis (c_438, B79)
+     * Trigeminal neuralgia (c_150, G50.0)
+     * Trigeminal neuropathy (c_1229, G50.8)
+     * Trochlear nerve palsy (c_548, H49.1)
+     * Trunk injury, unspecified location (c_1052, T09.9)
+     * Tularemia (c_236, A21)
+     * Tumor lysis syndrome (c_330, E88.3)
+     * Tumor of lip (c_1619, C00, C00.1, C00.2, C00.3, C00.4, C00.5,
+       C00.6, C00.8, C00.9, D00.0, D10.0)
+     * Tumor of oral cavity (c_1610, C02, C02.0, C02.1, C02.2, C02.3,
+       C02.9, C03, C03.0, C03.1, C03.9, C04, C04.0, C04.1, C04.9, C05.0,
+       C05.9, C06, C06.0, C06.1, C06.2, C06.9, D00.0, D10.1, D10.2, D10.3,
+       D37.0)
+     * Tumor of pharynx (c_1607, C01, C02.4, C05.1, C05.2, C09, C09.0,
+       C09.1, C09.8, C09.9, C10, C10.0, C10.1, C10.2, C10.3, C10.4, C10.8,
+       C10.9, C12, C13, C13.0, C13.1, C13.2, C13.8, C13.9, C14.0, D00.0,
+       D10.4, D10.5, D10.7, D10.9, D37.0)
+     * Type 1 Neurofibromatosis (c_202, Q85.0)
+     * Type 2 Neurofibromatosis (c_574, Q85.0)
+     * Typhoid fever (c_234, A01.0)
+
+U
+
+     * Ulcerative colitis (c_23, K51)
+     * Ulcerative colitis exacerbation (c_1209, K51, K51.8)
+     * Ulnar nerve syndrome (c_946, G56.2)
+     * Unspecified feeding or eating disorder (c_1564, F50.9)
+     * Unstable angina pectoris (c_664, I20.0)
+     * Unstable bradyarrhythmia (c_1127, I44.1, I44.2, I44.3, I45.9)
+     * Unstable tachyarrhythmia (c_1103, I49.0, R00.0)
+     * Upper airway cough syndrome (c_1640, R05)
+     * Upper limb injury, unspecified location (c_1036, T11.9)
+     * Upper limb pain, unspecified (c_1580, M79.6)
+     * Upper limb tumor (c_1608, C76.4)
+     * Urethritis (c_292, N34.1, N34.2, N34.3, N37.0)
+     * Urge urinary incontinence (c_54, N39.4)
+     * Uveitis (c_216, H20, H30)
+
+V
+
+     * Vaginal bleeding after gynecological procedure (c_1570, N93.8)
+     * Vagus nerve palsy (c_554, G52.2)
+     * Varicocele (c_767, I86.1)
+     * Vascular hemorrhagic diathesis (c_391, D69.9)
+     * Vasculitis (c_316, I77.6)
+     * Vertebrobasilar insufficiency (c_384, G45.0)
+     * Vestibular neuronitis (c_599, H81.2)
+     * Vestibulocochlear nerve damage (c_470, H93.3, S04.6)
+     * VIPoma (c_480, C25.4, E16.8)
+     * Viral gastroenteritis (c_1076, A08, A08.4, A09, K52.8, K52.9)
+     * Viral meningitis (c_562, A87, B00.3, B02.1, B26.1, G02.0)
+     * Visceral leishmaniasis (c_214, B55.0)
+     * Visual disturbance, unspecified (c_1073, H53.9)
+     * Vitamin A deficiency (c_1141, E50, E50.0, E50.1, E50.2, E50.3,
+       E50.4, E50.5, E50.6, E50.7, E50.8, E50.9)
+     * Vitamin B12 deficiency anemia (c_61, D51)
+     * Vitiligo (c_743, L80)
+     * Vitreous floaters (c_1572, H43.3)
+     * Vomiting, unspecified (c_966, R11)
+     * Von Willebrand disease (c_388, D68.0)
+     * Vulvar cancer (c_95, C51)
+     * Vulvovaginal candidiasis (c_732, B37.3)
+
+W
+
+     * Warts (c_13, B07)
+     * Wernicke's encephalopathy (c_376, E51.2)
+     * West Nile Virus infection (c_580, A92.3)
+     * Whitlow (c_569, L03.0)
+     * Wilson's disease (c_205, E83.0)
+     * Wound dehiscence (c_1193, T81.3)
+     * Wound infection (c_1192, T79.3)
+     * Wrist dislocation (c_1027, S63.0)
+     * Wrist or hand contusion (c_1043, S60.2)
+
+Y
+
+     * Yellow fever (c_244, A95)
+
+Z
+
+     * Zika virus infection (c_906, A92.5)
+     * Zollinger-Ellison syndrome (c_213, E16.4)
+
+   [102]Medical Content[103]Pediatrics Conditions
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [104]© 2025 Infermedica[105]Terms of Service[106]Privacy
+   Policy[107]Cookies Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#a
+  70. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#b
+  71. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#c
+  72. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#d
+  73. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#e
+  74. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#f
+  75. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#g
+  76. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#h
+  77. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#i
+  78. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#j
+  79. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#k
+  80. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#l
+  81. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#m
+  82. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#n
+  83. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#o
+  84. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#p
+  85. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#q
+  86. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#r
+  87. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#s
+  88. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#t
+  89. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#u
+  90. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#v
+  91. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#w
+  92. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#y
+  93. file:///tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#z
+  94. https://help.infermedica.com/
+  95. file:///documentation/overview/medical-content/
+  96. file:///documentation/overview/medical-content/available-conditions/
+  97. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  98. file:///documentation/overview/medical-content/available-symptoms/
+  99. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+ 100. file:///documentation/overview/medical-content/available-risk-factors/
+ 101. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+ 102. file:///documentation/overview/medical-content/
+ 103. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+ 104. https://infermedica.com/
+ 105. file:///terms-of-service/
+ 106. file:///privacy-policy/
+ 107. file:///cookies-policy/
+
+   Hidden links:
+ 109. file://localhost/
+ 110. https://github.com/shuding/nextra/pages/documentation/overview/medical-content/available-conditions.mdx
+ 111. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#a
+ 112. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#b
+ 113. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#c
+ 114. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#d
+ 115. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#e
+ 116. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#f
+ 117. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#g
+ 118. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#h
+ 119. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#i
+ 120. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#j
+ 121. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#k
+ 122. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#l
+ 123. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#m
+ 124. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#n
+ 125. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#o
+ 126. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#p
+ 127. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#q
+ 128. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#r
+ 129. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#s
+ 130. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#t
+ 131. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#u
+ 132. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#v
+ 133. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#w
+ 134. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#y
+ 135. file://localhost/tmp/lynxXXXXTHw6G7/L76210-8609TMP.html#z

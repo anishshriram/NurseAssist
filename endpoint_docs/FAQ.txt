@@ -1,0 +1,383 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]Bots and text analysis
+     * [70]Technical
+
+   [71]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Engine API
+   FAQ
+
+FAQ: Engine API
+
+   If what you're looking for isn't answered here, check out our
+   [72]general FAQ
+
+Bots and text analysis
+
+     * (BUTTON) Can I build a chatbot using Infermedica's Engine API?
+       Yes. You can build a symptom checker chatbot using Infermedica's
+       Engine API. While you need to handle the conversation flow on your
+       own, you can rely on our language technology to read symptoms
+       mentioned in user messages. Also, our [73]/diagnosis endpoint will
+       provide you with questions that the user may be asked directly
+       (such as "Is your headache severe?").
+       We have a special endpoint for reading symptoms mentioned in user
+       messages ([74]read more about the /parse endpoint) and [75]an
+       exemplary implementation of chatbot (opens in a new tab) . This
+       service is currently available only in English.
+     * (BUTTON) Can I build a chatbot in a language other than English
+       using Infermedica's Engine API?
+       Yes. You can build a symptom checking chatbot using Infermedica's
+       Engine API. While you need to handle the conversation flow on your
+       own, you can rely on our language technology to read symptoms
+       mentioned in user messages. Also, our /diagnosis endpoint will
+       provide you with questions that the user may be asked directly
+       (such as "Is your headache severe?").
+       We have a special endpoint for reading symptoms mentioned in user
+       messages (read more about the [76]/diagnosis endpoint). This
+       service is currently available only for English.
+     * (BUTTON) Can Infermedica's Engine API analyze the symptoms
+       mentioned in a text?
+       Yes, we have a special endpoint for reading observations mentioned
+       in user messages. [77]Read more about NLP.
+     * (BUTTON) Can I build a voice application (e.g Alexa skill) using
+       Infermedica Engine API?
+       Yes! Our [78]Natural Language Processing technology makes it
+       possible to understand observations in a user's messages. We don't
+       provide voice recognition or text-to-speech, but you can use a
+       commercially available platform, such as Alexa Voice Service, Baidu
+       Deep Voice, Google Speech, or Yandex Speechkit.
+       We would be happy to spread the word about your Infermedica-based
+       voice application. If you wish, feel free to share!
+     * (BUTTON) What is the difference between the /search and /parse
+       endpoints?
+       The search endpoint assumes that you are looking for one particular
+       observation -- a symptom or risk factor -- and returns a list of
+       candidate matches. The whole input text is treated as a query for
+       one observation. The behavior is customized for searching (possibly
+       partial) user input. It is best for implementing search boxes in
+       the UI.
+       The /parse endpoint gives you access to our NLP technology. You can
+       use it to read what a user said in their own words, describing one
+       or more observations. It is best suited for reading user messages
+       that were sent to a chatbot or an unstructured description of the
+       patient's observations in the health records. This endpoint returns
+       a list of captured mentions of observations, each of them assigned
+       with an id code and understood status (present or absent).
+
+Technical
+
+     * (BUTTON) Which programming languages does Infermedica support?
+       Infermedica's Engine API is a language-independent, standard web
+       service that can be easily integrated with any existing HTTP client
+       using virtually all of the popular programming languages and
+       frameworks.
+     * (BUTTON) What type of questions can be returned by the API?
+       The /diagnosis endpoint returns a structure containing a few lines
+       of useful information. One of the items returned is the most
+       relevant question given the current knowledge about the person
+       being examined. This is the question we suggest asking the user
+       next unless you decide that enough questions have already been
+       asked. This question has three possible types:
+          + single - a yes/no question about a single symptom (e.g. "Do
+            you have a headache?"); when the user answers this type of
+            question, you should send back all the evidence collected thus
+            far, including the status of the symptom that has just been
+            learned (present, absent or unknown)
+          + group_single - a single-choice question about a group of
+            related symptoms (e.g. "What is your body temperature?"); with
+            single-choice questions it is sufficient to send back the
+            answer chosen by the user (the ID of the answer with the
+            present status) together with the evidence collected in the
+            earlier stages
+          + group_multiple - a multiple-choice question about a group of
+            related symptoms (e.g. "What is the character of your
+            headache?"); any number of symptoms (including none) can be
+            sent as present; if you are sure that the others should be
+            interpreted as absent, please send them explicitly as such;
+            you may also send some symptoms as unknown to prevent getting
+            questions about them (this makes sense if the user didn't
+            answer conclusively).
+     * (BUTTON) Why am I getting 403 responses to my API call?
+       If you are getting error 403 in response to your API call, it's
+       most likely because you have exceeded your monthly limit of API
+       requests. Should this happen, [79]contact us.
+       Learn more about [80]Infermedica's Engine API errors by clicking
+       the link. If that doesn't help, please [81]contact us.
+     * (BUTTON) How do I disable group questions?
+       When using the /diagnosis endpoint, you can disable group questions
+       to make sure the API returns only single questions by sending
+       "disable_groups": true in "extras". Here is an example:
+       JSON
+    {
+      "age": 50,
+      "sex": "male",
+      "evidence": [
+        {"id": "s_98", "choice_id": "present"}
+      ],
+      "extras": {"disable_groups": true},
+    }
+       (BUTTON)
+     * (BUTTON) How do I send someone's weight and height to Infermedica's
+       Engine API?
+       This is not available directly in the current API version, but you
+       could compute BMI on your side and add one of the corresponding
+       BMI-related risk factors to the evidence about the current case
+       before sending it along when calling /diagnosis.
+       There are two such risk factors:
+          + p_6 - BMI below 19
+          + p_7 - BMI over 30
+       If the computed value of the person's BMI exceeds 30, add "p_7":
+       "present". If the value is lower than 19, add "p_6": "present". If
+       the value falls within the healthy range (19 < BMI < 30), it's best
+       to add both of these risk factors as absent to prevent the API from
+       asking about BMI.
+     * (BUTTON) How does the NLP endpoint (/parse) work?
+       This endpoint gives access to our in-house Natural Language
+       Processing technology. It allows you to capture symptoms and risk
+       factors mentioned in unstructured text descriptions, such as user
+       messages sent to a chatbot or a text description extracted from a
+       medical record.
+       Our language technology is also able to understand some typical
+       ways of expressing negation (e.g. "I don't have a headache" or
+       "lymph nodes are not enlarged").
+       Each captured mention is assigned an ID code and a status (present
+       or absent), which makes it compatible with our /diagnosis endpoint.
+       This way you can send the captured evidence directly for assessment
+       and learn current predictions, the triage level, and what question
+       to ask next.
+       This service works best with simple phrases or sentences (such as
+       "I have a terrible headache and back pain" or "feeling sick"). It
+       may be unable to understand complex stories (descriptions of
+       accidents, complications, and general descriptions involving a
+       series of events whose mutual relationship in time is relevant).
+       Our technology is based on automated syntactic analysis and
+       matching techniques tailored to the medical domain. We are
+       constantly improving the quality of this service.
+       [82]See an exemplary implementation of chatbot leveraging our NLP
+       engine (opens in a new tab).
+     * (BUTTON) The NLP endpoint (/parse) doesn't understand my input.
+       What do I do?
+       We're doing all we can to make this service as accurate as
+       possible, but no NLP technology is perfect, including ours. The
+       service works best with simple phrases and sentences (such as "I
+       have a sore throat" or "no vomiting but feeling sick"). It's not
+       good at understanding complex stories, in particular descriptions
+       of accidents or complications after diseases.
+       If you feel that it's not working properly for a case that it
+       should be able to handle, please [83]contact us. While we can't
+       promise that it will understand every possible description
+       correctly, we're constantly improving the technology and such
+       feedback is very important to us.
+     * (BUTTON) A call to /diagnosis returns a single condition. Why?
+       This is due to security measures. For all API calls containing less
+       than three reported observations, the list of conditions will be
+       limited to a single condition. For all calls with more than two
+       observations (either present or absent), the API will return the
+       full ranking of relevant conditions.
+       In all real life situations, you will want to collect more than two
+       pieces of evidence (e.g. two symptoms, two answers). Given that, we
+       believe this API behavior is not a limitation for any proper
+       application.
+     * (BUTTON) Does Infermedica log calls clients make to the API and the
+       responses provided? Can clients provide Infermedica with some sort
+       of information so that the Infermedica team can see what went wrong
+       in a client's submission to the API?
+       Infermedica can try to recreate an interview and check what
+       happened if the client uses Interview-id. Interview-id is mentioned
+       in the [84]developer's documentation and in Infermedica's help
+       center several times, should the client's tech team need help
+       implementing it.
+
+   [85]MDR[86]Getting started
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [87]© 2025 Infermedica[88]Terms of Service[89]Privacy Policy[90]Cookies
+   Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXJxurAv/L77078-3125TMP.html#bots-and-text-analysis
+  70. file:///tmp/lynxXXXXJxurAv/L77078-3125TMP.html#technical
+  71. https://help.infermedica.com/
+  72. file:///documentation/overview/faq/
+  73. file:///documentation/engine-api/build-your-solution/diagnosis/
+  74. file:///documentation/engine-api/build-your-solution/nlp/
+  75. https://infermedica.com/chatbot-demo
+  76. file:///documentation/engine-api/build-your-solution/diagnosis/
+  77. file:///documentation/engine-api/build-your-solution/nlp/
+  78. file:///documentation/engine-api/build-your-solution/nlp/
+  79. file:///get-in-touch/
+  80. file:///documentation/engine-api/basics/#errors
+  81. file:///get-in-touch/
+  82. https://infermedica.com/chatbot-demo
+  83. file:///get-in-touch/
+  84. file:///documentation/engine-api/build-your-solution/interview-id/
+  85. file:///documentation/engine-api/mdr/
+  86. file:///documentation/platform-api/
+  87. https://infermedica.com/
+  88. file:///terms-of-service/
+  89. file:///privacy-policy/
+  90. file:///cookies-policy/
+
+   Hidden links:
+  92. file://localhost/
+  93. https://github.com/shuding/nextra/pages/documentation/engine-api/faq.mdx
+  94. file://localhost/tmp/lynxXXXXJxurAv/L77078-3125TMP.html#bots-and-text-analysis
+  95. file://localhost/tmp/lynxXXXXJxurAv/L77078-3125TMP.html#technical

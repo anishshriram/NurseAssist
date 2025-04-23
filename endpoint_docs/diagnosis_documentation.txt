@@ -1,0 +1,1385 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]Stateless API
+     * [70]Interview flow
+     * [71]Request
+     * [72]Sex and age
+     * [73]Evidence
+     * [74]Indicating evidence source
+     * [75]Gathering initial evidence
+     * [76]Indicating initial evidence
+     * [77]Common risk factors
+     * [78]Weight and height
+     * [79]Request extras
+     * [80]Response
+     * [81]Question
+     * [82]Question types
+     * [83]single
+     * [84]group_single
+     * [85]group_multiple
+     * [86]Question extras
+     * [87]Conditions
+     * [88]Ranking limiting
+     * [89]Patient Education
+     * [90]Stop recommendation
+     * [91]Response extras
+     * [92]Extras
+     * [93]enable_symptom_duration
+     * [94]interview_mode
+     * [95]enable_explanations
+     * [96]enable_third_person_questions
+     * [97]include_condition_details
+     * [98]Advanced options
+     * [99]disable_intimate_content
+     * [100]disable_groups
+     * [101]Deprecated options
+     * [102]disable_adaptive_ranking
+     * [103]enable_triage_3
+     * [104]Alternative use cases
+
+   [105]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Engine API
+   Build your solution
+   Diagnosis
+
+Diagnosis
+
+   The /diagnosis endpoint is the core of the Infermedica API. Using a
+   patient's sex, age, and medical evidence (including symptoms and risk
+   factors), it suggests possible causes and generates questions to drive
+   an interview similar to one a doctor would have with a patient.
+   !!!
+
+   The /diagnosis endpoint in the API is not a substitute for independent
+   medical advice nor does it offer a diagnosis per se. The information
+   presented by Infermedica's API should not be considered medical advice.
+   The API is not intended or designed to be used to diagnose, treat,
+   cure, or prevent any disease. The information that Infermedica's API
+   provides should not be used for therapeutic purposes or as a substitute
+   for a health professional's advice.
+
+Stateless API
+
+   The Infermedica API is stateless. Since the API does not track the
+   state or progress of interviews, each request to /diagnosis must
+   contain all the information gathered to that point about a given case.
+   You can't send only the answer to the most recent question returned
+   from /diagnosis; your application must store sex, age, initial
+   evidence, and all previous answers, and resend them each time, along
+   with the most recent answer.
+
+Interview flow
+
+   To carry out a symptom assessment interview with a patient, you will
+   need multiple calls to /diagnosis. Before the first request, the
+   patient's sex, age, and initial evidence must be collected (e.g. the
+   patient's chief complaint and relevant risk factors). The response to
+   the first request will contain an interview question that should be
+   presented to the patient. The patient's answer should then be added to
+   the list of already collected evidence. The process should continue in
+   the following manner:
+     * send a request to /diagnosis with the updated evidence list,
+     * ask the patient the question returned from /diagnosis,
+     * add the patient's answer to the existing evidence list,
+     * repeat the steps.
+
+   This process can continue for as long as necessary. The should_stop
+   attribute suggests when the interview should be considered finished.
+   Our engine takes into account several factors when determining this,
+   including the interview length and the confidence it has in the
+   rankings. It's possible to continue the interview beyond this point if
+   needed, but we highly recommend honoring this attribute for most
+   use-cases. In general, the number of questions answered and the
+   probability of the top conditions in the rankings should be considered
+   when deciding when to stop the interview.
+
+Request
+
+   The /diagnosis endpoint responds to POST requests containing a JSON
+   object that describes a single medical case, e.g.
+   cURL
+curl "https://api.infermedica.com/v3/diagnosis" \
+  -X "POST" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sex": "female",
+    "age": {
+      "value": 25
+    },
+    "evidence": [
+      {"id": "s_47", "choice_id": "present", "source": "initial"},
+      {"id": "s_22", "choice_id": "present", "source": "initial"},
+      {"id": "p_81", "choice_id": "absent"}
+    ]
+  }'
+
+   (BUTTON)
+
+Sex and age
+
+   The sex and age attributes are two required elements of every request
+   to /diagnosis. Under the hood, sex and age are used to automatically
+   instantiate corresponding risk factors that may alter the base
+   prevalence of medical conditions in Infermedica's model.
+
+   The sex attribute indicates the patient's biological sex and can have
+   one of two possible values: female or male.
+
+   The age is composed of two attributes:
+     * age.unit - optional parameter:
+          + It can be either year or month,
+          + If not specified, it defaults to year,
+          + If age is provided in months, specifying age.unit as month is
+            required. This is especially important for children under 1
+            year of age, where age must be provided in months.
+     * age.value - required parameter:
+          + If age.unit is year, provide a value between 1 and 130,
+          + If age.unit is month, provide a value between 0 and 1560.
+
+   JSON
+"sex": "female",
+"age": {
+    "value": 11,
+    "unit": "month"
+}
+
+   (BUTTON)
+
+   If age.value is missing, invalid, or set to 0 when age.unit is year (or
+   not specified), you will get a 400 Bad Request [106]error.
+
+Evidence
+
+   The evidence list is the most important part of each request to
+   /diagnosis. While evidence is technically an optional attribute, to
+   receive a non-empty response there must be at least one present symptom
+   added to your evidence list. Please note that sending only risk factors
+   or only absent symptoms might not be sufficient to start the interview.
+
+   Each piece of evidence should be sent as a simple JSON object with two
+   required attributes: id and choice_id. Optionally, a source attribute
+   can also be added (see corresponding section below).
+   JSON
+"evidence": [
+  {"id": "s_98", "choice_id": "present"}
+]
+
+   (BUTTON)
+
+   The id attribute indicates an observed symptom or risk factor.
+
+   The choice_id attribute represents the state of given evidence and can
+   have one of 3 values: present, absent or unknown. Please note that
+   absent and unknown cannot be used interchangeably, as their
+   mathematical meanings are different.
+
+   Omitting id or choice_id or providing invalid values will yield a 400
+   Bad Request [107]error .
+
+Indicating evidence source
+
+   Another key important attribute of evidence is called source. It allows
+   the user to mark the exact stage of the interview that the given
+   evidence was sent at. Thanks to this, the engine can provide more
+   relevant interviews and, as a result, a better final list of most
+   probable conditions as well as improved triage recommendations.
+
+   We highly recommend adding the source attribute if any of the following
+   applies to your case:
+     * any symptoms are reported by user as initial evidence (see:
+       [108]Gathering initial evidence),
+     * any questions about symptoms or risk factors are prompted or
+       predefined (see: [109]Common risk factors),
+     * /suggest endpoint is used,
+     * /red_flags endpoint used.
+
+   !!!
+
+   Keep in mind that, while the source attribute is not strictly required
+   to get a response from the /diagnosis endpoint, setting it properly is
+   required for the interview as a whole to function properly. source is
+   also needed for Infermedica to be able to help with an implementation.
+   As such, it is best to treat the source attribute as though it were
+   required.
+
+   This attribute takes one of the following values:
+     * "source": "initial" - evidence reported by user,
+     * "source": "suggest" - evidence from /suggest endpoint,
+     * "source": "predefined" - evidence predefined separately from the
+       dynamic interview, should be applied to all custom evidence (not
+       calculated in /diagnosis or /suggest),
+     * "source": "red_flags" - evidence from /suggest with red_flags
+       method or /red_flags endpoint,
+     * no value - for evidence gathered during the dynamic interview, the
+       source attribute should be entirely omitted.
+
+   For example:
+   JSON
+{
+  "sex": "female",
+  "age": {
+    "value": 45
+  },
+  "evidence": [
+    {
+      "id": "s_21",
+      "choice_id": "present",
+      "source": "initial"
+    },
+    {
+      "id": "s_156",
+      "choice_id": "present",
+      "source": "suggest"
+    },
+    {
+      "id": "p_264",
+      "choice_id": "present",
+      "source": "suggest"
+    },
+    {
+      "id": "p_13",
+      "choice_id": "present",
+      "source": "predefined"
+    },
+    {
+      "id": "s_1193",
+      "choice_id": "present"
+    }
+  ]
+}
+
+   (BUTTON)
+   !!!
+
+   An evidence source is required for every piece of evidence that was not
+   inferred in /diagnosis, otherwise the quality of the interview could be
+   strongly decreased.
+
+Gathering initial evidence
+
+   Interviews are most effective when they are started with some
+   meaningful initial evidence. The search space of available symptoms is
+   very wide, so the statistical inference engine needs a place to start.
+   Due to this, you should aim for at least 2-3 initial present symptoms.
+   Adding additional symptoms, as well as absent ones, and risk factors is
+   also helpful.
+
+   There are many ways to gather initial evidence:
+     * using the [110]/search endpoint to implement autocomplete widgets
+       that let users enter and select their observations,
+     * using the [111]/parse endpoint to analyze free-text (either
+       pre-existing, like a patient record, or entered by the user, like a
+       chat message) and extract mentions of observations from it,
+     * building a predefined list of [112]common or particularly relevant
+       observations for users to choose from,
+     * building a human body avatar with each body part mapped to the
+       predefined list of observations for the user to select,
+     * using the [113]/suggest endpoint to find observations that have
+       often been selected by other users with similar health problems,
+     * allowing users to enter their laboratory test results.
+
+   Based on our experience from numerous deployments, it is both important
+   and challenging to design this initial step in a way that will
+   encourage users to provide enough data to begin the interview.
+
+Indicating initial evidence
+
+   The initial evidence, i.e. evidence reported by the user before the
+   start of the interview, should be marked as "source": "initial", e.g.
+   JSON
+"evidence": [
+  {"id": "s_98", "choice_id": "present", "source": "initial"}
+]
+
+   (BUTTON)
+
+   There are two consequences of marking evidence as initial:
+     * The inference engine can better understand the progress of the
+       interview, which supports the [114]stop recommendation feature
+     * Conditions unrelated to the initial evidence are only included in
+       the conditions ranking when their probability is sufficiently high.
+       This makes the interview results more focused on the chief
+       complaints.
+
+   In most cases, the initial evidence reported by a patient is related to
+   the conditions in the rankings. However, we've noticed that some users
+   provide initial evidence but later deny all of its related symptoms,
+   causing the engine to broaden its search space and return unrelated
+   conditions. Designating evidence as initial prevents this.
+
+   Although there are use cases where it is impossible to use the
+   "source": "initial" attribute, and it is therefore optional, we highly
+   recommend using this attribute whenever possible, especially if you are
+   relying on stop recommendations.
+
+Common risk factors
+
+   In our medical knowledge base, risk factors can be chronic conditions
+   (e.g. diabetes), lifestyle habits (e.g. smoking), geographical
+   locations (e.g. South America) or events (e.g. a head injury or insect
+   bite). Risk factors alone are not sufficient information to start an
+   interview, but their presence may greatly impact the base prevalence of
+   various conditions. For example, if a patient reports a high fever and
+   chills, it's most likely the flu. However, if the same symptoms are
+   present but we know that the patient has recently returned from some
+   exotic location, the engine will broaden its search towards infectious
+   tropical diseases. Similarly, when a patient reports a headache, it is
+   important to know if they have recently suffered an injury or trauma.
+
+   Although /diagnosis may return questions about risk factors, when
+   implementing a symptom checker we recommend asking the patient about
+   common risk factors before the actual interview begins. This helps to
+   steer the interview in the right direction and to reduce its length.
+
+   One way to gather initial risk factors is to use [115]/suggest in
+   relevant risk factors mode. This is recommended when working with
+   [116]demographic-based risk factors or [117]evidence-based risk
+   factors. However, some risk factors are not handled by the /suggest
+   algorithm, notably those related to geographical location (either
+   residence in or recent travel to):
+     * p_13 - United States or Canada
+     * p_14 - Central or South America
+     * p_15 - Europe
+     * p_16 - Northern Africa
+     * p_17 - Central Africa
+     * p_18 - Southern Africa
+     * p_19 - Australia or Oceania
+     * p_20 - Russia, Kazakhstan, or Mongolia
+     * p_21 - Middle East
+     * p_236 - Asia excluding Middle East, Russia, Kazakhstan and Mongolia
+
+   As geographical risk factors (which can substantially improve the
+   quality of an interview and its results) can only ever be gathered via
+   the addition of extra pre-interview risk factor questions, it is
+   strongly encouraged to add these to the application.
+
+   Every piece of evidence which is not gathered with API methods (e.g.
+   /search, /parse, /suggest, or /diagnosis), should be marked with
+   "source": "predefined", e.g.
+   JSON
+"evidence": [
+  {"id": "p_13", "choice_id": "present", "source": "predefined"},
+  {"id": "p_14", "choice_id": "present", "source": "predefined"},
+  {"id": "p_19", "choice_id": "present", "source": "predefined"}
+]
+
+   (BUTTON)
+   ¹
+
+   Hardcoding should be used sparingly. Overuse of hardcoding could lead
+   to unforeseen errors, code duplication, and other maintenance issues.
+
+Weight and height
+
+   The previous version of the Infermedica API allowed weight and height
+   to be sent along with sex and age. This is no longer supported, but
+   weight-related risk factors are available in our default model and can
+   be included as evidence instead. There are two such risk factors:
+     * p_6 - Low BMI
+     * p_7 - High BMI
+
+   When a patient's weight and height are available, you can compute their
+   [118]BMI (opens in a new tab) in your application and add the
+   appropriate risk factor as present to the evidence list in a /diagnosis
+   call, e.g.
+   JSON
+{
+  "sex": "male",
+  "age": {
+    "value": 45
+  },
+  "evidence": [
+    {"id": "p_7", "choice_id": "present"}
+  ]
+}
+
+   (BUTTON)
+
+   When the patient's BMI falls within a healthy range (between 19 and
+   30), you may include both of the above risk factors as absent.
+   Otherwise /diagnosis may return a question about BMI when such
+   information would be relevant in the symptom assessment process.
+
+Request extras
+
+   The extras attribute may contain additional options that control
+   various aspects of the endpoint. Please refer to [119]the section below
+   for a detailed explanation.
+
+Response
+
+   The response contains 5 sections:
+     * question - next interview question to ask the patient
+     * conditions - ranking of possible medical conditions
+     * should_stop - signals when to stop the interview (optional - this
+       attribute will be returned only if initial evidence is indicated)
+     * has_emergency_evidence - indicates if reported evidence appears
+       serious and the patient should go to an emergency department
+     * extras - usually empty, may contain additional or experimental
+       attributes.
+
+   JSON
+{
+  "question": {
+    "type": "group_single",
+    "text": "How strong is the headache?",
+    "items": [
+      {
+        "id": "s_1780",
+        "name": "Mild",
+        "choices": [
+          {
+            "id": "present",
+            "label": "Yes"
+          },
+          {
+            "id": "absent",
+             "label": "No"
+          },
+          {
+            "id": "unknown",
+            "label": "Don't know"
+          }
+        ]
+      },
+      {
+        "id": "s_1781",
+        "name": "Moderate",
+        "choices": [
+          {
+            "id": "present",
+            "label": "Yes"
+          },
+          {
+            "id": "absent",
+             "label": "No"
+          },
+          {
+            "id": "unknown",
+            "label": "Don't know"
+          }
+        ]
+      },
+      {
+        "id": "s_1193",
+        "name": "Severe",
+        "choices": [
+          {
+            "id": "present",
+            "label": "Yes"
+          },
+          {
+            "id": "absent",
+             "label": "No"
+          },
+          {
+            "id": "unknown",
+            "label": "Don't know"
+          }
+        ]
+      }
+    ],
+    "extras": {}
+  },
+  "conditions": [
+    {
+      "id": "c_130",
+      "name": "Acute otitis media",
+      "common_name": "Middle ear infection",
+      "probability": 0.1846
+    }
+  ],
+  "extras": {},
+  "has_emergency_evidence": false,
+  "should_stop": false,
+}
+
+   (BUTTON)
+
+Question
+
+   The question attribute represents an interview question that can be
+   presented to the user.
+
+   The question attribute can also have a null value. This means that
+   either no present symptom has been provided as initial evidence or, in
+   the rare case of an extremely long interview, that there are no more
+   questions to be asked.
+
+Question types
+
+   There are three main types of questions enabled by default, with each
+   requiring slightly different handling. A fourth can be enabled via the
+   [120]enable_symptom_duration option.
+
+single
+
+   The single type represents simple Yes/No/Don't know questions, e.g.
+   JSON
+"question": {
+  "type": "single",
+  "text": "Does the pain increase when you touch or press on the area around you
+r ear?",
+  "items": [
+    {
+      "id": "s_476",
+      "name": "Pain increases when touching ear area",
+      "choices": [
+        {
+          "id": "present",
+          "label": "Yes"
+        },
+        {
+          "id": "absent",
+          "label": "No"
+        },
+        {
+          "id": "unknown",
+          "label": "Don't know"
+        }
+      ]
+    }
+  ],
+  "extras": {}
+}
+
+   (BUTTON)
+
+   When the user answers a question of the single type, exactly one object
+   with the id of the item and selected choice_id should be added to the
+   evidence list of the next request, e.g.
+   JSON
+"evidence": [
+  ...
+  {"id": "s_476", "choice_id": "present"}
+]
+
+   (BUTTON)
+
+group_single
+
+   The group_single type represents questions about a group of related but
+   mutually exclusive symptoms, of which the patient should choose exactly
+   one, e.g.
+   JSON
+"question": {
+  "type": "group_single",
+  "text": "What is your body temperature?",
+  "items": [
+    {
+      "id": "s_99",
+      "name": "Between 99.5 and 101 °F (37 and 38 °C)",
+      "choices": [
+        {
+          "id": "present",
+          "label": "Yes"
+        },
+        {
+          "id": "absent",
+          "label": "No"
+        },
+        {
+          "id": "unknown",
+          "label": "Don't know"
+        }
+      ]
+    },
+    {
+      "id": "s_100",
+      "name": "Above 101 °F (38 °C)",
+      "choices": [
+        {
+          "id": "present",
+          "label": "Yes"
+        },
+        {
+          "id": "absent",
+          "label": "No"
+        },
+        {
+          "id": "unknown",
+          "label": "Don't know"
+        }
+      ]
+    }
+  ],
+  "extras": {}
+}
+
+   (BUTTON)
+   !!!
+
+   For a question of the group_single type, exactly one object with the id
+   of the selected item and choice_id set to present should be added to
+   the evidence list of the next request, with all other items omitted,
+   e.g.
+   JSON
+"evidence": [
+  ...
+  {"id": "s_99", "choice_id": "present"}
+]
+
+   (BUTTON)
+
+group_multiple
+
+   The group_multiple type represents questions about a group of related
+   symptoms where any number of them can be selected, e.g.
+   JSON
+"question": {
+  "type": "group_multiple",
+  "text": "How would you describe your headache?",
+  "items": [
+    {
+      "id": "s_25",
+      "name": "Pulsing or throbbing",
+      "choices": [
+        {
+          "id": "present",
+          "label": "Yes"
+        },
+        {
+          "id": "absent",
+          "label": "No"
+        },
+        {
+          "id": "unknown",
+          "label": "Don't know"
+        }
+      ]
+    },
+    {
+      "id": "s_604",
+      "name": "Feels like \"stabbing\" or \"drilling\"",
+      "choices": [
+        {
+          "id": "present",
+          "label": "Yes"
+        },
+        {
+          "id": "absent",
+          "label": "No"
+        },
+        {
+          "id": "unknown",
+          "label": "Don't know"
+        }
+      ]
+    },
+    {
+      "id": "s_23",
+      "name": "Feels like pressure around my head",
+      "choices": [
+        {
+          "id": "present",
+          "label": "Yes"
+        },
+        {
+          "id": "absent",
+          "label": "No"
+        },
+        {
+          "id": "unknown",
+          "label": "Don't know"
+        }
+      ]
+    }
+  ],
+  "extras": {}
+}
+
+   (BUTTON)
+   !!!
+
+   An object should be added to the evidence list of the next request for
+   each item of a group_multiple question. Any available choice_id is
+   allowed. Omitting any item may cause the same question to be returned
+   by the API again.
+
+Question extras
+
+   Questions can be configured by using [121]extra request options. For
+   instance, it's possible to [122]disable sensitive content or
+   [123]question groups, [124]add additional explanations, or change to
+   [125]third-person mode. Selecting a different [126]interview mode can
+   change which questions are asked during the interview.
+
+Conditions
+
+   Each response contains a conditions attribute holding a list of
+   possible conditions sorted by their estimated probability.
+
+   Each condition in the rankings is represented by a JSON object with the
+   following attributes: id, name, name_common, and probability.
+
+   While name and common_name attributes are returned for convenience, any
+   additional information about a given condition can be retrieved from
+   the /conditions/{id} [127]endpoint using the id attribute.
+   Alternatively, you can pass [128]include_condition_details in extras to
+   include condition details in the /diagnosis response.
+
+   The probability attribute is a floating point number between 0 and 1
+   indicating a match between reported evidence and conditions in the
+   model.
+
+   Please note that the condition rankings may be empty [] if there is no
+   evidence or in rare cases where the combination of evidence isn't
+   associated with any specific condition.
+
+Ranking limiting
+
+   To prevent reverse-engineering of our models, we limit the number of
+   conditions returned from /diagnosis.
+
+   Most notably, if the list of evidence is shorter than 3, only one
+   condition will be returned. In the case of longer evidence lists,
+   /diagnosis can return up to 20 conditions, depending on the probability
+   distribution of the conditions in the rankings.
+
+Patient Education
+
+   For some conditions, patient education articles may be available, as
+   shown by the has_patient_education attribute in [129]condition_details
+   being set to true. Patient education articles are documents compiled by
+   our medical experts that contain detailed information about a
+   condition's causes, the usual diagnostic process, possible care methods
+   etc., and can be presented to a patient to give them a deeper
+   understanding of the conditions that are returned in the interview
+   process. For more information, please refer to the [130]Patient
+   Education section.
+
+Stop recommendation
+
+   Once enough information has been collected, the interview should be
+   stopped. To help you decide when to stop asking further questions,
+   we've provided the stop condition recommendation. This feature uses a
+   heuristic algorithm which takes into account the number of questions
+   asked and the confidence of the current analysis' results.
+   !!!
+
+   The stop recommendation will be available only if you indicated at
+   least one initial evidence (see [131]Gathering initial evidence).
+
+   If should_stop is true, the stop condition has been reached. False
+   means that the interview should be continued. If the attribute is not
+   available at all, either you haven't specified the initial evidence or
+   the stop recommendation could not be proposed.
+   !!!
+
+   It is possible to finish the interview earlier if
+   has_emergency_evidence is true even if should_stop is false. This is
+   acceptable when the urgency of the case is sufficient for the end-user
+   and quick treatment is needed. However, we recommend continuing the
+   interview until the should_stop attribute is true to achieve the most
+   accurate results regarding the list of most probable conditions and/or
+   triage level. Please note that in some cases, even if
+   has_emergency_evidence is true, the triage level could still be
+   increased from emergency to emergency_ambulance.
+
+Response extras
+
+   The extras attribute in response object is empty by default, but can be
+   used to return additional or experimental attributes for custom models
+   or selected partners.
+
+Extras
+
+   Both the request and response objects may contain an extras attribute.
+   In requests, extras may include additional or experimental options to
+   control the behavior of the inference engine. These options can also
+   influence other endpoints that accept the same request object, such as
+   [132]/suggest or [133]/triage.
+   ¹
+
+   Note that providing invalid or non-existent options will not produce an
+   error.
+
+enable_symptom_duration
+
+   This option introduces a new type of question and an additional
+   evidence attribute to support specifying the duration of an
+   observation. To enable it:
+   JSON
+"extras": {
+  "enable_symptom_duration": true
+}
+
+   (BUTTON)
+
+   This option introduces the duration question type, which differs from
+   other types by replacing the items attribute with evidence_id in the
+   question object:
+   JSON
+"question": {
+  "type": "duration",
+  "text": "How long have you had stomach pain?",
+  "evidence_id": "s_13",
+  "extras": {}
+}
+
+   (BUTTON)
+
+   When responding to a duration type question, the answer should add a
+   single object to the evidence list. This object must use the
+   evidence_id value as its id and include a duration object, apart from
+   the typical choice_id. The duration object consists of two attributes:
+     * value - a required numeric value that specifies the duration,
+     * unit - a required duration unit, one of: week, day, hour, or
+       minute.
+
+   JSON
+"evidence": [
+  {
+    "id": "s_13",
+    "choice_id": "present",
+    "duration": {
+      "value": 2,
+      "unit": "day"
+    }
+  }
+]
+
+   (BUTTON)
+
+   The enable_symptom_duration option also allows for the use of the
+   duration object with initial evidence (observations marked with
+   "source": "initial"). While this addition is optional, including
+   duration information for initial symptoms can enhance the inference
+   process and potentially shorten the duration of the interview.
+
+interview_mode
+
+   This option allows you to control the behavior of the question
+   selection algorithm. The interview mode may have an influence on the
+   duration of the interview as well as the sequencing of questions.
+
+   Currently, the following interview modes are available:
+     * default - suitable for symptom checking applications, providing the
+       right balance between duration of interview and accuracy of the
+       presented results,
+     * triage - suitable for triage applications that prioritize providing
+       a safe triage level rather than attaining the highest possible
+       accuracy for the final list of most probable conditions. If
+       accuracy is a priority, this mode should not be used. The interview
+       process is also shorter in cases where a patient is suspected of
+       having a condition that requires emergency-level support as the
+       interview is then stopped and the results are shown right away.
+
+   JSON
+"extras": {
+  "interview_mode": "triage"
+}
+
+   (BUTTON)
+   !!!
+
+   Interview modes can only be used when [134]5-level triage is enabled.
+
+enable_explanations
+
+   This optional functionality is designed to provide additional
+   descriptions, enhancing user understanding of each question's meaning.
+   JSON
+"extras": {
+  "enable_explanations": true
+}
+
+   (BUTTON)
+
+   When enabled, explanations can be attached to questions or question
+   items. For single type questions, explanations are added at the
+   question level. In group questions, they are attached to individual
+   question items. Two additional attributes are included at both levels:
+     * explication - additional context or description of the observation
+       in question,
+     * instruction - a list of steps to confirm the symptom's presence.
+
+   JSON
+"question": {
+  "type": "single",
+  "text": "Does she have a fever?",
+  "explication": "The most accurate measurement is rectal temperature. You can a
+lso measure the temperature under the armpit or use contactless thermometers. Ho
+wever, using the contact thermometer is more accurate. Follow the thermometer ma
+nufacturer's instructions. A temperature above 37°C or 98.6°F is classified as a
+ fever.",
+  "instruction": [
+    "Clean the thermometer using soap and cold water.",
+    "For rectal insertion, apply a small amount of petroleum jelly to the end of
+ the thermometer.",
+    "Insert the silver tip into the anus or mouth.",
+    "Hold the thermometer in place for 2 minutes, or as long as recommended by t
+he manufacturer."
+  ],
+  "items": [
+    {
+      "id": "s_98",
+      "name": "Fever",
+      "explication": null,
+      "instruction": null,
+      "choices": [
+        {
+          "id": "present",
+          "label": "Yes"
+        },
+        {
+          "id": "absent",
+          "label": "No"
+        },
+        {
+          "id": "unknown",
+          "label": "Don't know"
+        }
+      ]
+    }
+  ],
+  "extras": {}
+}
+
+   (BUTTON)
+   ¹
+
+   Explanations are optional and may not be present for every question or
+   question item. In such cases, null is returned.
+
+enable_third_person_questions
+
+   With this option, the interview can be configured to allow users to
+   answer questions on behalf of someone else. By setting this option to
+   true, each question from the /diagnosis endpoint will be formulated in
+   the third person. As interviews for individuals under the age of 18
+   have to be performed by someone else, if the age selected is under 18
+   then the questions will be asked in third person.
+   JSON
+"extras": {
+  "enable_third_person_questions": true
+}
+
+   (BUTTON)
+   !!!
+
+   If the model in use does not support third person questions, a 400 Bad
+   Request error will be returned with the message: "message": "Third
+   person question not supported."
+
+include_condition_details
+
+   Enabling this option adds an additional condition_details object to
+   each condition in the conditions list. This object contains attributes
+   that have the same values and meanings as those in the output of the
+   [135]/conditions endpoint:
+     * icd10_code
+     * category
+     * prevalence
+     * acuteness
+     * severity
+     * triage_level
+     * hint
+     * has_patient_education
+
+   JSON
+"extras": {
+  "include_condition_details": true
+}
+
+   (BUTTON)
+   JSON
+"conditions": [
+  {
+    "id": "c_255",
+    "name": "Tetanus",
+    "common_name": "Tetanus",
+    "probability": 0.3118,
+    "condition_details": {
+      "icd10_code": "A35",
+      "category": {
+        "id": "cc_16",
+        "name": "Infectiology"
+      },
+      "prevalence": "very_rare",
+      "severity": "severe",
+      "acuteness": "acute",
+      "triage_level": "emergency_ambulance",
+      "hint": "You may need urgent medical attention! Call an ambulance.",
+      "has_patient_education": false
+    }
+  }
+]
+
+   (BUTTON)
+
+Advanced options
+
+   The options listed below can be useful in certain use cases, but are
+   generally not recommended as they may have a negative impact on
+   interview quality.
+
+disable_intimate_content
+
+   This option is used to exclude "intimate" concepts, including those
+   related to sexual activity.
+   JSON
+"extras": {
+  "disable_intimate_content": true
+}
+
+   (BUTTON)
+
+   There are several safeguards to ensure appropriate presentation of
+   content tagged as "intimate". If disable_intimate_content is not
+   included, intimate content may be returned in responses. That said,
+   questions considered very sensitive in nature - especially those about
+   sexual behavior - will still require the user's explicit consent. This
+   consent is facilitated via the Consent to a sexual interview symptom
+   (s_2652). Setting the disable_intimate_content option to true ensures
+   that no content tagged as "intimate" is included.
+
+   Please note that the criteria for what constitutes "intimate" content
+   can change over time. For the most up-to-date information regarding
+   this classification, we recommend contacting Infermedica.
+
+disable_groups
+
+   Activating this option configures the /diagnosis endpoint to return
+   only single type questions, effectively disabling questions of the
+   group_single and group_multiple types. This can be particularly useful
+   in interfaces where implementing group questions is challenging, such
+   as in chatbots or voice assistants. However, as a general guideline, it
+   is recommended to keep group questions enabled for more accurate and
+   shorter interviews.
+   JSON
+"extras": {
+  "disable_groups": true
+}
+
+   (BUTTON)
+
+Deprecated options
+
+   These options are maintained for backward compatibility only and should
+   not be used in new implementations.
+
+disable_adaptive_ranking
+
+   Enabling this option reverts to the legacy method of displaying the
+   ranking of possible conditions, used before the implementation of the
+   current adaptive ranking system.
+   JSON
+"extras": {
+  "disable_adaptive_ranking": true
+}
+
+   (BUTTON)
+
+enable_triage_3
+
+   Activating this option switches back to the legacy 3-level triage
+   system. For detailed information, please refer to the [136]/triage
+   endpoint documentation.
+   JSON
+"extras": {
+  "enable_triage_3": true
+}
+
+   (BUTTON)
+
+Alternative use cases
+
+   While an interactive symptom checker (e.g. mobile application, chatbot
+   or voice assistant) in which the user is presented with a series of
+   medical questions is the most recognizable use case, there are other
+   valid uses of the /diagnosis endpoint.
+
+   The /diagnosis endpoint can be used to provide context-aware decision
+   support, e.g. when paired with /parse to analyze patient notes, or
+   integrated into an EHR-like system to provide instant insights about
+   possible causes or subsequent care steps. In such cases, only one call
+   to /diagnosis is usually required, as all the evidence is known in
+   advance and there is no direct contact with the patient.
+
+   When /diagnosis is used with [137]custom models, there are even more
+   possibilities. We've seen /diagnosis used to qualify patients for
+   clinical trials, to assess the risks of post-operational complications,
+   and to support operators of medical call centers.
+   [138]Suggest Related Concepts[139]Triage
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [140]© 2025 Infermedica[141]Terms of Service[142]Privacy
+   Policy[143]Cookies Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#stateless-api
+  70. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#interview-flow
+  71. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#request
+  72. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#sex-and-age
+  73. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#evidence
+  74. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#indicating-evidence-source
+  75. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#gathering-initial-evidence
+  76. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#indicating-initial-evidence
+  77. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#common-risk-factors
+  78. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#weight-and-height
+  79. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#request-extras
+  80. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#response
+  81. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#question
+  82. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#question-types
+  83. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#single
+  84. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#group_single
+  85. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#group_multiple
+  86. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#question-extras
+  87. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#conditions
+  88. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#ranking-limiting
+  89. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#patient-education
+  90. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#stop-recommendation
+  91. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#response-extras
+  92. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#extras
+  93. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_symptom_duration
+  94. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#interview_mode
+  95. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_explanations
+  96. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_third_person_questions
+  97. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#include_condition_details
+  98. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#advanced-options
+  99. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#disable_intimate_content
+ 100. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#disable_groups
+ 101. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#deprecated-options
+ 102. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#disable_adaptive_ranking
+ 103. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_triage_3
+ 104. file:///tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#alternative-use-cases
+ 105. https://help.infermedica.com/
+ 106. file:///documentation/engine-api/basics/#errors
+ 107. file:///documentation/engine-api/basics/#errors
+ 108. file:///documentation/engine-api/build-your-solution/diagnosis/#gathering-initial-evidence
+ 109. file:///documentation/engine-api/build-your-solution/diagnosis/#common-risk-factors
+ 110. file:///documentation/engine-api/build-your-solution/search/
+ 111. file:///documentation/engine-api/build-your-solution/nlp/
+ 112. file:///documentation/overview/medical-content/available-symptoms/
+ 113. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+ 114. file:///documentation/engine-api/build-your-solution/diagnosis/#stop-recommendation
+ 115. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/#relevant-risk-factors
+ 116. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/#demographic-risk-factors
+ 117. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/#evidence-based-risk-factors
+ 118. https://en.wikipedia.org/wiki/Body_mass_index
+ 119. file:///documentation/engine-api/build-your-solution/diagnosis/#extras
+ 120. file:///documentation/engine-api/build-your-solution/diagnosis/#enable_symptom_duration
+ 121. file:///documentation/engine-api/build-your-solution/diagnosis/#extras
+ 122. file:///documentation/engine-api/build-your-solution/diagnosis/#disable_intimate_content
+ 123. file:///documentation/engine-api/build-your-solution/diagnosis/#disable_groups
+ 124. file:///documentation/engine-api/build-your-solution/diagnosis/#enable_explanations
+ 125. file:///documentation/engine-api/build-your-solution/diagnosis/#enable_third_person_questions
+ 126. file:///documentation/engine-api/build-your-solution/diagnosis/#interview_mode
+ 127. file:///documentation/engine-api/build-your-solution/medical-concepts/#conditions
+ 128. file:///documentation/engine-api/build-your-solution/diagnosis/#include_condition_details
+ 129. file:///documentation/engine-api/build-your-solution/diagnosis/#include_condition_details
+ 130. file:///documentation/engine-api/build-your-solution/patient-education/
+ 131. file:///documentation/engine-api/build-your-solution/diagnosis/#gathering-initial-evidence
+ 132. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+ 133. file:///documentation/engine-api/build-your-solution/triage/
+ 134. file:///documentation/engine-api/build-your-solution/diagnosis/#enable_triage_3
+ 135. file:///documentation/engine-api/build-your-solution/medical-concepts/#conditions
+ 136. file:///documentation/engine-api/build-your-solution/triage/
+ 137. file:///documentation/engine-api/basics/#models
+ 138. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+ 139. file:///documentation/engine-api/build-your-solution/triage/
+ 140. https://infermedica.com/
+ 141. file:///terms-of-service/
+ 142. file:///privacy-policy/
+ 143. file:///cookies-policy/
+
+   Hidden links:
+ 145. file://localhost/
+ 146. https://github.com/shuding/nextra/pages/documentation/engine-api/build-your-solution/diagnosis.mdx
+ 147. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#stateless-api
+ 148. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#interview-flow
+ 149. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#request
+ 150. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#sex-and-age
+ 151. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#evidence
+ 152. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#indicating-evidence-source
+ 153. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#gathering-initial-evidence
+ 154. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#indicating-initial-evidence
+ 155. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#common-risk-factors
+ 156. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#weight-and-height
+ 157. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#request-extras
+ 158. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#response
+ 159. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#question
+ 160. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#question-types
+ 161. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#single
+ 162. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#group_single
+ 163. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#group_multiple
+ 164. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#question-extras
+ 165. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#conditions
+ 166. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#ranking-limiting
+ 167. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#patient-education
+ 168. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#stop-recommendation
+ 169. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#response-extras
+ 170. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#extras
+ 171. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_symptom_duration
+ 172. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#interview_mode
+ 173. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_explanations
+ 174. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_third_person_questions
+ 175. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#include_condition_details
+ 176. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#advanced-options
+ 177. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#disable_intimate_content
+ 178. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#disable_groups
+ 179. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#deprecated-options
+ 180. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#disable_adaptive_ranking
+ 181. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#enable_triage_3
+ 182. file://localhost/tmp/lynxXXXXv4Haqh/L75372-6154TMP.html#alternative-use-cases

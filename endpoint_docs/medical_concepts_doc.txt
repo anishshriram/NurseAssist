@@ -1,0 +1,624 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]Endpoints
+     * [70]Specifying age
+     * [71]Common attributes
+     * [72]Conditions
+     * [73]Endpoints
+     * [74]Attributes
+     * [75]Symptoms
+     * [76]Endpoints
+     * [77]Attributes
+     * [78]Risk factors
+     * [79]Endpoints
+     * [80]Attributes
+     * [81]Querying all concept types
+     * [82]Endpoints
+     * [83]Filtering by types and IDs
+     * [84]Attributes
+
+   [85]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Engine API
+   Build your solution
+   Medical Concepts
+
+Medical concepts
+
+   Our API recognizes various types of medical concepts: symptoms, risk
+   factors, and conditions. Symptoms and risk factors are observations
+   used to describe patient health problems, and our API can suggest
+   conditions as their possible causes.
+
+   To interact with our API, you need to know IDs of medical concepts in
+   our [86]knowledge base. We provide endpoints to assist in [87]finding
+   these IDs, [88]extracting them from free-text, and obtaining detailed
+   information about them, as detailed in this and following sections of
+   the documentation.
+
+Endpoints
+
+   For each medical concept type, there are two REST-inspired read-only
+   endpoints that support GET requests, returning:
+    1. All concepts for a specific age group (e.g.
+       /conditions?age.value=25).
+    2. Details of a single concept, if available for a specific age group
+       (e.g. /conditions/c_1?age.value=25).
+
+   There are also two similar read-only endpoints that allow querying all
+   medical concept types together (/concepts and /concepts/{id}).
+
+Specifying age
+
+   Age is a required parameter for both endpoints because it affects the
+   list of possible medical concepts. Here's how to specify it:
+
+   age.unit - optional parameter:
+     * It can be either year or month,
+     * If not specified, it defaults to year,
+     * If age is provided in months, specifying age.unit as month is
+       required. This is especially important for children under 1 year of
+       age, where age must be provided in months.
+
+   age.value - required parameter:
+     * If age.unit is year, provide a value between 1 and 130,
+     * If age.unit is month, provide a value between 0 and 1560.
+
+   If age.value is missing, invalid, or set to 0 when age.unit is year (or
+   not specified), you will get a 400 Bad Request error.
+
+Common attributes
+
+   Each concept is represented by a JSON object with several attributes.
+   Some attributes are common to all concepts:
+     * id - short and unique concept ID,
+     * name - professional medical term for the concept,
+     * common_name - alternative name in plain language. If common_name is
+       not defined, the API returns name instead.
+
+   Please note that endpoints returning a single concept (e.g.,
+   /conditions/c_1?age.value=25) may provide more attributes than those
+   returning a list of concepts (e.g., /conditions?age.value=25).
+
+Conditions
+
+   Conditions refer to diseases, and other medical disorders defined in
+   our knowledge base. Each condition is assigned a unique ID that begins
+   with the c_ prefix and is followed by an integer, e.g. c_26.
+   ¹
+
+   You can explore the list of all available [89]adult and [90]pediatrics
+   conditions.
+
+Endpoints
+
+    1. The /conditions?age.value={age} endpoint responds to GET requests
+       by returning the list of all conditions available for a given age
+       group.
+       cURL
+curl "https://api.infermedica.com/v3/conditions?age.value=25" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+    2. The /conditions/{id}?age.value={age} endpoint also responds to GET
+       requests, but returns detailed information about a specific
+       condition identified by the provided ID. If an invalid ID is
+       provided, the endpoint will generate a 404 Not Found error.
+       cURL
+curl "https://api.infermedica.com/v3/conditions/c_26?age.value=25" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+
+Attributes
+
+   Apart from id, name and common_name, each condition has several
+   available attributes:
+     * sex_filter - filter indicating conditions only valid for one sex;
+       one of both, female, male
+     * categories - list of categories the condition belongs to (e.g.
+       Dermatology or Gastroenterology)
+     * prevalence - approximate estimate of how common the condition is;
+       one of very_rare, rare, moderate, common
+     * acuteness - comparative distinction between acute and chronic
+       conditions; one of chronic, chronic_with_exacerbations,
+       acute_potentially_chronic, acute
+     * severity - approximate estimate of how severe the condition is; one
+       of mild, moderate, severe; can be used together with acuteness to
+       alert users, e.g. when an acute and severe condition is suggested
+       by /diagnosis
+     * hint - brief bit of advice for patients that recommends the steps
+       to take if a condition is suspected (e.g. Please consult a
+       dermatologist as soon as possible); may be null
+     * icd10_code - ICD-10 code of condition; may be null
+
+   Example of a JSON object representing a condition, as returned by
+   /conditions/c_26?age.value=25:
+   JSON
+{
+  "id": "c_26",
+  "name": "Depressive disorder",
+  "common_name": "Depression",
+  "sex_filter": "both",
+  "categories": [
+    "Psychiatry"
+  ],
+  "prevalence": "rare",
+  "acuteness": "chronic_with_exacerbations",
+  "severity": "severe",
+  "extras": {
+    "icd10_code": "F32.0, F32.1, F32.2, F32.8, F32.9, F33.0, F33.1, F33.2, F33.8
+, F33.9",
+    "hint": "Please consult a psychiatrist or a psychologist."
+  },
+  "triage_level": "consultation",
+  "recommended_channel": "video_teleconsultation"
+}
+
+   (BUTTON)
+
+Symptoms
+
+   Symptoms refer to medical signs and symptoms caused by conditions from
+   our knowledge base. IDs of symptoms start with the s_ prefix and are
+   followed by an integer, e.g. s_962.
+
+   In our knowledge base, symptoms are organized into a parent-child
+   hierarchy. Each symptom can have a single parent symptom assigned, e.g.
+   severe headache is a child of headache. Each parent-child relation has
+   a type assigned to it. The type of each relation is provided as the
+   parent_relation attribute and describes how the child symptom relates
+   to its parent; e.g. the child may refer to a specific body location
+   (e.g. lumbar back pain or back pain) or an exacerbating factor (e.g.
+   abdominal pain increasing after a meal or abdominal pain).
+
+   The parent-child hierarchy of symptoms plays an important role in the
+   symptom assessment process:
+     * reporting a child symptom automatically adds its parent symptom to
+       the evidence list,
+     * reporting a parent symptom as absent will inform the engine not to
+       ask about its children.
+
+   ¹
+
+   You can explore the list of all available [91]adult and [92]pediatrics
+   symptoms.
+
+Endpoints
+
+    1. The /symptoms?age.value={age} endpoint responds to GET requests by
+       returning the list of all symptoms available for a given age group.
+       cURL
+curl "https://api.infermedica.com/v3/symptoms?age.value=25" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+    2. The /symptoms/{id}?age.value={age} endpoint also responds to GET
+       requests, but it only returns detailed information about a single
+       symptom. If an invalid ID is provided, the endpoint will generate a
+       404 Not Found error.
+       cURL
+curl "https://api.infermedica.com/v3/symptoms/s_962?age.value=25" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+
+Attributes
+
+   Like conditions, symptoms have several available attributes (including
+   id, name and common_name):
+     * question - question asking the patient to confirm or deny the
+       symptom; may be null for professional symptoms, which are only
+       intended for medical providers and are not used in patient
+       interviews
+     * question_third_person - question in third person form, asking the
+       reporter to confirm or deny the symptom; may be null for
+       professional symptoms, which are only intended for medical
+       providers and are not used in patient interviews
+     * sex_filter - filter indicating symptoms only valid for one sex: one
+       of both, female, male
+     * category - category of the symptom; currently all symptoms are
+       assigned to the same category: Signs and symptoms
+     * parent_id - ID of the parent symptom; may be null
+     * parent_relation - type of relation with the parent symptom: one of
+       duration, severity, character, exacerbating_factor,
+       diminishing_factor, location, radiation , may be null
+     * children - list of child symptoms (symptoms that indicate this
+       symptom as their parent) and their relations with this symptom
+
+   Example of a JSON object representing a symptom, as returned by
+   /symptoms/s_962?age.value=25:
+   JSON
+{
+  "id": "s_962",
+  "name": "Dysphagia",
+  "common_name": "Difficulty swallowing",
+  "question": "Do you find it difficult to swallow food or feel like it gets stu
+ck in your throat or chest?",
+  "question_third_person": "Does he|she find it difficult to swallow food or fee
+l like it gets stuck in his|her throat or chest?",
+  "sex_filter": "both",
+  "category": "Signs and symptoms",
+  "seriousness": "normal",
+  "extras": {},
+  "children": [
+    {
+      "id": "s_1779",
+      "parent_relation": "location"
+    },
+    {
+      "id": "s_1776",
+      "parent_relation": "location"
+    },
+    {
+      "id": "s_2571",
+      "parent_relation": "severity"
+    }
+  ],
+  "parent_id": null,
+  "parent_relation": null
+}
+
+   (BUTTON)
+
+Risk factors
+
+   Risk factors represent a patient's chronic conditions (e.g. diabetes),
+   lifestyle factors (e.g. smoking), geographical locations (e.g. Central
+   Africa) and events (e.g. insect bite or head injury) that may modify
+   the baseline probability of conditions. IDs of risk factors start with
+   the p_ prefix (as in predisposition) and are followed by an integer,
+   e.g. p_28.
+   ¹
+
+   You can explore the list of all available [93]adult and [94]pediatrics
+   risk factors.
+
+Endpoints
+
+    1. The /risk_factors?age.value={age} endpoint responds to GET requests
+       by returning the list of all risk factors available for given age
+       group.
+       cURL
+curl "https://api.infermedica.com/v3/risk_factors?age.value=25" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+    2. The /risk_factors/{id}?age.value={age} endpoint also responds to
+       GET requests, but it only returns detailed information about a
+       single risk factor. If an invalid ID is provided, the endpoint will
+       generate a 404 Not Found error.
+       cURL
+curl "https://api.infermedica.com/v3/risk_factors/p_28?age.value=25" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+
+Attributes
+
+   These are the attributes available for a risk factor (including id,
+   name and common_name):
+     * question - question asking the patient to confirm or deny the risk
+       factor; may be null for risk factors that should be added
+       automatically based on sex- or age-related risk factors
+     * question_third_person - question in third person form, asking the
+       reporter to confirm or deny the risk factor; may be null for risk
+       factors that should be added automatically based on sex- or
+       age-related risk factors
+     * sex_filter - filter indicating risk factors only valid for one sex:
+       one of both, female, male
+     * category - category of the risk factor; currently all risk factors
+       are assigned to the same category: Risk factors
+
+   Example of a JSON object representing a risk factor, as returned by
+   /risk_factors/p_28?age.value=25:
+   JSON
+{
+  "id": "p_28",
+  "name": "Smoking cigarettes",
+  "common_name": "Smoking cigarettes",
+  "question": "Do you smoke or have you smoked cigarettes in the past for at lea
+st 10 years?",
+  "question_third_person": "Does he|she smoke or has he|she smoked cigarettes in
+ the past for at least 10 years?",
+  "sex_filter": "both",
+  "category": "Risk factors",
+  "seriousness": "normal",
+  "extras": {},
+}
+
+   (BUTTON)
+
+Querying all concept types
+
+   There are specific use cases where querying all concept types together
+   is practical and efficient, as it eliminates the need for multiple
+   requests to individual concept type endpoints. A typical example is
+   displaying a comprehensive summary of a completed interview, listing
+   all reported symptoms, risk factors, and potential conditions
+   identified during the interview. To support these use cases, two more
+   general endpoints are available - /concepts and /concepts/{id}.
+
+Endpoints
+
+    1. The /concepts endpoint responds to GET requests by returning a list
+       of all available medical concepts.
+       Please note that, unlike with other endpoints, the age.value query
+       parameter is not supported here.
+       cURL
+curl "https://api.infermedica.com/v3/concepts" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+    2. The /concepts/{id} endpoint also responds to GET requests,
+       returning details for a single medical concept. If an invalid ID is
+       provided, the endpoint will generate a 404 Not Found error.
+       cURL
+curl "https://api.infermedica.com/v3/concepts/c_1" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+       (BUTTON)
+
+Filtering by types and IDs
+
+   The /concepts endpoint supports filtering concepts by their types and
+   IDs, using the types and ids query parameters, respectively. Both
+   parameters can accept either a single value or multiple comma-separated
+   values. The supported types are condition, symptom, and risk_factor.
+
+   For example, /concepts?types=symptom,condition would return all
+   symptoms and conditions, while /concepts?ids=c_1,s_1 would return a
+   list containing only the concepts c_1 and s_1. These filters can also
+   be used together; for instance, /concepts?ids=c_1,s_1&types=condition
+   would return a list with the single concept c_1.
+
+Attributes
+
+   Both /concepts and /concepts/{id} endpoints return only a minimal set
+   of common attributes, which include id, name, and common_name, as well
+   as:
+     * type - the type of the medical concept, which can be one of
+       condition, symptom, or risk_factor.
+
+   Example of a JSON object representing a condition, as returned by
+   /concepts/c_1:
+   JSON
+{
+  "id": "c_1",
+  "type": "condition",
+  "name": "Achalasia",
+  "common_name": "Achalasia"
+}
+
+   (BUTTON)
+   [95]Interview-Id[96]Search
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [97]© 2025 Infermedica[98]Terms of Service[99]Privacy
+   Policy[100]Cookies Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints
+  70. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#specifying-age
+  71. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#common-attributes
+  72. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#conditions
+  73. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-1
+  74. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes
+  75. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#symptoms
+  76. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-2
+  77. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes-1
+  78. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#risk-factors
+  79. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-3
+  80. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes-2
+  81. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#querying-all-concept-types
+  82. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-4
+  83. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#filtering-by-types-and-ids
+  84. file:///tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes-3
+  85. https://help.infermedica.com/
+  86. file:///documentation/overview/medical-content/
+  87. file:///documentation/engine-api/build-your-solution/search/
+  88. file:///documentation/engine-api/build-your-solution/nlp/
+  89. file:///documentation/overview/medical-content/available-conditions/
+  90. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  91. file:///documentation/overview/medical-content/available-symptoms/
+  92. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  93. file:///documentation/overview/medical-content/available-risk-factors/
+  94. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  95. file:///documentation/engine-api/build-your-solution/interview-id/
+  96. file:///documentation/engine-api/build-your-solution/search/
+  97. https://infermedica.com/
+  98. file:///terms-of-service/
+  99. file:///privacy-policy/
+ 100. file:///cookies-policy/
+
+   Hidden links:
+ 102. file://localhost/
+ 103. https://github.com/shuding/nextra/pages/documentation/engine-api/build-your-solution/medical-concepts.mdx
+ 104. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints
+ 105. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#specifying-age
+ 106. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#common-attributes
+ 107. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#conditions
+ 108. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-1
+ 109. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes
+ 110. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#symptoms
+ 111. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-2
+ 112. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes-1
+ 113. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#risk-factors
+ 114. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-3
+ 115. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes-2
+ 116. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#querying-all-concept-types
+ 117. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#endpoints-4
+ 118. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#filtering-by-types-and-ids
+ 119. file://localhost/tmp/lynxXXXXdcuOks/L75440-1370TMP.html#attributes-3
