@@ -37,12 +37,13 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     }
 };
 
-// Zod schema for login validation
+//Zod schema for validation
 const LoginSchema = z.object({
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(1, 'Password is required'), // Basic check, length done during registration
+    email: z.string({ required_error: 'Email is required' }).email('Invalid email address'),
+    password: z.string({ required_error: 'Password is required' }).min(1, 'Password cannot be empty'), // Keep min(1) for empty string check if needed
 });
 
+// controller functions 
 // login - find user, compare password, generate JWT
 export const login = async (req: Request, res: Response, next: NextFunction) => {
     try {

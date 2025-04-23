@@ -4,10 +4,20 @@ import { z } from 'zod';
 
 // validating user data 
 export const UserSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters long'),
-    role: z.enum(['Nurse', 'Doctor'], { errorMap: () => ({ message: "Role must be 'Nurse' or 'Doctor'" }) }),
+    name: z.string({ required_error: 'Name is required' }).min(1, 'Name cannot be empty'), 
+    email: z.string({ required_error: 'Email is required' }).email('Invalid email address'),
+    password: z.string({ required_error: 'Password is required' }).min(8, 'Password must be at least 8 characters long'),
+    role: z.enum(['Nurse', 'Doctor'], {
+        errorMap: (issue, ctx) => {
+            if (issue.code === z.ZodIssueCode.invalid_type && issue.received === 'undefined') {
+                return { message: 'Role is required' };
+            }
+            if (issue.code === z.ZodIssueCode.invalid_enum_value) {
+                return { message: "Role must be 'Nurse' or 'Doctor'" };
+            }
+            return { message: ctx.defaultError };
+        }
+    }),
 });
 
 export type UserInput = z.infer<typeof UserSchema>;
@@ -70,4 +80,3 @@ export const findUserByEmail = async (email: string): Promise<(User & { password
         throw new Error('Failed to retrieve user due to a database error.');
     }
 };
-
