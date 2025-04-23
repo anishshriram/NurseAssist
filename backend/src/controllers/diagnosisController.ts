@@ -5,9 +5,9 @@ import { z } from 'zod';
 
 // /evidence
 const evidenceSchema = z.object({
-    id: z.string().min(1), // Infermedica symptom/risk factor ID (e.g., 's_123', 'risk_5')
+    id: z.string().min(1), // symptom/risk factor ID 
     choice_id: z.enum(['present', 'absent', 'unknown']),
-    source: z.string().optional(), // Optional source information
+    source: z.string().optional(), 
 });
 
 // /diagnosis

@@ -1,7 +1,7 @@
 // /home/adilh/classes/NurseAssist/backend/src/services/infermedicaService.ts
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import config from '../config';
-import { v4 as uuidv4 } from 'uuid'; // For generating Interview-Ids if needed
+import { v4 as uuidv4 } from 'uuid';
 
 // Define interfaces for expected API request bodies and responses (optional but recommended for type safety)
 // /diagnosis
@@ -12,7 +12,7 @@ interface DiagnosisRequestBody {
     extras?: { [key: string]: any }; // For options like enable_explanations
 }
 
-///diagnosis response
+//diagnosis response
 interface DiagnosisResponse {
     question: any; //idk what to put here
     conditions: Array<{ id: string; name: string; common_name: string; probability: number }>;

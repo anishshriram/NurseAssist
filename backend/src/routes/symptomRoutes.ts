@@ -1,13 +1,12 @@
-// /home/adilh/classes/NurseAssist/backend/src/routes/symptomRoutes.ts
 import { Router } from 'express';
 import { searchSymptoms } from '../controllers/symptomController';
 
 const router = Router();
 
-// GET /api/symptoms/search?phrase=headache&age=30&sex=female
-// Requires X-Interview-ID header
+// rest api I need to run: GET /api/symptoms/search?phrase=headache&age=30&sex=female
+// interview Id is required, generate a random uuid
 router.get('/search', searchSymptoms);
 
-// Add other symptom/evidence related routes here later (e.g., POST /evidence)
+// access evidence via /evidence later
 
 export default router;

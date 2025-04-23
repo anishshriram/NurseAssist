@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import config from './config'; // Ensure .env is loaded first
+import config from './config'; 
 
 // routing packages
 // import authRoutes from './routes/authRoutes';
