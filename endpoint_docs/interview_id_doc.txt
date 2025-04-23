@@ -1,0 +1,296 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]Who creates an Interview-Id?
+     * [70]Format of an Interview-Id
+     * [71]Example requests
+     * [72]Example use of Interview-Id
+
+   [73]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Engine API
+   Build your solution
+   Interview-Id
+
+Interview-Id
+
+   The Interview-Id is a unique, random, immutable string that defines a
+   given patient's single interview with Infermedica API.
+
+   A single interview with Infermedica API
+
+   In this context, "a single interview" may span across multiple calls to
+   the API and usually refers to a full symptom-checking interview - from
+   the moment the user initiates the interview to when they get all of the
+   required recommendations and decide to finish the interaction.
+
+   The Interview-Id value should be passed to Infermedica API during each
+   request via the HTTP header: Interview-Id.
+
+Who creates an Interview-Id?
+
+   Whenever a patient starts an interview with Infermedica API, a single
+   Interview-Id should be generated. It's the API client's responsibility
+   to generate that Interview-Id.
+
+Format of an Interview-Id
+
+   Infermedica does not enforce any particular form, but we recommend
+   following these rules:
+     * The Interview-Id should be unique to a single interview. In other
+       words, no interviews should share the same Interview-Id.
+     * The Interview-Id should stay unchanged throughout the entirety of a
+       single interview with the API. In other words, a single interview
+       should be marked with a single Interview-Id from start to finish.
+     * The Interview-Id should be random (i.e. "meaningless") - it should
+       not convey any business/medical knowledge nor should it be any kind
+       of PII (patient's ID, name, etc.). In fact - on its own, it should
+       convey no information whatsoever.
+
+   Putting all that together - the best practice is to use some kind of
+   [74]UUID (opens in a new tab) generation tool to create Interview-Ids.
+
+Example requests
+
+   Let's assume you generated an Interview-Id using the UUID tool as
+   follows: d083e76f-3c29-44aa-8893-587f3691c0c5
+
+   Then each call to the API should add it to the Interview-Id HTTP
+   header.
+
+   E.g. call to the /search endpoint:
+   cURL
+curl "https://api.infermedica.com/v3/search?phrase=abdominal%20pain&age.value=30
+&sex=male" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Content-Type: application/json" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5" \
+  -H "Dev-Mode: true"
+
+   (BUTTON)
+
+   and a call to the /diagnosis endpoint:
+   cURL
+curl "https://api.infermedica.com/v3/diagnosis" \
+  -X "POST" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Content-Type: application/json" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5" \
+  -H "Dev-Mode: true" \
+  -d '{"sex":"male", "age":{"value": 30}, "evidence":[{"id":"s_100", "choice_id"
+:"present"}]}'
+
+   (BUTTON)
+
+Example use of Interview-Id
+
+    1. The patient initiates an interview with an Infermedica API-based
+       product.
+    2. The API client generates a new Interview-Id.
+    3. The interview begins. Each of the mentioned requests to the API
+       should contain the Interview-Id HTTP header. What the exact
+       boundaries of a single interview are is dependent on your specific
+       use-case. Here is our example:
+          + several calls to the /search endpoint to find chief complaints
+            (initial symptoms).
+          + a call to the /suggest endpoint containing all of the initial
+            evidence found in point 1.
+          + multiple calls to the /diagnosis endpoint, starting with the
+            initial evidence and answers to the /suggest questions. Each
+            call results in the user being asked a question. After which,
+            the evidence list that is included in these calls is expanded
+            to include the user's answer to the previous question and a
+            subsequent call is made, getting back another question. This
+            process repeats until a stop condition is met.
+          + additional calls to the recommendation endpoints such as
+            /triage, /recommend_specialist etc.
+    4. The interview ends.
+          + The Interview-Id should be stored by the client.
+          + The Interview-Id should be "forgotten" - meaning that it
+            should never be reused for another interview.
+
+   [75]Basics[76]Medical Concepts
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [77]© 2025 Infermedica[78]Terms of Service[79]Privacy Policy[80]Cookies
+   Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#who-creates-an-interview-id
+  70. file:///tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#format-of-an-interview-id
+  71. file:///tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#example-requests
+  72. file:///tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#example-use-of-interview-id
+  73. https://help.infermedica.com/
+  74. https://en.wikipedia.org/wiki/Universally_unique_identifier
+  75. file:///documentation/engine-api/basics/
+  76. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  77. https://infermedica.com/
+  78. file:///terms-of-service/
+  79. file:///privacy-policy/
+  80. file:///cookies-policy/
+
+   Hidden links:
+  82. file://localhost/
+  83. https://github.com/shuding/nextra/pages/documentation/engine-api/build-your-solution/interview-id.mdx
+  84. file://localhost/tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#who-creates-an-interview-id
+  85. file://localhost/tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#format-of-an-interview-id
+  86. file://localhost/tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#example-requests
+  87. file://localhost/tmp/lynxXXXXRyXKH3/L75406-9774TMP.html#example-use-of-interview-id

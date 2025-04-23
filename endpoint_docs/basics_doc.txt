@@ -1,0 +1,36 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+   (BUTTON)
+   Light
+
+   Error page illustration
+
+We've turned the site upside down...
+
+   ...and it looks like this page is missing.
+   [4]Go to documentation
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [5]© 2025 Infermedica[6]Terms of Service[7]Privacy Policy[8]Cookies
+   Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. https://infermedica.com/
+   6. file:///terms-of-service/
+   7. file:///privacy-policy/
+   8. file:///cookies-policy/
+
+   Hidden links:
+  10. file://localhost/

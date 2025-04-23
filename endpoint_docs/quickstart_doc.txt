@@ -1,0 +1,547 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]Setup
+     * [70]Authentication
+     * [71]First request
+     * [72]Output
+     * [73]Question
+     * [74]Conditions
+     * [75]Interview flow
+     * [76]Stop recommendation
+     * [77]Results
+     * [78]Next steps
+
+   [79]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Engine API
+   Quickstart
+
+Quickstart
+
+   This short tutorial will get you started with the Infermedica API.
+   Subsequent sections of this documentation describe our API in greater
+   detail but if you're short on time and have experience with web
+   services, this is a quick overview of what working with Infermedica API
+   is like.
+
+Setup
+
+   The current version of the Infermedica API is available at
+   https://api.infermedica.com/v3. It is a standard web service that
+   accepts GET and POST requests. All responses (including error messages)
+   use the JSON format. POST requests also take JSON inputs (make sure you
+   include the header Content-Type: application/json).
+
+Authentication
+
+   The Infermedica API uses custom HTTP headers to authenticate your
+   requests. You will need to add App-Id and App-Key headers to every
+   request you make. You can find your credentials on the Apps page (when
+   you're logged in). An Interview-Id should also be included. More
+   information on Interview-Id can be found [80]here.
+
+First request
+
+   The most important part of our API, given that it handles the symptom
+   assessment reasoning, is the /diagnosis endpoint. The endpoint accepts
+   POST requests. Apart from sex and age, it requires a list of observed
+   evidence (symptoms or risk factors). The list cannot be empty, so first
+   you need to gather some initial information about the case.
+
+   Let's assume we have a male patient, aged 30, suffering from severe
+   headaches, light sensitivity and a stiff neck. Each observation is
+   represented by a unique ID; in this case the symptom IDs are s_1193,
+   s_488 and s_418, respectively. There are also ways to search for
+   observations and find their IDs (e.g. autocomplete or processing free
+   text). Each piece of evidence can have one of three possible states:
+   present, absent, or unknown. The state is defined using the choice_id
+   attribute.
+
+   In order to achieve the best results and enable more API features, at
+   least one of the reported observations should be marked as initial. The
+   initial observation is usually the chief complaint that you first
+   enter.
+
+   The case described above can be represented with the following JSON
+   object:
+   JSON
+{
+  "sex": "male",
+  "age": {
+    "value": 30
+  },
+  "evidence": [
+    {
+      "id": "s_1193",
+      "choice_id": "present",
+      "source": "initial"
+    },
+    {
+      "id": "s_488",
+      "choice_id": "present"
+    },
+    {
+      "id": "s_418",
+      "choice_id": "present"
+    }
+  ]
+}
+
+   (BUTTON)
+
+   Your first request to the API could look like this:
+   cURL
+curl "https://api.infermedica.com/v3/diagnosis" \
+  -X "POST" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Content-Type: application/json" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5" \
+  -H "Dev-Mode: true" \
+  -d '{
+    "sex": "male",
+    "age": {
+      "value": 30
+    },
+    "evidence": [
+      {
+        "id": "s_1193",
+        "choice_id": "present",
+        "source": "initial"
+      },
+      {
+        "id": "s_488",
+        "choice_id": "present"
+      },
+      {
+        "id": "s_418",
+        "choice_id": "present"
+      }
+    ]
+  }'
+
+   (BUTTON)
+
+Output
+
+   The response returned from /diagnosis will contain three main sections:
+     * the next interview question to ask your user,
+     * a ranking of the most probable health conditions,
+     * a flag indicating if the interview should be stopped (please note
+       that you need to have at least one observation marked as initial to
+       see this flag in the output).
+
+   JSON
+{
+  "question": {...},
+  "conditions": [...],
+  "should_stop": true,
+  ...
+}
+
+   (BUTTON)
+
+Question
+
+   The question attribute represents the next interview question that can
+   be presented to the user. Questions are follow-ups to already reported
+   evidence and can be used to build conversation-like interfaces (symptom
+   checkers, chatbots, etc.) that mimic the way a doctor would interview
+   their patients.
+
+   In this example, the API generates a question about a symptom called
+   Fever (represented by its ID s_98).
+   JSON
+{
+  "question": {
+    "type": "single",
+    "text": "Do you have a fever?",
+    "items": [
+      {
+        "id": "s_98",
+        "name": "Fever",
+        "choices": [
+          {
+            "id": "present",
+            "label": "Yes"
+          },
+          {
+            "id": "absent",
+            "label": "No"
+          },
+          {
+            "id": "unknown",
+            "label": "Don't know"
+          }
+        ]
+      }
+    ],
+    "extras": {}
+  },
+  "conditions": [...],
+  ...
+}
+
+   (BUTTON)
+   ¹
+
+   Please note that in some rare cases question can have a null value
+   (e.g. when an empty evidence list is sent or when there are no more
+   questions to ask).
+
+   There are three possible types of questions:
+     * single - a yes/no question about a single symptom (e.g. "Do you
+       have a headache?")
+     * group_single - single-choice questions about a group of related
+       symptoms (e.g. "What is your body temperature?")
+     * group_multiple - a multiple-choice question about a group of
+       related symptoms (e.g. "What is the character of your headache?");
+       any number of symptoms (including none) can be selected.
+
+   ¹
+
+   In some use cases (a chatbot being a popular one), the presentation of
+   group questions (group_single or group_multiple) to users might be
+   difficult to implement. You can disable group questions to make sure
+   the API only returns single questions. To disable group questions,
+   please include the following in your JSON object:
+"extras": {"disable_groups": true}.
+
+   (BUTTON)
+
+Conditions
+
+   The conditions attribute is a list of health conditions that is related
+   to the reported evidence. The list is a ranking sorted by the estimated
+   probability of the conditions.
+   JSON
+{
+  "question": {...},
+  "conditions": [
+    {
+      "id": "c_49",
+      "name": "Migraine",
+      "probability": 0.4532
+    },
+    {
+      "id": "c_151",
+      "name": "Meningitis",
+      "probability": 0.2942
+    },
+    {
+      "id": "c_55",
+      "name": "Tension-type headaches",
+      "probability": 0.1787
+    }
+  ],
+  ...
+}
+
+   (BUTTON)
+   !!!
+
+   Please note that for all API calls containing less than three reported
+   observations the list of conditions will be limited to a single
+   condition. For all calls with more than two observations (either
+   present or absent) the API will return the full ranking of relevant
+   conditions. This behavior has been introduced due to security reasons.
+
+Interview flow
+
+   It's possible and sometimes necessary (e.g. when analyzing data without
+   user interaction) to settle for the condition ranking that is returned
+   by the first call to /diagnosis, but asking the user additional
+   questions generated by the API can greatly improve results.
+
+   Following on from the previous example, the condition rankings seem to
+   indicate that our patient may suffer from migraines but answering
+   additional questions could either help to confirm this suggestion, by
+   increasing its probability and ruling out other, more serious health
+   problems, such as meningitis, or could prompt a broader list of most
+   probable conditions by suggesting other possible causes.
+
+   If the patient were to answer "No" to the question about fever, you
+   would need to add the following evidence:
+   JSON
+{
+  "id": "s_98",
+  "choice_id": "absent"
+}
+
+   (BUTTON)
+   ¹
+
+   For single and group_single questions, only one piece of evidence (as
+   in the above example) is required. However, please note that
+   group_multiple questions require special handling: you need to include
+   evidence for each item of the question. You can find more examples on
+   the /diagnosis description page.
+   !!!
+
+   It's very important to understand that the /diagnosis endpoint is
+   stateless. This means that the API does not track the state or progress
+   of cases it receives, so with each request you need to send all the
+   information gathered about the patient to this point.
+
+   In our case, the next /diagnosis request could include the following
+   JSON object:
+   JSON
+{
+  "sex": "male",
+  "age": {
+    "value": 30
+  },
+  "evidence": [
+    {
+      "id": "s_1193",
+      "choice_id": "present",
+      "initial": "true"
+    },
+    {
+      "id": "s_488",
+      "choice_id": "present"
+    },
+    {
+      "id": "s_418",
+      "choice_id": "present"
+    },
+    {
+      "id": "s_320",
+      "choice_id": "absent"
+    }
+  ]
+}
+
+   (BUTTON)
+
+   Note that you have to include the new evidence but (because of the
+   stateless nature of /diagnosis) still keep the other data (including
+   sex, age and initial evidence).
+
+   You can continue this process: ask a question, accept an answer from
+   the user, append new evidence to the list, make a request to
+   /diagnosis. Each time the API will reply with an updated condition
+   rankings and another question to ask.
+
+Stop recommendation
+
+   If should_stop is true, the stop condition has been reached. False
+   means that the interview should be continued. If the attribute is not
+   available at all, it means that either you haven't specified the
+   initial evidence or that the stop recommendation could not be proposed.
+   You can find more information about the stop recommendation and
+   available interview modes on the [81]Diagnosis page.
+
+Results
+
+   When your stop condition is met, you may use the condition rankings
+   that were returned from your last call to /diagnosis to obtain more
+   information about each condition (such as its severity, acuteness, or
+   advice for the user) by using the /conditions endpoint, or get an
+   explanation of why a given condition was suggested by using the
+   /explain endpoint (for conditions with probability >20%).
+
+Next steps
+
+   You should now have an initial understanding of how to work with the
+   Infermedica API. Feel free to read the subsequent sections of this
+   documentation for more detailed information about each endpoint, or go
+   to our [82]GitHub (opens in a new tab) to see sample applications and
+   libraries built using our API.
+   [83]FAQ[84]Basics
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [85]© 2025 Infermedica[86]Terms of Service[87]Privacy Policy[88]Cookies
+   Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#setup
+  70. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#authentication
+  71. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#first-request
+  72. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#output
+  73. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#question
+  74. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#conditions
+  75. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#interview-flow
+  76. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#stop-recommendation
+  77. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#results
+  78. file:///tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#next-steps
+  79. https://help.infermedica.com/
+  80. file:///documentation/engine-api/build-your-solution/interview-id/
+  81. file:///documentation/engine-api/build-your-solution/diagnosis/
+  82. https://github.com/infermedica
+  83. file:///documentation/overview/faq/
+  84. file:///documentation/engine-api/basics/
+  85. https://infermedica.com/
+  86. file:///terms-of-service/
+  87. file:///privacy-policy/
+  88. file:///cookies-policy/
+
+   Hidden links:
+  90. file://localhost/
+  91. https://github.com/shuding/nextra/pages/documentation/engine-api/index.mdx
+  92. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#setup
+  93. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#authentication
+  94. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#first-request
+  95. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#output
+  96. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#question
+  97. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#conditions
+  98. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#interview-flow
+  99. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#stop-recommendation
+ 100. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#results
+ 101. file://localhost/tmp/lynxXXXXc8ivcr/L76099-6129TMP.html#next-steps

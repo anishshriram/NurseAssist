@@ -1,0 +1,325 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]Request
+     * [70]Filtering by sex
+     * [71]Filtering by concept type
+     * [72]Filtering out professional observations
+     * [73]Response
+
+   [74]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Engine API
+   Build your solution
+   Search
+
+Search
+
+   The /search endpoint helps find [75]medical concepts (symptoms, risk
+   factors, and conditions) that match a given phrase. In contrast to the
+   /parse endpoint, the /search endpoint can handle short word fragments,
+   even those just a few letters long, and is suitable for building
+   autocomplete-like input forms. Its main function is to convert
+   user-entered phrases into specific medical concept IDs recognized by
+   our API.
+
+   Apart from the [76]common attributes name and common_name, /search also
+   has access to a database that has two types of synonyms - ones used by
+   the medical community and ones used by regular users. This enhances its
+   capability to correctly recognize a broader range of user-entered
+   phrases.
+   ¹
+
+   Unlike the /parse endpoint, /search supports all [77]languages
+   available in the Infermedica API.
+
+Request
+
+   The /search endpoint responds to GET requests and requires two query
+   parameters:
+     * phrase - the phrase to be matched against medical concepts.
+     * age.value - the patient's age, which should be a positive integer
+       between 0 and 130.
+
+   An optional age.unit query parameter can also be added to change the
+   default unit from year to month. For example,
+   age.value=5&age.unit=month indicates an age of 5 months. If age.unit is
+   omitted, the default unit of year will be used.
+   cURL
+curl "https://api.infermedica.com/v3/search?phrase=bell&age.value=30" \
+  -X "GET" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Interview-Id: d083e76f-3c29-44aa-8893-587f3691c0c5"
+
+   (BUTTON)
+
+Filtering by sex
+
+   An optional sex parameter can be used to filter the search results for
+   concepts applicable to a selected biological sex. The allowed values
+   are female or male.
+
+   For example, use /v3/search?phrase=lacta&age.value=30&sex=female to
+   show only those medical concepts relevant for one biological sex.
+
+Filtering by concept type
+
+   By default, the /search endpoint only returns observations (symptoms
+   and risk factors). You can use the optional types parameter to specify
+   a comma-separated list of medical concept types to be included in the
+   search results. The supported types are condition, symptom, and
+   risk_factor.
+
+   For example, to search for both symptoms and conditions, you could use
+   /v3/search?phrase=influ&age.value=30&types=symptom,condition.
+
+Filtering out professional observations
+
+   An optional include_pro parameter can be used to include or exclude
+   professional observations from the search results. Professional
+   observations refer to symptoms or risk factors that are difficult for
+   individuals without medical training to self-assess accurately as they
+   require specific knowledge or diagnostic tools to identify. These
+   complex observations are not used in patient-facing interviews and they
+   do not have questions assigned to them.
+
+   By default, the include_pro parameter is set to true, which means
+   professional observations are included in the search results. To
+   exclude these observations and only return concepts suitable for
+   patient self-assessment, the include_pro parameter can be set to false.
+
+   For example, to exclude professional observations from the search
+   results, use /v3/search?phrase=sign&age.value=30&include_pro=false.
+
+Response
+
+   The response is a JSON list of objects, each containing two attributes:
+     * id - the ID of the medical concept,
+     * label - the actual value that matched the phrase. This can be a
+       value of either the name or common_name attributes, or one of their
+       synonyms.
+
+   JSON
+[
+        {
+                "id": "s_13",
+                "label": "belly pain"
+        },
+        {
+                "id": "s_309",
+                "label": "belly feels full"
+        },
+        {
+                "id": "s_1840",
+                "label": "belly pain since morning"
+        },
+        {
+                "id": "s_1783",
+                "label": "moderate belly ache"
+        },
+        {
+                "id": "s_1852",
+                "label": "belly pain from a few days"
+        },
+        {
+                "id": "s_1782",
+                "label": "my belly hurts a little"
+        },
+        {
+                "id": "s_1842",
+                "label": "belly pain from weeks"
+        },
+        {
+                "id": "s_1860",
+                "label": "belly cramps"
+        }
+]
+
+   (BUTTON)
+   [78]Medical Concepts[79]NLP
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [80]© 2025 Infermedica[81]Terms of Service[82]Privacy Policy[83]Cookies
+   Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXX9siJtB/L75815-9868TMP.html#request
+  70. file:///tmp/lynxXXXX9siJtB/L75815-9868TMP.html#filtering-by-sex
+  71. file:///tmp/lynxXXXX9siJtB/L75815-9868TMP.html#filtering-by-concept-type
+  72. file:///tmp/lynxXXXX9siJtB/L75815-9868TMP.html#filtering-out-professional-observations
+  73. file:///tmp/lynxXXXX9siJtB/L75815-9868TMP.html#response
+  74. https://help.infermedica.com/
+  75. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  76. file:///documentation/engine-api/build-your-solution/medical-concepts/#common-attributes
+  77. file:///documentation/engine-api/basics/#models
+  78. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  79. file:///documentation/engine-api/build-your-solution/nlp/
+  80. https://infermedica.com/
+  81. file:///terms-of-service/
+  82. file:///privacy-policy/
+  83. file:///cookies-policy/
+
+   Hidden links:
+  85. file://localhost/
+  86. https://github.com/shuding/nextra/pages/documentation/engine-api/build-your-solution/search.mdx
+  87. file://localhost/tmp/lynxXXXX9siJtB/L75815-9868TMP.html#request
+  88. file://localhost/tmp/lynxXXXX9siJtB/L75815-9868TMP.html#filtering-by-sex
+  89. file://localhost/tmp/lynxXXXX9siJtB/L75815-9868TMP.html#filtering-by-concept-type
+  90. file://localhost/tmp/lynxXXXX9siJtB/L75815-9868TMP.html#filtering-out-professional-observations
+  91. file://localhost/tmp/lynxXXXX9siJtB/L75815-9868TMP.html#response

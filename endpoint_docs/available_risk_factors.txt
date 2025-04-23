@@ -1,0 +1,695 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]A
+     * [70]B
+     * [71]C
+     * [72]D
+     * [73]E
+     * [74]F
+     * [75]G
+     * [76]H
+     * [77]I
+     * [78]K
+     * [79]L
+     * [80]M
+     * [81]N
+     * [82]O
+     * [83]P
+     * [84]R
+     * [85]S
+     * [86]T
+     * [87]U
+     * [88]V
+     * [89]W
+
+   [90]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Overview
+   [91]Medical Content
+   Risk Factors
+
+Available risk factors
+
+   Check out the risk factors available in our knowledge base. Remember,
+   that you can also download the current list of risk factors using the
+   /concepts?types=risk_factor endpoint.
+   ¹
+
+   Browse through all available conditions and symptoms
+
+   Conditions: [92]Adults -> [93]Pediatrics ->
+
+   Symptoms: [94]Adults -> [95]Pediatrics ->
+
+   Risk factors: [96]Adults -> [97]Pediatrics ->
+
+A
+
+     * Abdominal injury (p_144)
+     * Acceleration-deceleration injury (p_145)
+     * Alcohol consumption in the last month (p_656)
+     * Alcohol consumption less than 24 hours ago, large amount (p_658)
+     * Alcohol consumption less than 24 hours ago, small amount (p_657)
+     * Alcohol consumption, binge drinking (p_653)
+     * Alcohol consumption, heavy drinking (p_654)
+     * Alcohol consumption, risky drinking (p_655)
+     * Animal bite (p_155)
+     * Animal bite, snake (p_390)
+     * Ankle injury (p_243)
+     * Anticoagulant use (p_174)
+     * Arm injury (p_254)
+     * Atmospheric pressure changes (p_81)
+
+B
+
+     * Back injury (p_146)
+     * Bacterial tonsillitis (p_79)
+     * Blunt eye injury (p_704)
+     * Breastfeeding (p_281)
+     * Breasts development (p_295)
+
+C
+
+     * Cannabinoids ingestion, past 72 hours (p_410)
+     * Cannabis smoking, past 72 hours (p_69)
+     * Carbon monoxide exposure (p_40)
+     * Central venous catheter (p_716)
+     * Chest injury (p_136)
+     * Chronic cannabinoid use (p_511)
+     * Chronic exposure to pesticide or benzene based chemicals (p_393)
+     * Chronic heavy alcohol use in the past (p_659)
+     * Chronic NSAIDs use (p_220)
+     * Circumcision (p_283)
+     * Clavicle injury (p_582)
+     * Cold exposure (p_624)
+     * Compromised immune system (p_83)
+     * Consumption of foods or drinks that cause bloating (p_380)
+     * Consumption of fruits or vegetables contaminated with animal feces
+       (p_303)
+     * Consumption of raw or undercooked meat (p_63)
+     * Contact lenses (p_139)
+     * Contact with allergen (p_82)
+     * Contact with allergen, potential severe allergic reaction (p_612)
+     * Contact with animals (p_122)
+     * Contact with animals, cat (p_100)
+     * Contact with children with gastroenteritis (p_500)
+     * Contact with sick person, chickenpox (p_99)
+     * Contact with sick person, monkeypox (p_508)
+     * Contact with the blood of another person (p_385)
+     * COVID-19 vaccination, more than 6 months ago (p_360)
+
+D
+
+     * Dental trauma (p_188)
+     * Diagnosed aortic aneurysm (p_182)
+     * Diagnosed asthma (p_167)
+     * Diagnosed atherosclerosis (p_173)
+     * Diagnosed atrial fibrillation (p_342)
+     * Diagnosed cholecystolithiasis (p_60)
+     * Diagnosed chronic heart failure (p_441)
+     * Diagnosed chronic obstructive pulmonary disease (p_164)
+     * Diagnosed cirrhosis of the liver (p_622)
+     * Diagnosed concussion (p_306)
+     * Diagnosed coronary disease (p_78)
+     * Diagnosed Crohn's disease (p_93)
+     * Diagnosed diabetes (p_8)
+     * Diagnosed diabetes mellitus, type 1 (p_370)
+     * Diagnosed diabetes mellitus, type 2 (p_371)
+     * Diagnosed diabetes, other type (p_378)
+     * Diagnosed diabetes, unknown type (p_379)
+     * Diagnosed hemolytic anemia (p_530)
+     * Diagnosed hemophilia (p_202)
+     * Diagnosed hypertension (p_9)
+     * Diagnosed osteoporosis or osteopenia (p_333)
+     * Diagnosed ovarian mass (p_386)
+     * Diagnosed peripheral vascular disease (p_183)
+     * Diagnosed psoriasis (p_263)
+     * Diagnosed structural heart disease (p_121)
+     * Diagnosed ulcerative colitis (p_358)
+     * Drug consumption, new in the past 4 weeks (p_549)
+     * Dyslipidemia (p_719)
+
+E
+
+     * Ear injury (p_209)
+     * Elbow injury (p_253)
+     * Enlarged scar (p_364)
+     * Evidence of COVID-19 infection, between 2 weeks and 2 months ago
+       (p_608)
+     * Excessive use of visual display terminals (p_361)
+     * Excessive UV exposure (p_128)
+     * Eyelid injury (p_690)
+
+F
+
+     * Fall onto an outstretched hand (p_299)
+     * Family history of bleeding disorders (p_272)
+     * Family history of celiac disease (p_718)
+     * Family history of Helicobacter pylori infection (p_355)
+     * Finger injury (p_169)
+     * Fly bite, Asia, excluding Middle East, Russia, Mongolia and
+       Kazakhstan (p_437)
+     * Fly bite, Australia and Oceania (p_414)
+     * Fly bite, Central Africa (p_478)
+     * Fly bite, Central or South America (p_418)
+     * Fly bite, Europe (p_419)
+     * Fly bite, Middle East (p_417)
+     * Fly bite, North America (p_435)
+     * Fly bite, Northern Africa (p_477)
+     * Fly bite, Russia, Kazakhstan, or Mongolia (p_436)
+     * Fly bite, Southern Africa (p_479)
+     * Foot injury (p_246)
+     * Forearm injury (p_252)
+     * Foreign body in wound (p_528)
+     * Frequent tobacco smoke exposure (p_267)
+
+G
+
+     * Genital injury (p_207)
+
+H
+
+     * Hand injury (p_250)
+     * Head area or neck injury (p_260)
+     * Heavy metal exposure (p_353)
+     * High risk for an ectopic pregnancy (p_204)
+     * Hip injury (p_245)
+     * History of a stressful situation, in the past 6 months (p_509)
+     * History of a tick bite, 3 weeks to 3 months ago, Asia, excluding
+       Middle East, Russia, Mongolia and Kazakhstan (p_595)
+     * History of a tick bite, 3 weeks to 3 months ago, Europe (p_589)
+     * History of a tick bite, 3 weeks to 3 months ago, North America
+       (p_592)
+     * History of a tick bite, 3 weeks to 3 months ago, Russia,
+       Kazakhstan, or Mongolia (p_593)
+     * History of a tick bite, more than 3 months ago, Asia, excluding
+       Middle East, Russia, Mongolia and Kazakhstan (p_596)
+     * History of a tick bite, more than 3 months ago, Europe (p_590)
+     * History of a tick bite, more than 3 months ago, Russia, Kazakhstan,
+       or Mongolia (p_594)
+     * History of a tick bite, more then 3 months ago, North America
+       (p_591)
+     * History of anaphylactic reaction (p_176)
+     * History of burn (p_384)
+     * History of chickenpox or VZV vaccination (p_296)
+     * History of cholecystectomy (p_397)
+     * History of colectomy (p_311)
+     * History of coronarography (p_319)
+     * History of COVID infection (p_318)
+     * History of cured malignant neoplasm in childhood (p_695)
+     * History of cystectomy (p_313)
+     * History of deep vein thrombosis (p_201)
+     * History of depressive episode (p_171)
+     * History of foreign body insertion in ear (p_490)
+     * History of foreign body insertion in nose (p_491)
+     * History of foreign body insertion in vulva or vagina (p_556)
+     * History of gastrectomy (p_312)
+     * History of head trauma (p_307)
+     * History of heart bypass surgery (p_320)
+     * History of Helicobacter pylori infection (p_683)
+     * History of hernia surgery (p_324)
+     * History of hip joint replacement (p_321)
+     * History of hypertensive crisis (p_327)
+     * History of hysterectomy (p_276)
+     * History of knee joint replacement (p_322)
+     * History of laryngectomy (p_325)
+     * History of malignant neoplasm (p_691)
+     * History of marine injury (p_442)
+     * History of mastectomy (p_309)
+     * History of miscarriage (p_559)
+     * History of nephrectomy (p_314)
+     * History of nephrolithiasis (p_196)
+     * History of orchiectomy (p_315)
+     * History of polypectomy (p_317)
+     * History of prostatectomy (p_316)
+     * History of pulmonary tuberculosis (p_344)
+     * History of pulmonectomy (p_310)
+     * History of rheumatic fever (p_90)
+     * History of sepsis (p_323)
+     * History of stroke (p_278)
+     * History of thyroidectomy (p_308)
+     * History of tonsillectomy (p_190)
+     * History of vasectomy (p_326)
+     * Hormonal contraceptive or menopausal hormone therapy (p_54)
+     * Human bite (p_679)
+     * Hymenoptera sting, Asia, excluding Middle East, Russia, Mongolia
+       and Kazakhstan (p_466)
+     * Hymenoptera sting, Australia and Oceania (p_468)
+     * Hymenoptera sting, Central Africa (p_484)
+     * Hymenoptera sting, Central and South America (p_463)
+     * Hymenoptera sting, Europe (p_464)
+     * Hymenoptera sting, Middle East (p_467)
+     * Hymenoptera sting, North America (p_462)
+     * Hymenoptera sting, Northern Africa (p_483)
+     * Hymenoptera sting, Russia, Kazakhstan, or Mongolia (p_465)
+     * Hymenoptera sting, Southern Africa (p_485)
+
+I
+
+     * Improper hand hygiene (p_367)
+     * Improper oral hygiene (p_357)
+     * Incomplete or lack of tetanus vaccination (p_536)
+     * Indigenous Australian heritage (p_389)
+     * Instituting ACE-inhibitor therapy (p_149)
+     * Intrauterine contraception, hormonal (p_641)
+     * Intrauterine contraception, non-hormonal (p_642)
+     * Intrauterine contraception, unknown type (p_561)
+     * Intravenous drug use (p_49)
+
+K
+
+     * Kissing bug bite, Central or South America (p_434)
+     * Kissing bug bite, North America (p_424)
+     * Knee injury (p_244)
+
+L
+
+     * Last tetanus immunization less than 5 years ago (p_615)
+     * Last tetanus immunization more than 5 years ago (p_208)
+     * Limb injury (p_53)
+     * Lip injury (p_282)
+     * Local upper limb compression (p_191)
+     * Long contact with wet soil (p_506)
+     * Low BMI (p_6)
+     * Lower leg injury (p_247)
+     * Lower limb injury (p_256)
+
+M
+
+     * Major force injury (p_261)
+     * Male sexual immaturity (p_157)
+     * Man (p_2)
+     * Man who does not reveal his sexual preferences (p_496)
+     * Man who has sex with men (p_493)
+     * Man who has sex with women (p_494)
+     * Man who has sex with women and men (p_499)
+     * Maternal alcohol consumption during pregnancy (p_375)
+     * Minor injury of nail fold (p_576)
+     * Missed mandatory vaccine (p_292)
+     * Mosquito bite, Asia, excluding Middle East, Russia, Mongolia and
+       Kazakhstan (p_429)
+     * Mosquito bite, Australia and Oceania (p_432)
+     * Mosquito bite, Central Africa (p_472)
+     * Mosquito bite, Central or South America (p_427)
+     * Mosquito bite, Europe (p_430)
+     * Mosquito bite, Middle East (p_431)
+     * Mosquito bite, North America (p_428)
+     * Mosquito bite, Northern Africa (p_471)
+     * Mosquito bite, Russia, Kazakhstan, or Mongolia (p_438)
+     * Mosquito bite, Southern Africa (p_473)
+
+N
+
+     * Nail injury (p_229)
+     * Neck injury (p_240)
+     * New intensive physical activity (p_334)
+     * No childbirth in the past 6 weeks (p_488)
+     * No history of sexual intercourse (p_721)
+     * No suspicion of abuse (p_449)
+     * Non-breastfeeding (p_619)
+     * Non-healing wound (p_166)
+     * Non-serious eye injury (p_142)
+     * Nose injury (p_185)
+
+O
+
+     * Ongoing malignant neoplasm (p_681)
+     * Ongoing or recently completed chemotherapy (p_675)
+     * Ongoing or recently completed radiation therapy (p_676)
+     * Opioid use, past 72 hours (p_43)
+     * Oral antibiotics in the past 2 weeks (p_305)
+     * Oral iron therapy (p_377)
+     * Other serious eye injury (p_710)
+     * Overdosing prescribed medication (p_714)
+     * Overweight and obesity (p_7)
+
+P
+
+     * Paracetamol overdose, past 72 hours (p_25)
+     * Pelvis injury (p_241)
+     * Perforation injury of eye (p_689)
+     * Permanent mobility limitation (p_707)
+     * Personal or family history of allergy (p_287)
+     * Pharmacological abortion in the last month (p_660)
+     * Plaster cast on a limb (p_670)
+     * Possible contact with COVID-19 case (p_301)
+     * Possible methanol consumption, past 72 hours (p_599)
+     * Postmenopause (p_11)
+     * Postpartum period (p_55)
+     * Pre-menstrual age (p_141)
+     * Pregnancy (p_42)
+     * Pregnancy, I trimester (p_152)
+     * Pregnancy, II trimester (p_153)
+     * Pregnancy, III trimester (p_154)
+     * Presence of a stoma (p_680)
+     * Prior myocardial infarction (p_80)
+     * Procedural abortion in the last month (p_661)
+     * Profuse bleeding recently (p_213)
+     * Prolonged exposure to sunlight and heat (p_138)
+     * Prolonged lower limb immobilization (p_280)
+     * Psychological trauma, less than a month ago (p_518)
+     * Psychological trauma, more than a month ago (p_519)
+
+R
+
+     * Recent alcohol consumption (p_143)
+     * Recent beetroot consumption (p_352)
+     * Recent burn (p_234)
+     * Recent burn injury to the eye (p_697)
+     * Recent Caesarean Section (p_566)
+     * Recent contact with herbicides (p_36)
+     * Recent contact with insecticides (p_41)
+     * Recent COVID-19 infection (p_339)
+     * Recent fall from standing height (p_583)
+     * Recent foreign body insertion in anus (p_562)
+     * Recent head injury (p_232)
+     * Recent history of urinary tract infections (p_161)
+     * Recent hysterectomy (p_668)
+     * Recent immunization (p_366)
+     * Recent inhalation injury (p_613)
+     * Recent invasive procedure (p_586)
+     * Recent otitis media (p_354)
+     * Recent ovarian stimulation (p_662)
+     * Recent physical injury (p_264)
+     * Recent procedure on cervix (p_667)
+     * Recent surgery (p_585)
+     * Recent upper respiratory tract infection (p_148)
+     * Residence or recent travel, Asia, excluding Middle East, Russia,
+       Mongolia and Kazakhstan (p_236)
+     * Residence or recent travel, Australia and Oceania (p_19)
+     * Residence or recent travel, Central Africa (p_17)
+     * Residence or recent travel, Central or South America (p_14)
+     * Residence or recent travel, Europe (p_15)
+     * Residence or recent travel, Middle East (p_21)
+     * Residence or recent travel, Northern Africa (p_16)
+     * Residence or recent travel, Russia, Kazakhstan, or Mongolia (p_20)
+     * Residence or recent travel, Southern Africa (p_18)
+     * Residence or recent travel, the United States, Canada or Greenland
+       (p_13)
+     * Risky sexual behavior (p_216)
+
+S
+
+     * Salicylate overdose, past 72 hours (p_273)
+     * Sedative or hypnotic withdrawal (p_46)
+     * Shoulder injury (p_255)
+     * Sleeping pills or sedatives use, past 72 hours (p_45)
+     * Smokeless tobacco usage (p_533)
+     * Smoking cigarettes (p_28)
+     * Spider bite, Asia, excluding Middle East, Russia, Mongolia and
+       Kazakhstan (p_458)
+     * Spider bite, Australia and Oceania (p_460)
+     * Spider bite, Central Africa (p_481)
+     * Spider bite, Central and South America (p_455)
+     * Spider bite, Europe (p_456)
+     * Spider bite, Middle East (p_459)
+     * Spider bite, North America (p_454)
+     * Spider bite, Northern Africa (p_480)
+     * Spider bite, Russia, Kazakhstan, or Mongolia (p_457)
+     * Spider bite, Southern Africa (p_482)
+     * Stimulants use, past 72 hours (p_156)
+
+T
+
+     * Thigh injury (p_248)
+     * Tick bite, Asia, excluding Middle East, Russia, Mongolia and
+       Kazakhstan (p_440)
+     * Tick bite, Australia and Oceania (p_452)
+     * Tick bite, Central Africa (p_475)
+     * Tick bite, Central or South America (p_420)
+     * Tick bite, Europe (p_421)
+     * Tick bite, Middle East (p_422)
+     * Tick bite, North America (p_415)
+     * Tick bite, Northern Africa (p_476)
+     * Tick bite, Russia, Kazakhstan, or Mongolia (p_439)
+     * Tick bite, Southern Africa (p_474)
+     * Time spent at more than 2500 meters or 8200 ft above sea level
+       (p_140)
+     * Toe injury (p_168)
+     * Transvaginal procedure on uterus in the past 2 weeks (p_666)
+     * Trunk injury (p_259)
+
+U
+
+     * Unbalanced vegetarian diet (p_61)
+     * Uncertainty about abuse (p_448)
+     * Uncircumcised male (p_443)
+     * Unknown insect bite, Asia, excluding Middle East, Russia, Mongolia
+       and Kazakhstan (p_408)
+     * Unknown insect bite, Australia and Oceania (p_409)
+     * Unknown insect bite, Central Africa (p_402)
+     * Unknown insect bite, Central or South America (p_404)
+     * Unknown insect bite, Europe (p_400)
+     * Unknown insect bite, Middle East (p_406)
+     * Unknown insect bite, North America (p_405)
+     * Unknown insect bite, Northern Africa (p_403)
+     * Unknown insect bite, Russia, Kazakhstan, or Mongolia (p_407)
+     * Unknown insect bite, Southern Africa (p_401)
+     * Unprotected vaginal intercourse in the past 3 months (p_328)
+     * Unspecified conditions marker (p_230)
+     * Upper limb injury (p_257)
+     * Usage of antipsychotic drugs (p_686)
+     * Usage of serotonergic drugs (p_685)
+
+V
+
+     * Vaping (p_711)
+     * Victim of abuse (p_447)
+     * Victim of physical abuse (p_335)
+     * Victim of psychological abuse (p_363)
+
+W
+
+     * Weather sensitivity (p_376)
+     * Wild mushroom consumption (p_37)
+     * Within two years after menarche (p_293)
+     * Woman (p_1)
+     * Woman who does not reveal her sexual preferences (p_497)
+     * Woman who has sex with men (p_495)
+     * Woman who has sex with men and women (p_498)
+     * Woman who has sex with women (p_492)
+     * Wrist injury (p_251)
+
+   [98]Pediatrics Symptoms[99]Pediatrics Risk Factors
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [100]© 2025 Infermedica[101]Terms of Service[102]Privacy
+   Policy[103]Cookies Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#a
+  70. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#b
+  71. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#c
+  72. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#d
+  73. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#e
+  74. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#f
+  75. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#g
+  76. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#h
+  77. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#i
+  78. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#k
+  79. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#l
+  80. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#m
+  81. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#n
+  82. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#o
+  83. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#p
+  84. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#r
+  85. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#s
+  86. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#t
+  87. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#u
+  88. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#v
+  89. file:///tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#w
+  90. https://help.infermedica.com/
+  91. file:///documentation/overview/medical-content/
+  92. file:///documentation/overview/medical-content/available-conditions/
+  93. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  94. file:///documentation/overview/medical-content/available-symptoms/
+  95. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  96. file:///documentation/overview/medical-content/available-risk-factors/
+  97. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  98. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  99. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+ 100. https://infermedica.com/
+ 101. file:///terms-of-service/
+ 102. file:///privacy-policy/
+ 103. file:///cookies-policy/
+
+   Hidden links:
+ 105. file://localhost/
+ 106. https://github.com/shuding/nextra/pages/documentation/overview/medical-content/available-risk-factors.mdx
+ 107. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#a
+ 108. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#b
+ 109. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#c
+ 110. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#d
+ 111. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#e
+ 112. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#f
+ 113. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#g
+ 114. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#h
+ 115. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#i
+ 116. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#k
+ 117. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#l
+ 118. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#m
+ 119. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#n
+ 120. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#o
+ 121. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#p
+ 122. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#r
+ 123. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#s
+ 124. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#t
+ 125. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#u
+ 126. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#v
+ 127. file://localhost/tmp/lynxXXXXSWrBKX/L76402-9783TMP.html#w

@@ -1,0 +1,328 @@
+    (BUTTON) Documentation
+   [1]Get in touchGet in touch[2]For businessFor business (opens in a new
+   tab)[3]Log inLog in (opens in a new tab)
+   ____________________
+   (BUTTON)
+   ____________________
+     * (BUTTON) Overview
+          + [4]Overview
+            [5]Platform API
+            [6]Engine API
+          + [7]Introduction
+          + [8]Platform API vs Engine API
+          + [9]Medical Content
+               o [10]Conditions
+               o [11]Pediatrics Conditions
+               o [12]Symptoms
+               o [13]Pediatrics Symptoms
+               o [14]Risk Factors
+               o [15]Pediatrics Risk Factors
+          + [16]Patient Education Coverage
+          + [17]Medical Changelog
+          + [18]Implementations
+          + [19]Integrations
+          + [20]FAQ
+     * (BUTTON) Engine API
+          + [21]Overview
+            [22]Platform API
+            [23]Engine API
+          + [24]Quickstart
+          + [25]Basics
+          + (BUTTON) Build your solution
+               o [26]Interview-Id
+               o [27]Medical Concepts
+               o [28]Search
+               o [29]NLP
+               o [30]Suggest Related Concepts
+               o [31]Diagnosis
+               o [32]Triage
+               o [33]Specialist & Channel Recommender
+               o [34]Patient Education
+               o [35]Rationale
+               o [36]Explain
+               o [37]Intent Survey
+          + [38]API reference
+          + [39]Postman collection
+          + (BUTTON) Resources
+               o [40]Help Center /^ (opens in a new tab)
+               o [41]UI Component library /^ (opens in a new tab)
+               o [42]Status page /^ (opens in a new tab)
+          + [43]Changelog: Engine API
+          + [44]MDR
+          + [45]FAQ
+     * (BUTTON) Platform API
+          + [46]Overview
+            [47]Platform API
+            [48]Engine API
+          + [49]Getting started
+          + (BUTTON) Basics
+               o [50]Authentication
+               o [51]Settings
+          + (BUTTON) Interview types
+               o [52]Triage
+               o [53]Intake
+               o [54]Follow-up
+          + (BUTTON) Build your solution
+               o [55]Users
+               o [56]Patients
+               o [57]Surveys
+               o [58]Navigating Question Flows
+               o [59]Fetching Results
+               o [60]Medical Knowledge
+               o [61]Webhooks
+          + (BUTTON) Resources
+               o [62]Help Center /^ (opens in a new tab)
+               o [63]UI Component library /^ (opens in a new tab)
+               o [64]Status page /^ (opens in a new tab)
+          + [65]Changelog: Platform API
+          + [66]MDR
+          + [67]FAQ
+     * (BUTTON) api-intake
+          + [68]Navigating Question Flows
+
+   (BUTTON)
+   Light
+
+   On This Page
+     * [69]Request
+     * [70]Extras
+     * [71]Response
+     * [72]Types of rationale
+
+   [73]Visit the Help Center -> (opens in a new tab)
+   Documentation
+   Engine API
+   Build your solution
+   Rationale
+
+Rationale
+
+   The /rationale endpoint enhances transparency and insight into the
+   internal logic of the question selection process that determines which
+   observation to ask about next. An observation refers to a [74]medical
+   concept in our knowledge base, representing one of the patient's health
+   parameters: symptom, risk factor, or lab test. Once the algorithm
+   selects an observation, the /rationale endpoint can provide the
+   reasoning behind that choice. The reasoning can then be displayed to
+   end-users during the interview to improve their overall understanding
+   of and confidence in the system.
+   ¹
+
+   Trial access to Infermedica API limits calls to the /rationale
+   endpoint. [75]Contact us for more plan options.
+
+Request
+
+   The /rationale endpoint responds to POST requests and accepts the same
+   JSON object as the /diagnosis endpoint.
+   cURL
+curl "https://api.infermedica.com/v3/rationale" \
+  -X "POST" \
+  -H "App-Id: XXXXXXXX" \
+  -H "App-Key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" \
+  -H "Content-Type: application/json" \
+  -H "Interview-ID: d083e76f-3c29-44aa-8893-587f3691c0c5" \
+  -d '{
+        "age" : {"value": 25},
+        "evidence" : [
+            {
+                "choice_id" : "present",
+                "id" : "s_44"
+            }
+        ],
+        "sex" : "female"
+  }'
+
+   (BUTTON)
+
+   The example above describes the case of a 25-year-old female patient
+   who has already reported joint pain (represented here by symptom s_44).
+
+Extras
+
+   The extras attribute found in the /diagnosis endpoint is also available
+   with /rationale. For more information, see [76]Extras.
+
+Response
+
+   Rationale is an object comprised of the following attributes:
+     * type: string - a well defined code (r0-r6)
+     * observation_params: list[string] - a list of observation IDs,
+       relevant to prioritizing a question
+     * condition_params: list[string] - a list of condition IDs, relevant
+       to prioritizing a question
+
+   The response is represented by a JSON object that uses the previously
+   mentioned data model.
+   JSON
+{
+    "type": "r6",
+    "observation_params": [
+        {
+            "id": "s_44",
+            "name": "Joint pain",
+            "common_name": "Joint pain"
+        }
+    ],
+    "condition_params": []
+}
+
+   (BUTTON)
+
+   This response indicates that the question asked by the algorithm is an
+   important observation directly related to one of the pieces of evidence
+   already provided. In this case - to joint pain.
+
+Types of rationale
+
+   The different rationale types are as follows:
+     * r0 - Current question has the highest inferred statistical
+       relevance. Returned possible values include:
+          + observation_params - a one-element list containing the
+            observation in question
+          + condition_params - all of the rankings conditions that are
+            related to the observation in question
+     * r1 - Current question is based on a custom rule that's been used to
+       refine the algorithm. This will be one of four variants:
+          + the observation is both considered important by our medical
+            experts and has a sufficiently high inferred relevance.
+            Returned possible values include:
+               o observation_params - a one-element set, the observation
+               o condition_params - empty
+          + the observation is crucial for the improvement of confidence
+            in several key conditions. Returned possible values include:
+               o observation_params - empty
+               o condition_params - the set of conditions that more
+                 confidence is needed for
+          + the observation is a child node of another relevant
+            observation and has a sufficiently inferred relevance value.
+            Returned possible values include:
+               o observation_params - a one-element set, the parent
+                 observation of the prioritized observation
+               o condition_params - empty
+     * r2 - Current question is about one of a few pre-defined "key
+       symptoms" and is relevant for a condition that is sufficiently high
+       in statistical relevance. Returned possible values include:
+          + observation_params - a one-element set, the key symptom
+          + condition_params - a one-element set, the condition that the
+            key symptom is relevant for
+     * r3 - Current question is about a mandatory observation for a
+       condition that is sufficiently probable in relevance. Returned
+       possible values include:
+          + observation_params - empty
+          + condition_params - a one-element set, the condition that the
+            observation is mandatory for
+     * r4 - Current question is about a risk factor that, depending on its
+       state, may change the statistical relevance of the conditions
+       significantly. Returned possible values include:
+          + observation_params - a one-element set, the risk factor
+          + condition_params - a one-element set, the condition the risk
+            factor is most significant to
+     * r5 - No longer used.
+     * r6 - Current question is about the most important observation out
+       of those directly related to the evidence provided. Returned
+       possible values include:
+          + observation_params - a one-element set, the source observation
+          + condition_params - empty
+
+   [77]Patient Education[78]Explain
+   (BUTTON)
+   Light
+     __________________________________________________________________
+
+   [79]© 2025 Infermedica[80]Terms of Service[81]Privacy Policy[82]Cookies
+   Policy
+
+References
+
+   Visible links:
+   1. file:///get-in-touch/
+   2. https://infermedica.com/solutions/infermedica-api
+   3. https://myapp.infermedica.com/login
+   4. file:///documentation/overview/
+   5. file:///documentation/platform-api/
+   6. file:///documentation/engine-api/
+   7. file:///documentation/overview/
+   8. file:///documentation/overview/platform-api-vs-engine-api/
+   9. file:///documentation/overview/medical-content/
+  10. file:///documentation/overview/medical-content/available-conditions/
+  11. file:///documentation/overview/medical-content/available-pediatrics-conditions/
+  12. file:///documentation/overview/medical-content/available-symptoms/
+  13. file:///documentation/overview/medical-content/available-pediatrics-symptoms/
+  14. file:///documentation/overview/medical-content/available-risk-factors/
+  15. file:///documentation/overview/medical-content/available-pediatrics-risk-factors/
+  16. file:///documentation/overview/patient-education-coverage/
+  17. file:///documentation/overview/changelog/
+  18. file:///documentation/overview/implementations/
+  19. file:///documentation/overview/integrations/
+  20. file:///documentation/overview/faq/
+  21. file:///documentation/overview/
+  22. file:///documentation/platform-api/
+  23. file:///documentation/engine-api/
+  24. file:///documentation/engine-api/
+  25. file:///documentation/engine-api/basics/
+  26. file:///documentation/engine-api/build-your-solution/interview-id/
+  27. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  28. file:///documentation/engine-api/build-your-solution/search/
+  29. file:///documentation/engine-api/build-your-solution/nlp/
+  30. file:///documentation/engine-api/build-your-solution/suggest-related-concepts/
+  31. file:///documentation/engine-api/build-your-solution/diagnosis/
+  32. file:///documentation/engine-api/build-your-solution/triage/
+  33. file:///documentation/engine-api/build-your-solution/specialist-recommender/
+  34. file:///documentation/engine-api/build-your-solution/patient-education/
+  35. file:///documentation/engine-api/build-your-solution/rationale/
+  36. file:///documentation/engine-api/build-your-solution/explain/
+  37. file:///documentation/engine-api/build-your-solution/intent-survey/
+  38. file:///documentation/engine-api/api/
+  39. file:///documentation/engine-api/postman/
+  40. https://help.infermedica.com/
+  41. https://component.infermedica.com/
+  42. https://status.infermedica.com/
+  43. file:///documentation/engine-api/changelog-api/
+  44. file:///documentation/engine-api/mdr/
+  45. file:///documentation/engine-api/faq/
+  46. file:///documentation/overview/
+  47. file:///documentation/platform-api/
+  48. file:///documentation/engine-api/
+  49. file:///documentation/platform-api/
+  50. file:///documentation/platform-api/basics/authentication/
+  51. file:///documentation/platform-api/basics/settings/
+  52. file:///documentation/platform-api/interview-types/triage/
+  53. file:///documentation/platform-api/interview-types/intake/
+  54. file:///documentation/platform-api/interview-types/follow-up/
+  55. file:///documentation/platform-api/build-your-solution/users/
+  56. file:///documentation/platform-api/build-your-solution/patients/
+  57. file:///documentation/platform-api/build-your-solution/surveys/
+  58. file:///documentation/platform-api/build-your-solution/navigating-question-flows/
+  59. file:///documentation/platform-api/build-your-solution/fetching-results/
+  60. file:///documentation/platform-api/build-your-solution/medical-knowledge/
+  61. file:///documentation/platform-api/build-your-solution/webhooks/
+  62. https://help.infermedica.com/
+  63. https://component.infermedica.com/
+  64. https://status.infermedica.com/
+  65. file:///documentation/platform-api/changelog/
+  66. file:///documentation/platform-api/mdr/
+  67. file:///documentation/platform-api/faq/
+  68. file:///documentation/api-intake/navigating-question-flows/
+  69. file:///tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#request
+  70. file:///tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#extras
+  71. file:///tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#response
+  72. file:///tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#types-of-rationale
+  73. https://help.infermedica.com/
+  74. file:///documentation/engine-api/build-your-solution/medical-concepts/
+  75. mailto:support@infermedica.com
+  76. file:///documentation/engine-api/build-your-solution/diagnosis/#extras
+  77. file:///documentation/engine-api/build-your-solution/patient-education/
+  78. file:///documentation/engine-api/build-your-solution/explain/
+  79. https://infermedica.com/
+  80. file:///terms-of-service/
+  81. file:///privacy-policy/
+  82. file:///cookies-policy/
+
+   Hidden links:
+  84. file://localhost/
+  85. https://github.com/shuding/nextra/pages/documentation/engine-api/build-your-solution/rationale.mdx
+  86. file://localhost/tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#request
+  87. file://localhost/tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#extras
+  88. file://localhost/tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#response
+  89. file://localhost/tmp/lynxXXXXMSwnVo/L88683-7575TMP.html#types-of-rationale
