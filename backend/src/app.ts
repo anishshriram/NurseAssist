@@ -3,11 +3,11 @@ import cors from 'cors';
 import config from './config'; 
 
 // routing packages
-// import authRoutes from './routes/authRoutes';
-// import sessionRoutes from './routes/sessionRoutes';
+import authRoutes from './routes/authRoutes';
 import symptomRoutes from './routes/symptomRoutes';
 import diagnosisRoutes from './routes/diagnosisRoutes';
 // import patientRoutes from './routes/patientRoutes';
+// import sessionRoutes from './routes/sessionRoutes';
 
 const app: Express = express();
 
@@ -35,7 +35,7 @@ app.get('/health', (req: Request, res: Response) => {
 // routing
 app.use('/api/symptoms', symptomRoutes);
 app.use('/api/diagnosis', diagnosisRoutes); // Mount diagnosis routes
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/sessions', sessionRoutes);
 // app.use('/api/patients', patientRoutes);
 
