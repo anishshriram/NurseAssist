@@ -7,7 +7,7 @@ import NurseDashboard from "./pages/NurseDashboard";
 
 
 function App(){
-    const [showLogin, setShowLogin] = useState(false); // true -> show login, false -> show register
+    const [showLogin, setShowLogin] = useState(true); // true -> show login, false -> show register
     const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
 
     function togglePage(){

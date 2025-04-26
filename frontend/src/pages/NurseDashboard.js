@@ -101,7 +101,7 @@ function NurseDashboard({handleLogout}){
         React.createElement("button", {
             key: "logoutButton",
             onClick: handleLogout
-        }, "Log Out")
+        }, "Logout")
         
     ]);
 }
