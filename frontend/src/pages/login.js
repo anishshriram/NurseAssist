@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {loginUser} from "../services/authenticationService"
 
-function Login(){
+function Login({togglePage, setUserRole}){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState(""); // Success or error message
@@ -18,7 +18,7 @@ function Login(){
         if(result.error){
             setMessage(result.error);
         }else{
-            setMessage('Welcome ${result.role}!');
+            setMessage('Welcome result.role');
             // Create a redirect to the correct dashboard based on role (doctor, nurse, admin)
         }
     }
@@ -52,7 +52,13 @@ function Login(){
         }, "Login"),
 
         // Welcome message or error message
-        React.createElement("p", {key: "message"}, message)
+        React.createElement("p", {key: "message"}, message),
+
+        // Switch to Register Button
+        React.createElement("button", {
+            key: "goToRegister",
+            onClick: () => togglePage()
+        }, "Don't have an account? Register Here")
     ]);
 }
 

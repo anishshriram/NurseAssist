@@ -71,7 +71,13 @@ function Register({togglePage, setUserRole}){
         }, "Register"),
 
         // Welcome message or error message
-        React.createElement("p", {key: "message"}, message)
+        React.createElement("p", {key: "message"}, message),
+        
+        // Switch to Login Button
+        React.createElement("button", {
+            key: "goToRegister",
+            onClick: () => togglePage()
+        }, "Don't have an account? Login Here")
     ]);
 }
 
