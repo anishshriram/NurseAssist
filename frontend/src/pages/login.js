@@ -1,5 +1,5 @@
-import React from "react";
-import {loginUser} from "./services/authenticationService"
+import React, {useState} from "react";
+import {loginUser} from "../services/authenticationService"
 
 function Login(){
     const [email, setEmail] = useState("");
@@ -18,7 +18,7 @@ function Login(){
         if(result.error){
             setMessage(result.error);
         }else{
-            setMessage("Welcome ${result.role}!");
+            setMessage('Welcome ${result.role}!');
             // Create a redirect to the correct dashboard based on role (doctor, nurse, admin)
         }
     }
