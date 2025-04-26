@@ -18,7 +18,8 @@ function Login({togglePage, setUserRole}){
         if(result.error){
             setMessage(result.error);
         }else{
-            setMessage('Welcome result.role');
+            localStorage.setItem("userRole", result.role);
+            setUserRole(result.role);
             // Create a redirect to the correct dashboard based on role (doctor, nurse, admin)
         }
     }
