@@ -7,7 +7,7 @@ const mockPatients = [
     {id: 3, name: "patiente3", status: "Awaiting Symptoms"}
 ]
 
-function NurseDashboard({handleLogout}){
+function NurseDashboard({handleLogout, userName}){
     const [patients, setPatients] = useState(mockPatients); // Update
     const [sortType, setSortType] = useState("name");
     const [searchTerm, setSearchTerm] = useState(""); // Tracks whats typed into the search bar
@@ -46,7 +46,7 @@ function NurseDashboard({handleLogout}){
 
     return React.createElement("div", null, [
         // Title element
-        React.createElement("h2", {key: "title"}, "Welcome Nurse!"),
+        React.createElement("h2", {key: "title"}, "Welcome Nurse " + userName + "!"),
 
         // Button to take you to the enter symptoms page
         React.createElement("button", {

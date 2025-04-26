@@ -9,6 +9,7 @@ import NurseDashboard from "./pages/NurseDashboard";
 function App(){
     const [showLogin, setShowLogin] = useState(true); // true -> show login, false -> show register
     const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
+    const [userName, setUserName] = useState(localStorage.getItem("userName"));
 
     function togglePage(){
         setShowLogin(!showLogin); // Switch between pages, this basically switches the state value
@@ -16,12 +17,14 @@ function App(){
 
     function handleLogout(){
         localStorage.removeItem("userRole");
+        localStorage.removeItem("userName");
         setUserRole(null);
+        setUserName(null);
     }
 
     // If user is logged in, show the correct dashboard
     if (userRole === "Nurse") {
-        return React.createElement(NurseDashboard, {handleLogout});
+        return React.createElement(NurseDashboard, {handleLogout, userName});
     //} else if (userRole === "Doctor") {
         //return React.createElement(DoctorDashboard);
     //} else if (userRole === "Admin") {
