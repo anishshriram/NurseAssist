@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState}  from "react";
 
-function Register(){
+function Register({togglePage, setUserRole}){
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -8,6 +8,7 @@ function Register(){
     const [message, setMessage] = useState("");
 
     function handleRegistration(){
+        console.log("name:", name, "email:", email, "password:", password, "role:", role);
         // Ensures formatting is correct
         if(!name || !email || !password || !role) {
             setMessage("Please fill out all fields.");
@@ -15,6 +16,8 @@ function Register(){
         }
 
         // Temporary placeholder -> Replace with real API call
+        localStorage.setItem("userRole", role);
+        setUserRole(role);
         setMessage(`Account created for ${role}: ${name}`);
     }
 
@@ -64,7 +67,7 @@ function Register(){
         // time its for handleRegister)
         React.createElement("button", {
             key: "registerButton",
-            onClick: handleRegister
+            onClick: handleRegistration
         }, "Register"),
 
         // Welcome message or error message
