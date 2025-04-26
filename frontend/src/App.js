@@ -33,8 +33,8 @@ function App(){
     // If not logged in, show login or register
     return React.createElement("div", null, [
         showLogin
-            ? React.createElement(Login, { key: "login", togglePage, setUserRole })
-            : React.createElement(Register, { key: "register", togglePage, setUserRole })
+            ? React.createElement(Login, { key: "login", togglePage, setUserRole, setUserName })
+            : React.createElement(Register, { key: "register", togglePage, setUserRole, setUserName })
     ]);
 
    

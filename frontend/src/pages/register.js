@@ -1,26 +1,26 @@
 import React, {useState}  from "react";
 
-function Register({togglePage, setUserRole}){
-    const [userName, setUserName] = useState("");
+function Register({togglePage, setUserRole, setUserName}){
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("Nurse");          
     const [message, setMessage] = useState("");
 
     function handleRegistration(){
-        console.log("name:", userName, "email:", email, "password:", password, "role:", role);
+        console.log("name:", name, "email:", email, "password:", password, "role:", role);
         // Ensures formatting is correct
-        if(!userName || !email || !password || !role) {
+        if(!name || !email || !password || !role) {
             setMessage("Please fill out all fields.");
             return;
         }
 
         // Temporary placeholder -> Replace with real API call
         localStorage.setItem("userRole", role);
-        localStorage.setItem("userName", userName);
+        localStorage.setItem("userName", name);
         setUserRole(role); // Creates a redirect to the correct dashboard based on role (doctor, nurse, admin)
-        setUserName(userName);
-        setMessage(`Account created for ${role}: ${userName}`);
+        setName(name);
+        setMessage(`Account created for ${role}: ${name}`);
     }
 
     return React.createElement("div", null, [
@@ -32,8 +32,8 @@ function Register({togglePage, setUserRole}){
             key: "name",
             type: "text",
             placeholder: "Full Name",
-            value: userName,
-            onChange: (e) => setUserName(e.target.value)
+            value: name,
+            onChange: (e) => setName(e.target.value)
         }),
 
         // Input field for email

@@ -46,7 +46,9 @@ function NurseDashboard({handleLogout, userName}){
 
     return React.createElement("div", null, [
         // Title element
-        React.createElement("h2", {key: "title"}, "Welcome Nurse " + userName + "!"),
+        React.createElement("h2", {key: "title"}, 
+            userName ? "Welcome Nurse " + userName + "!" : "Welcome Nurse!" // Was having issues with naming, this way it just says welcome nurse if name doesnt laod
+        ),
 
         // Button to take you to the enter symptoms page
         React.createElement("button", {
