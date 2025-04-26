@@ -19,8 +19,8 @@ function Login({togglePage, setUserRole}){
             setMessage(result.error);
         }else{
             localStorage.setItem("userRole", result.role);
-            setUserRole(result.role);
-            // Create a redirect to the correct dashboard based on role (doctor, nurse, admin)
+            localStorage.setItem("userName", result.name);
+            setUserRole(result.role); // Creates a redirect to the correct dashboard based on role (doctor, nurse, admin)
         }
     }
 
@@ -34,7 +34,7 @@ function Login({togglePage, setUserRole}){
             type: "text",
             placeholder: "Email",
             value: email,
-            onChange: (email) => setEmail(email.target.value)
+            onChange: (e) => setEmail(e.target.value)
         }),
 
         // Input field for password
@@ -43,7 +43,7 @@ function Login({togglePage, setUserRole}){
             type: "password",
             placeholder: "Password",
             value: password,
-            onChange: (password) => setPassword(password.target.value)
+            onChange: (e) => setPassword(e.target.value)
         }),
 
         // Login button -> calls handleLogin() function when clicked

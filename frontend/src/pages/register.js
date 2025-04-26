@@ -1,24 +1,26 @@
 import React, {useState}  from "react";
 
 function Register({togglePage, setUserRole}){
-    const [name, setName] = useState("");
+    const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("Nurse");          
     const [message, setMessage] = useState("");
 
     function handleRegistration(){
-        console.log("name:", name, "email:", email, "password:", password, "role:", role);
+        console.log("name:", userName, "email:", email, "password:", password, "role:", role);
         // Ensures formatting is correct
-        if(!name || !email || !password || !role) {
+        if(!userName || !email || !password || !role) {
             setMessage("Please fill out all fields.");
             return;
         }
 
         // Temporary placeholder -> Replace with real API call
         localStorage.setItem("userRole", role);
-        setUserRole(role);
-        setMessage(`Account created for ${role}: ${name}`);
+        localStorage.setItem("userName", userName);
+        setUserRole(role); // Creates a redirect to the correct dashboard based on role (doctor, nurse, admin)
+        setUserName(userName);
+        setMessage(`Account created for ${role}: ${userName}`);
     }
 
     return React.createElement("div", null, [
@@ -30,8 +32,8 @@ function Register({togglePage, setUserRole}){
             key: "name",
             type: "text",
             placeholder: "Full Name",
-            value: name,
-            onChange: (name) => setName(name.target.value)
+            value: userName,
+            onChange: (e) => setUserName(e.target.value)
         }),
 
         // Input field for email
@@ -40,7 +42,7 @@ function Register({togglePage, setUserRole}){
             type: "text",
             placeholder: "Email",
             value: email,
-            onChange: (email) => setEmail(email.target.value)
+            onChange: (e) => setEmail(e.target.value)
         }),
 
         // Input field for password
@@ -49,14 +51,14 @@ function Register({togglePage, setUserRole}){
             type: "password",
             placeholder: "Password",
             value: password,
-            onChange: (password) => setPassword(password.target.value)
+            onChange: (e) => setPassword(e.target.value)
         }),
 
         // Multi-select option for role (doctor, nurse, admin)
         React.createElement("select", {
             key: "role",
             value: role,
-            onChange: (role) => setRole(role.target.value)
+            onChange: (e) => setRole(e.target.value)
         }, [
             React.createElement("option", { key: "nurse", value: "Nurse" }, "Nurse"),
             React.createElement("option", { key: "doctor", value: "Doctor" }, "Doctor"),
@@ -75,9 +77,9 @@ function Register({togglePage, setUserRole}){
         
         // Switch to Login Button
         React.createElement("button", {
-            key: "goToRegister",
+            key: "goToLogin",
             onClick: () => togglePage()
-        }, "Don't have an account? Login Here")
+        }, "Already have an account? Login Here")
     ]);
 }
 
