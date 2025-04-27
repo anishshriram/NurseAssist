@@ -3,7 +3,7 @@ import Login from "./pages/login"
 import Register from "./pages/register"
 import NurseDashboard from "./pages/NurseDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard.js";
 
 
 function App(){

@@ -16,8 +16,7 @@ function DoctorDashboard({handleLogout, userName}){
     const [patients, setPatients] = useState(mockPatients); // Update
     const [sortType, setSortType] = useState("name");
     const [searchTerm, setSearchTerm] = useState(""); // Tracks whats typed into the search bar
-    const [selectedPatientID, setSelectedPatientID] = useState(null); // Patient ID who we are tracking
-    const [symptomsInput, setSymptomsInput] = useState(""); // Symptom text input
+    
     // Controls popup (for the patient that is being viewed)
     const [popupPatient, setPopupPatient] = useState(null);
     

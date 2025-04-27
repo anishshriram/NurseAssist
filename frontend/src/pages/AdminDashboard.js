@@ -1,3 +1,5 @@
+// Pretty much same as nurse dashboard, only removed functionality to do anything other than see the patients
+
 import React, {useState}  from "react";
 
 // Temporary placeholder -> mock data for testing, replace with real API call later
@@ -11,8 +13,7 @@ function AdminDashboard({handleLogout, userName}){
     const [patients, setPatients] = useState(mockPatients); // Update
     const [sortType, setSortType] = useState("name");
     const [searchTerm, setSearchTerm] = useState(""); // Tracks whats typed into the search bar
-    const [selectedPatientID, setSelectedPatientID] = useState(null); // Patient ID who we are tracking
-    const [symptomsInput, setSymptomsInput] = useState(""); // Symptom text input
+    
 
     
 
