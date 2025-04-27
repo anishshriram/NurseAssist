@@ -2,9 +2,9 @@ import React, {useState}  from "react";
 
 // Temporary placeholder -> mock data for testing, replace with real API call later
 const mockPatients = [
-    {id: 1, name: "patient1", status: "Pending Diagnosis"},
-    {id: 2, name: "patient2", status: "Diagnosis Confirmed"},
-    {id: 3, name: "patiente3", status: "Awaiting Symptoms"}
+    {id: 1, name: "patient1", status: "Pending Diagnosis", symptoms: "", diagnosis: ""},
+    {id: 2, name: "patient2", status: "Diagnosis Confirmed", symptoms: "", diagnosis: ""},
+    {id: 3, name: "patiente3", status: "Awaiting Symptoms", symptoms: "", diagnosis: ""}
 ]
 
 function NurseDashboard({handleLogout, userName}){
@@ -22,18 +22,45 @@ function NurseDashboard({handleLogout, userName}){
     }
 
     function handleSubmitSymptoms(patientID){
-        alert("Submitting symptoms for patient ID ${patientID}: ${symptomsInput}");
+        alert("Submitting symptoms for patient ID" + patientID);
+        const updatedPatients = patients.map(patient => {
+            if (patient.id === patientID) {
+                return { ...patient, symptoms: symptomsInput }; // Save the symptoms
+            }
+            return patient;
+        });
+    
+        setPatients(updatedPatients);
         setSelectedPatientID(null); // Clear form for input
     }
 
     // Placeholder function for viewing diagnoses
-    function handleViewDiagnoses(){
-        alert("This will show you patient diagnoses"); //Placeholder, not implemented yet
+    function handleViewDiagnoses(patientID){
+        //alert("This will show you patient diagnoses"); //Placeholder, not implemented yet
+        const patient = patients.find(p => p.id === patientID);
+        if (patient && patient.diagnosis) {
+            alert(`Diagnosis for ` + patient.name + `: ` + patient.diagnosis);
+        } else {
+            alert("No diagnosis available for this patient yet.");
+        }
     }
 
     // Placeholder function for generating diagnoses
     function handleGenerateDiagnosis(patientID) {
-        alert(`Generating diagnosis for patient ID ${patientID}`);
+        alert(`Generating diagnosis for patient ID ` + patientID);
+        const updatedPatients = patients.map(patient => {
+            if (patient.id === patientID) {
+                if (patient.symptoms) {
+                    return { ...patient, diagnosis: "Auto Diagnosis Based on Symptoms" }; // Placeholder, Fake diagnosis, have to implement that logic on the backend
+                } else {
+                    alert("No symptoms entered yet for this patient!");
+                    return patient;
+                }
+            }
+            return patient;
+        });
+    
+        setPatients(updatedPatients);
     }    
 
     // Placeholder function for exporting patient data
@@ -63,7 +90,7 @@ function NurseDashboard({handleLogout, userName}){
         React.createElement("h2", {key: "title"}, 
             userName ? "Welcome Nurse " + userName + "!" : "Welcome Nurse!" // Was having issues with naming, this way it just says welcome nurse if name doesnt laod
         ),
-
+        /*
         // Button to take you to the enter symptoms page
         React.createElement("button", {
             key: "enterSymptoms",
@@ -71,11 +98,12 @@ function NurseDashboard({handleLogout, userName}){
         }, "Enter Symptoms"),
 
         // Button to view diagnoses
+        
         React.createElement("button", {
             key: "viewDiagnoses",
             onClick: handleViewDiagnoses
         }, "View Diagnoses"),
-
+        */
         // Button to export patient data
         React.createElement("button", {
             key: "exportPatitents",
@@ -126,6 +154,11 @@ function NurseDashboard({handleLogout, userName}){
                     key: `generateDiagnosis-${patient.id}`,
                     onClick: () => handleGenerateDiagnosis(patient.id)
                 }, "Generate Diagnosis"),
+
+                React.createElement("button", {
+                    key: `viewDiagnosis-${patient.id}`,
+                    onClick: () => handleViewDiagnoses(patient.id)
+                }, "View Diagnosis"),
 
                 // Symptoms Input Form
                 selectedPatientID === patient.id
