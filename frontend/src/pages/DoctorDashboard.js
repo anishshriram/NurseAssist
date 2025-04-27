@@ -18,26 +18,12 @@ function DoctorDashboard({handleLogout, userName}){
     const [searchTerm, setSearchTerm] = useState(""); // Tracks whats typed into the search bar
     const [selectedPatientID, setSelectedPatientID] = useState(null); // Patient ID who we are tracking
     const [symptomsInput, setSymptomsInput] = useState(""); // Symptom text input
-
-    // Function for entering symptoms
-    function handleEnterSymptoms(patientID){
-        // alert("This will take you to the symptom entry form"); // Placeholder, its not implemented yet
-        setSelectedPatientID(patientID);
-        setSymptomsInput(""); // Clear input
-    }
-
-    function handleSubmitSymptoms(patientID){
-        alert("Submitting symptoms for patient ID" + patientID);
-        const updatedPatients = patients.map(patient => {
-            if (patient.id === patientID) {
-                return { ...patient, symptoms: symptomsInput }; // Save the symptoms
-            }
-            return patient;
-        });
+    // Controls popup (for the patient that is being viewed)
+    const [popupPatient, setPopupPatient] = useState(null);
     
-        setPatients(updatedPatients);
-        setSelectedPatientID(null); // Clear form for input
-    }
+    
+
+    
 
     // Placeholder function for viewing diagnoses
     function handleViewDiagnoses(patientID){
@@ -50,23 +36,7 @@ function DoctorDashboard({handleLogout, userName}){
         }
     }
 
-    // Placeholder function for generating diagnoses
-    function handleGenerateDiagnosis(patientID) {
-        alert(`Generating diagnosis for patient ID ` + patientID);
-        const updatedPatients = patients.map(patient => {
-            if (patient.id === patientID) {
-                if (patient.symptoms) {
-                    return { ...patient, diagnosis: "Auto Diagnosis Based on Symptoms" }; // Placeholder, Fake diagnosis, have to implement that logic on the backend
-                } else {
-                    alert("No symptoms entered yet for this patient!");
-                    return patient;
-                }
-            }
-            return patient;
-        });
-    
-        setPatients(updatedPatients);
-    }    
+        
 
     function handleConfirmDiagnosis(patientID){
         const updatedPatients = patients.map(patient => {
@@ -77,7 +47,29 @@ function DoctorDashboard({handleLogout, userName}){
         });
     
         setPatients(updatedPatients);
+        setPopupPatient(null); //Closes the popup
         alert("Diagnosis confirmed for patient ID " + patientID);
+    }
+
+    // If the doctor doesnt agree with the diagnosis, then pushes back to nurse
+    function handlePushBack(patientID){
+        const updatedPatients = patients.map(patient => {
+            if(patient.id === patientID){
+                return{...patient, status: "Needs Nurse Review"}
+            }
+            return patient;
+        })
+
+        setPatients(updatedPatients);
+        setPopupPatient(null);
+        alert("Pushed back to Nurse for review");
+    }
+
+    function openConfirmPopup(patientID){
+        const patient = patients.find(p => p.id === patientID);
+        if(patient){
+            setPopupPatient(patient); // Actually opens the popup
+        }
     }
 
     // Placeholder function for exporting patient data
@@ -138,7 +130,11 @@ function DoctorDashboard({handleLogout, userName}){
             onClick: handleViewDiagnoses
         }, "View Diagnoses"),
         */
-
+        React.createElement("button", {
+            key: "exportPatitents",
+            onClick: handleExportPatients
+        }, "Export All Patient Data"),
+        
         React.createElement("input", {
             key: "searchBar",
             type: "text",
@@ -179,7 +175,7 @@ function DoctorDashboard({handleLogout, userName}){
 
                 React.createElement("button", {
                     key: `confirmDiagnosis-${patient.id}`,
-                    onClick: () => handleConfirmDiagnosis(patient.id)
+                    onClick: () => openConfirmPopup(patient.id)
                 }, "Confirm Diagnosis")
                 
             ])
@@ -187,6 +183,22 @@ function DoctorDashboard({handleLogout, userName}){
             //    key: `patient-${patient.id}` // backticks for a dynamic string
             //}, patient.name + " - " + patient.status)
         ),
+
+        popupPatient ? React.createElement("div", {key: "popup", style: {border: "1px solid black", padding: "20px", margin: "20px", backgroundColor: "#f0f0f0" }},[
+            React.createElement("h3", {key: "popup-title"}, "Confirm Diagnosis for " + popupPatient.name),
+            React.createElement("p", {key: "popup-symptoms"}, "Symptoms: " + (popupPatient.symptoms || "No Symptoms Entered")),
+            React.createElement("p", {key: "popup-confidence"}, "Confidence Level: xx%"), //Temporary Placeholder
+            React.createElement("p", {key: "popup-source"}, "Diagnosis generated via (either AI or system generated)"),
+            React.createElement("button", {
+                key: "confirmButton",
+                onClick: () => handleConfirmDiagnosis(popupPatient.id)
+            }, "Confirm Diagnosis"),
+            React.createElement("button", {
+                key: "pushBackButton",
+                onClick: () => handlePushBack(popupPatient.id)
+            }, "Push Back to Nurse")
+        ])
+        : null,
 
         React.createElement("button", {
             key: "logoutButton",
