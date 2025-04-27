@@ -2,7 +2,7 @@ import React, {useState}  from "react"
 import Login from "./pages/login"
 import Register from "./pages/register"
 import NurseDashboard from "./pages/NurseDashboard";
-//import DoctorDashboard from "./pages/DoctorDashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
 //import AdminDashboard from "./pages/AdminDashboard";
 
 
@@ -25,8 +25,8 @@ function App(){
     // If user is logged in, show the correct dashboard
     if (userRole === "Nurse") {
         return React.createElement(NurseDashboard, {handleLogout, userName});
-    //} else if (userRole === "Doctor") {
-        //return React.createElement(DoctorDashboard);
+    } else if (userRole === "Doctor") {
+        return React.createElement(DoctorDashboard, {handleLogout, userName});
     //} else if (userRole === "Admin") {
         //return React.createElement(AdminDashboard);
     }

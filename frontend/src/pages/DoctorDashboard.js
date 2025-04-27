@@ -1,3 +1,8 @@
+// Copied fully from nurse dashboard. Changes Made:
+// -Removed enter symptoms, generate diagnosis, submit symptoms button
+// -Added confirm diagnosis button
+// -minor edits to text and formatting (like nurse -> doctor)
+
 import React, {useState}  from "react";
 
 // Temporary placeholder -> mock data for testing, replace with real API call later
@@ -7,7 +12,7 @@ const mockPatients = [
     {id: 3, name: "patiente3", status: "Awaiting Symptoms", symptoms: "", diagnosis: ""}
 ]
 
-function NurseDashboard({handleLogout, userName}){
+function DoctorDashboard({handleLogout, userName}){
     const [patients, setPatients] = useState(mockPatients); // Update
     const [sortType, setSortType] = useState("name");
     const [searchTerm, setSearchTerm] = useState(""); // Tracks whats typed into the search bar
@@ -63,6 +68,18 @@ function NurseDashboard({handleLogout, userName}){
         setPatients(updatedPatients);
     }    
 
+    function handleConfirmDiagnosis(patientID){
+        const updatedPatients = patients.map(patient => {
+            if (patient.id === patientID) {
+                return { ...patient, status: "Diagnosis Confirmed" };
+            }
+            return patient;
+        });
+    
+        setPatients(updatedPatients);
+        alert("Diagnosis confirmed for patient ID " + patientID);
+    }
+
     // Placeholder function for exporting patient data
     function handleExportPatients(){
         alert("Exporting patient data"); // Placeholder, not implemented yet
@@ -105,7 +122,7 @@ function NurseDashboard({handleLogout, userName}){
     return React.createElement("div", null, [
         // Title element
         React.createElement("h2", {key: "title"}, 
-            userName ? "Welcome Nurse " + userName + "!" : "Welcome Nurse!" // Was having issues with naming, this way it just says welcome nurse if name doesnt laod
+            userName ? "Welcome Doctor " + userName + "!" : "Welcome Doctor!" // Was having issues with naming, this way it just says welcome nurse if name doesnt laod
         ),
         /*
         // Button to take you to the enter symptoms page
@@ -121,11 +138,6 @@ function NurseDashboard({handleLogout, userName}){
             onClick: handleViewDiagnoses
         }, "View Diagnoses"),
         */
-        // Button to export patient data
-        React.createElement("button", {
-            key: "exportPatitents",
-            onClick: handleExportPatients
-        }, "Export All Patient Data"),
 
         React.createElement("input", {
             key: "searchBar",
@@ -160,39 +172,16 @@ function NurseDashboard({handleLogout, userName}){
                     patient.name + " - " + patient.status
                 ),
 
-                // Enter Symptoms button
-                React.createElement("button", {
-                    key: `enterSymptoms-${patient.id}`,
-                    onClick: () => handleEnterSymptoms(patient.id)
-                }, "Enter Symptoms"),
-
-                // Generate Diagnosis Button
-                React.createElement("button", {
-                    key: `generateDiagnosis-${patient.id}`,
-                    onClick: () => handleGenerateDiagnosis(patient.id)
-                }, "Generate Diagnosis"),
-
                 React.createElement("button", {
                     key: `viewDiagnosis-${patient.id}`,
                     onClick: () => handleViewDiagnoses(patient.id)
                 }, "View Diagnosis"),
 
-                // Symptoms Input Form
-                selectedPatientID === patient.id
-                ? React.createElement("div", {key: `symptomForm-${patient.id}`}, [
-                    React.createElement("input", {
-                        key: `symptomInput-${patient.id}`,
-                        type: "text",
-                        placeholder: "Enter Symptoms Here...",
-                        value: symptomsInput,
-                        onChange: (e) => setSymptomsInput(e.target.value)
-                    }),
-                    React.createElement("button", {
-                        key: `submitSymptoms-${patient.id}`,
-                        onClick: () => handleSubmitSymptoms(patient.id)
-                    }, "Submit Symptoms")
-                ])
-                : null
+                React.createElement("button", {
+                    key: `confirmDiagnosis-${patient.id}`,
+                    onClick: () => handleConfirmDiagnosis(patient.id)
+                }, "Confirm Diagnosis")
+                
             ])
             //React.createElement("p", {
             //    key: `patient-${patient.id}` // backticks for a dynamic string
@@ -207,4 +196,4 @@ function NurseDashboard({handleLogout, userName}){
     ]);
 }
 
-export default NurseDashboard;
+export default DoctorDashboard;
