@@ -66,6 +66,23 @@ function NurseDashboard({handleLogout, userName}){
     // Placeholder function for exporting patient data
     function handleExportPatients(){
         alert("Exporting patient data"); // Placeholder, not implemented yet
+        // Create CSV string
+        const csvContent = "data:text/csv;charset=utf-8," 
+        + "Name,Status,Symptoms,Diagnosis\n" 
+        + patients.map(p => 
+            `${p.name},${p.status},${p.symptoms || "N/A"},${p.diagnosis || "N/A"}`
+        ).join("\n");
+
+        //Creating a download link
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "patient_data.csv");
+        document.body.appendChild(link);
+
+        // Trigger download
+        link.click();
+        document.body.removeChild(link);
     }
     
     // Sort patients whenever sortType changes
