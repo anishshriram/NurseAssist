@@ -184,6 +184,7 @@ function DoctorDashboard({handleLogout, userName}){
             //}, patient.name + " - " + patient.status)
         ),
 
+        // Popout to confirm diagnosis, only if necessary
         popupPatient ? React.createElement("div", {key: "popup", style: {border: "1px solid black", padding: "20px", margin: "20px", backgroundColor: "#f0f0f0" }},[
             React.createElement("h3", {key: "popup-title"}, "Confirm Diagnosis for " + popupPatient.name),
             React.createElement("p", {key: "popup-symptoms"}, "Symptoms: " + (popupPatient.symptoms || "No Symptoms Entered")),

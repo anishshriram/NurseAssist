@@ -3,7 +3,7 @@ import Login from "./pages/login"
 import Register from "./pages/register"
 import NurseDashboard from "./pages/NurseDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
-//import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 
 function App(){
@@ -27,8 +27,8 @@ function App(){
         return React.createElement(NurseDashboard, {handleLogout, userName});
     } else if (userRole === "Doctor") {
         return React.createElement(DoctorDashboard, {handleLogout, userName});
-    //} else if (userRole === "Admin") {
-        //return React.createElement(AdminDashboard);
+    } else if (userRole === "Admin") {
+        return React.createElement(AdminDashboard, {handleLogout, userName});
     }
     // If not logged in, show login or register
     return React.createElement("div", null, [
