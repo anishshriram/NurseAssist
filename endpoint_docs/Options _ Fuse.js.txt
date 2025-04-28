@@ -1,0 +1,271 @@
+Fuse.jsFuse.js <https://www.fusejs.io/>
+Guide <https://www.fusejs.io/>
+Donate <https://www.fusejs.io/donate/>
+Twitter open in new window <https://twitter.com/intent/user?
+screen_name=kirorisk>
+GitHub open in new window <https://github.com/krisk/fuse>
+
+Guide <https://www.fusejs.io/>
+Donate <https://www.fusejs.io/donate/>
+Twitter open in new window <https://twitter.com/intent/user?
+screen_name=kirorisk>
+GitHub open in new window <https://github.com/krisk/fuse>
+
+  *
+
+    Getting Started
+
+      o Installation <https://www.fusejs.io/getting-started/
+        installation.html>
+      o Explanation of Different Builds <https://www.fusejs.io/getting-
+        started/different-builds.html>
+  * Live Demo <https://www.fusejs.io/demo.html>
+  *
+
+    API Reference
+
+      o Options <https://www.fusejs.io/api/options.html>
+          + Basic Options <https://www.fusejs.io/api/options.html#basic-
+            options>
+              # isCaseSensitive <https://www.fusejs.io/api/
+                options.html#iscasesensitive>
+              # ignoreDiacritics <https://www.fusejs.io/api/
+                options.html#ignorediacritics>
+              # includeScore <https://www.fusejs.io/api/
+                options.html#includescore>
+              # includeMatches <https://www.fusejs.io/api/
+                options.html#includematches>
+              # minMatchCharLength <https://www.fusejs.io/api/
+                options.html#minmatchcharlength>
+              # shouldSort <https://www.fusejs.io/api/
+                options.html#shouldsort>
+              # findAllMatches <https://www.fusejs.io/api/
+                options.html#findallmatches>
+              # keys <https://www.fusejs.io/api/options.html#keys>
+          + Fuzzy Matching Options <https://www.fusejs.io/api/
+            options.html#fuzzy-matching-options>
+              # location <https://www.fusejs.io/api/options.html#location>
+              # threshold <https://www.fusejs.io/api/options.html#threshold>
+              # distance <https://www.fusejs.io/api/options.html#distance>
+              # ignoreLocation <https://www.fusejs.io/api/
+                options.html#ignorelocation>
+          + Advanced Options <https://www.fusejs.io/api/
+            options.html#advanced-options>
+              # useExtendedSearch <https://www.fusejs.io/api/
+                options.html#useextendedsearch>
+              # getFn <https://www.fusejs.io/api/options.html#getfn>
+              # sortFn <https://www.fusejs.io/api/options.html#sortfn>
+              # ignoreFieldNorm <https://www.fusejs.io/api/
+                options.html#ignorefieldnorm>
+              # fieldNormWeight <https://www.fusejs.io/api/
+                options.html#fieldnormweight>
+      o Global config <https://www.fusejs.io/api/config.html>
+      o Methods <https://www.fusejs.io/api/methods.html>
+      o Indexing <https://www.fusejs.io/api/indexing.html>
+      o Logical Query Operators <https://www.fusejs.io/api/query.html>
+  * Examples <https://www.fusejs.io/examples.html>
+  *
+
+    Concepts
+
+      o Scoring Theory <https://www.fusejs.io/concepts/scoring-theory.html>
+
+
+  # <#options> Options
+
+
+    # <#basic-options> Basic Options
+
+
+      # <#iscasesensitive> |isCaseSensitive|
+
+  * Type: |boolean|
+  * Default: |false|
+
+Indicates whether comparisons should be case sensitive.
+
+
+      # <#ignorediacritics> |ignoreDiacritics|
+
+  * Type: |boolean|
+  * Default: |false|
+
+Indicates whether comparisons should ignore diacritics (accents).
+
+
+      # <#includescore> |includeScore|
+
+  * Type: |boolean|
+  * Default: |false|
+
+Whether the score should be included in the result set. A score of |0|
+indicates a perfect match, while a score of |1| indicates a complete
+mismatch.
+
+
+      # <#includematches> |includeMatches|
+
+  * Type: |boolean|
+  * Default: |false|
+
+Whether the matches should be included in the result set. When |true|,
+each record in the result set will include the indices of the matched
+characters. These can consequently be used for highlighting purposes.
+
+
+      # <#minmatchcharlength> |minMatchCharLength|
+
+  * Type: |number|
+  * Default: |1|
+
+Only the matches whose length exceeds this value will be returned. (For
+instance, if you want to ignore single character matches in the result,
+set it to |2|).
+
+
+      # <#shouldsort> |shouldSort|
+
+  * Type: |boolean|
+  * Default: |true|
+
+Whether to sort the result list, by score.
+
+
+      # <#findallmatches> |findAllMatches|
+
+  * Type: |boolean|
+  * Default: |false|
+
+When true, the matching function will continue to the end of a search
+pattern even if a perfect match has already been located in the string.
+
+
+      # <#keys> |keys|
+
+  * Type: |Array|
+  * Default: |[]|
+
+List of keys that will be searched. This supports nested paths, weighted
+search, searching in arrays of strings <https://www.fusejs.io/
+examples.html#search-string-array> and objects <https://www.fusejs.io/
+examples.html#nested-search>.
+
+
+    # <#fuzzy-matching-options> Fuzzy Matching Options
+
+
+      # <#location> |location|
+
+  * Type: |number|
+  * Default: |0|
+
+Determines approximately where in the text is the pattern expected to be
+found.
+
+
+      # <#threshold> |threshold|
+
+  * Type: |number|
+  * Default: |0.6|
+
+At what point does the match algorithm give up. A threshold of |0.0|
+requires a perfect match (of both letters and location), a threshold of
+|1.0| would match anything.
+
+
+      # <#distance> |distance|
+
+  * Type: |number|
+  * Default: |100|
+
+Determines how close the match must be to the fuzzy location (specified
+by |location|). An exact letter match which is |distance| characters
+away from the fuzzy location would score as a complete mismatch. A |
+distance| of |0| requires the match be at the exact |location|
+specified. A distance of |1000| would require a perfect match to be
+within |800| characters of the |location| to be found using a |
+threshold| of |0.8|.
+
+
+      # <#ignorelocation> |ignoreLocation|
+
+  * Type: |boolean|
+  * Default: |false|
+
+When |true|, search will ignore |location| and |distance|, so it won't
+matter where in the string the pattern appears.
+
+TIP
+
+The default options only search the first 60 characters. This should
+suffice if it is reasonably expected that the match is within this
+range. To modify this behavior, set the appropriate combination of |
+location|, |threshold|, |distance| (or |ignoreLocation|).
+
+To better understand how these options work together, read our Scoring
+Theory <https://www.fusejs.io/concepts/scoring-theory.html#scoring-theory>.
+
+
+    # <#advanced-options> Advanced Options
+
+
+      # <#useextendedsearch> |useExtendedSearch|
+
+  * Type: |boolean|
+  * Default: |false|
+
+When |true|, it enables the use of unix-like search commands. See
+example <https://www.fusejs.io/examples.html#extended-search>.
+
+
+      # <#getfn> |getFn|
+
+  * Type: |Function|
+  * Default: |(obj: T, path: string | string[]) => string | string[]|
+
+The function to use to retrieve an object's value at the provided path.
+The default will also search nested paths.
+
+
+      # <#sortfn> |sortFn|
+
+  * Type: |Function|
+  * Default: |(a, b) => number|
+
+The function to use to sort all the results. The default will sort by
+ascending relevance score, ascending index.
+
+
+      # <#ignorefieldnorm> |ignoreFieldNorm|
+
+  * Type: |boolean|
+  * Default: |false|
+
+When |true|, the calculation for the relevance score (used for sorting)
+will ignore the field-length norm <https://www.fusejs.io/concepts/
+scoring-theory.html#fuzziness-score>.
+
+TIP
+
+The only time it makes sense to set |ignoreFieldNorm| to |true| is when
+it does not matter how many terms there are, but only that the query
+term exists.
+
+
+      # <#fieldnormweight> |fieldNormWeight|
+
+  * Type: |number|
+  * Default: |1|
+
+Determines how much the field-length norm <https://www.fusejs.io/
+concepts/scoring-theory.html#field-length-norm> affects scoring. A value
+of |0| is equivalent to ignoring the field-length norm. A value of |0.5|
+will greatly reduce the effect of field-length norm, while a value of |
+2.0| will greatly increase it.
+
+*❤️️ Fuse.js? Support its development with a small donation.*
+Donate <https://github.com/sponsors/krisk>
+Last Updated: 6/24/2024, 7:48:48 AM
+
+Global config <https://www.fusejs.io/api/config.html>
+

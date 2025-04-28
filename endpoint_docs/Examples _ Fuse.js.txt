@@ -1,0 +1,223 @@
+Fuse.jsFuse.js <https://www.fusejs.io/>
+Guide <https://www.fusejs.io/>
+Donate <https://www.fusejs.io/donate/>
+Twitter open in new window <https://twitter.com/intent/user?
+screen_name=kirorisk>
+GitHub open in new window <https://github.com/krisk/fuse>
+
+Guide <https://www.fusejs.io/>
+Donate <https://www.fusejs.io/donate/>
+Twitter open in new window <https://twitter.com/intent/user?
+screen_name=kirorisk>
+GitHub open in new window <https://github.com/krisk/fuse>
+
+  *
+
+    Getting Started
+
+      o Installation <https://www.fusejs.io/getting-started/
+        installation.html>
+      o Explanation of Different Builds <https://www.fusejs.io/getting-
+        started/different-builds.html>
+  * Live Demo <https://www.fusejs.io/demo.html>
+  *
+
+    API Reference
+
+      o Options <https://www.fusejs.io/api/options.html>
+      o Global config <https://www.fusejs.io/api/config.html>
+      o Methods <https://www.fusejs.io/api/methods.html>
+      o Indexing <https://www.fusejs.io/api/indexing.html>
+      o Logical Query Operators <https://www.fusejs.io/api/query.html>
+  * Examples <https://www.fusejs.io/examples.html>
+      o Search String Array <https://www.fusejs.io/examples.html#search-
+        string-array>
+      o Search Object Array <https://www.fusejs.io/examples.html#search-
+        object-array>
+      o Nested Search <https://www.fusejs.io/examples.html#nested-search>
+      o Weighted Search <https://www.fusejs.io/examples.html#weighted-
+        search>
+          + Default weight <https://www.fusejs.io/examples.html#default-
+            weight>
+      o Extended Search <https://www.fusejs.io/examples.html#extended-
+        search>
+  *
+
+    Concepts
+
+      o Scoring Theory <https://www.fusejs.io/concepts/scoring-theory.html>
+
+
+  # <#examples> Examples
+
+------------------------------------------------------------------------
+
+
+    # <#search-string-array> Search String Array
+
+List
+JS
+Output
+
+|["Old Man's War", "The Lock Artist"]
+|
+
+
+    # <#search-object-array> Search Object Array
+
+List
+JS
+Output
+
+|[
+  {
+    "title": "Old Man's War",
+    "author": "John Scalzi",
+    "tags": ["fiction"]
+  },
+  {
+    "title": "The Lock Artist",
+    "author": "Steve",
+    "tags": ["thriller"]
+  }
+]
+|
+
+
+    # <#nested-search> Nested Search
+
+You can search through nested values with different ways:
+
+  * define the path with dot notation (|.|)
+  * define the path with array notation (|[]|)
+  * Define a per-key |getFn| function
+
+List
+JS (dot notation)
+JS (array notation)
+JS (get function)
+Output
+
+|[
+  {
+    "title": "Old Man's War",
+    "author": {
+      "name": "John Scalzi",
+      "tags": [
+        {
+          "value": "American"
+        }
+      ]
+    }
+  },
+  {
+    "title": "The Lock Artist",
+    "author": {
+      "name": "Steve Hamilton",
+      "tags": [
+        {
+          "value": "English"
+        }
+      ]
+    }
+  }
+]
+|
+
+IMPORTANT
+
+The path has to eventually point to a string, otherwise you will not get
+any results.
+
+
+    # <#weighted-search> Weighted Search
+
+You can allocate a weight to keys to give them higher (or lower) values
+in search results. The |weight| value has to be greater than |0|.
+
+List
+JS
+Output
+
+|[
+  {
+    "title": "Old Man's War fiction",
+    "author": "John X",
+    "tags": ["war"]
+  },
+  {
+    "title": "Right Ho Jeeves",
+    "author": "P.D. Mans",
+    "tags": ["fiction", "war"]
+  }
+]
+|
+
+
+      # <#default-weight> Default |weight|
+
+When a |weight| isn't provided, it will default to |1|. In the following
+example, while |author| has been given a weight of |2|, |title| will be
+assigned a weight of |1|.
+
+|const fuse = new Fuse(books, {
+  keys: [
+    'title', // will be assigned a `weight` of 1
+    {
+      name: 'author',
+      weight: 2
+    }
+  ]
+})
+|
+
+Note that internally Fuse will normalize the weights to be within |0|
+and |1| exclusive.
+
+
+    # <#extended-search> Extended Search
+
+This form of advanced searching allows you to fine-tune results.
+
+White space acts as an *AND* operator, while a single pipe (|||)
+character acts as an *OR* operator. To escape white space, use double
+quote ex. |="scheme language"| for exact match.
+
+Token	Match type	Description
+|jscript|	fuzzy-match	Items that fuzzy match |jscript|
+|=scheme|	exact-match	Items that are |scheme|
+|'python|	include-match	Items that include |python|
+|!ruby|	inverse-exact-match	Items that do not include |ruby|
+|^java|	prefix-exact-match	Items that start with |java|
+|!^earlang|	inverse-prefix-exact-match	Items that do not start with |
+earlang|
+|.js$|	suffix-exact-match	Items that end with |.js|
+|!.go$|	inverse-suffix-exact-match	Items that do not end with |.go|
+
+White space acts as an *AND* operator, while a single pipe (|||)
+character acts as an *OR* operator.
+
+List
+JS
+Output
+
+|[
+  {
+    "title": "Old Man's War",
+    "author": "John Scalzi"
+  },
+  {
+    "title": "The Lock Artist",
+    "author": "Steve"
+  },
+  {
+    "title": "Artist for Life",
+    "author": "Michelangelo"
+  }
+]
+|
+
+*❤️️ Fuse.js? Support its development with a small donation.*
+Donate <https://github.com/sponsors/krisk>
+Last Updated: 7/8/2023, 6:53:35 PM
+
