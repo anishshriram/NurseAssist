@@ -1,0 +1,1018 @@
+import React, { useState, useEffect, useMemo } from "react"; 
+import { 
+    searchSymptomsApi, 
+    getDiagnosisApi, 
+    saveDiagnosisApi 
+} from '../services/symptomService';
+import { v4 as uuidv4 } from 'uuid'; 
+import { debounce } from 'lodash'; 
+
+const mockPatients = [
+    {id: 1, name: "patient1", status: "Pending Diagnosis", symptoms: "", diagnosis: "", age: 30, sex: "male"},
+    {id: 2, name: "patient2", status: "Diagnosis Confirmed", symptoms: "", diagnosis: "", age: 45, sex: "female"},
+    {id: 3, name: "patiente3", status: "Awaiting Symptoms", symptoms: "", diagnosis: "", age: 25, sex: "male"}
+]
+
+function NurseDashboard({handleLogout, userName}){
+    const [patients, setPatients] = useState(mockPatients); 
+    const [sortType, setSortType] = useState("name");
+    const [searchTerm, setSearchTerm] = useState(""); 
+    const [selectedPatientID, setSelectedPatientID] = useState(null); 
+    const [symptomsInput, setSymptomsInput] = useState(""); 
+
+    const [symptomSearchTerm, setSymptomSearchTerm] = useState('');
+    const [symptomSearchResults, setSymptomSearchResults] = useState([]);
+    const [isSearchingSymptoms, setIsSearchingSymptoms] = useState(false);
+    const [symptomSearchError, setSymptomSearchError] = useState(null);
+
+    const [patientAge, setPatientAge] = useState(''); 
+    const [patientSex, setPatientSex] = useState(''); 
+    const [interviewId, setInterviewId] = useState('');
+
+    const [selectedSymptoms, setSelectedSymptoms] = useState([]); 
+
+    const [diagnosisResult, setDiagnosisResult] = useState(null);
+    const [isDiagnosing, setIsDiagnosing] = useState(false);
+    const [diagnosisError, setDiagnosisError] = useState(null);
+
+    const [gatheredEvidence, setGatheredEvidence] = useState([]); // State for all evidence during interview
+
+    const [isSavingDiagnosis, setIsSavingDiagnosis] = useState(false);
+    const [saveDiagnosisError, setSaveDiagnosisError] = useState(null);
+    const [diagnosisSaved, setDiagnosisSaved] = useState(false);
+    const [selectedPatientId, setSelectedPatientId] = useState(null); // To track which patient we're diagnosing
+
+    useEffect(() => {
+        const newId = uuidv4();
+        setInterviewId(newId);
+        console.log(">>> NurseDashboard: Generated Interview ID:", newId);
+    }, []);
+
+    const performSearch = async (phrase, age, sex, id) => {
+        console.log(">>> NurseDashboard: --- performSearch ACTUAL EXECUTION ---", { phrase, age, sex, id });
+        const token = localStorage.getItem('userToken');
+
+        if (!phrase?.trim() || !age || !sex || !id || !token) { 
+            setSymptomSearchResults([]);
+            setIsSearchingSymptoms(false);
+            let reason = 'Unknown prerequisite missing in performSearch';
+            if (!phrase?.trim()) reason = 'Missing search phrase';
+            else if (!age) reason = 'Missing patient age';
+            else if (!sex) reason = 'Missing patient sex';
+            else if (!id) reason = 'Missing interview ID';
+            else if (!token) reason = 'Missing auth token';
+
+            console.log(`>>> NurseDashboard: performSearch SKIPPED. Reason: ${reason}`);
+
+            if (!patientAge || !patientSex) {
+                 // Keep existing error
+            } else {
+                setSymptomSearchError(''); // Clear other errors
+            }
+            return;
+        }
+
+        console.log(`>>> NurseDashboard: Calling searchSymptomsApi via performSearch...`);
+        setIsSearchingSymptoms(true);
+        setSymptomSearchError(''); // Clear previous errors before new search
+        setDiagnosisResult(null);
+        setDiagnosisError('');
+        setGatheredEvidence([]); // Clear accumulated evidence on new search
+
+        try {
+            const results = await searchSymptomsApi(phrase, age, sex, id, token);
+            console.log(">>> NurseDashboard: API call successful, results:", results);
+            setSymptomSearchResults(results || []); 
+        } catch (error) {
+            console.error(">>> NurseDashboard: Symptom search API call failed:", error);
+            setSymptomSearchError(error.message || "Failed to fetch symptoms");
+            setSymptomSearchResults([]); 
+        } finally {
+            setIsSearchingSymptoms(false);
+        }
+    };
+
+    const debouncedSearchHandler = useMemo(
+        () => {
+            console.log(">>> NurseDashboard: Creating debounced function instance.");
+            return debounce(performSearch, 500);
+        },
+        [] 
+    );
+
+    useEffect(() => {
+        console.log(">>> NurseDashboard: Search useEffect triggered with:", { symptomSearchTerm, patientAge, patientSex, interviewId });
+
+        if (symptomSearchTerm.trim() && patientAge && patientSex && interviewId) {
+             console.log(">>> NurseDashboard: Calling debouncedSearchHandler...");
+            debouncedSearchHandler(symptomSearchTerm, patientAge, patientSex, interviewId);
+        } else {
+             console.log(">>> NurseDashboard: Prerequisites not met or search term empty, clearing results and cancelling debounce.");
+            setSymptomSearchResults([]);
+             if (symptomSearchTerm.trim() && (!patientAge || !patientSex)){
+                 setSymptomSearchError('Please enter patient age and sex before searching.');
+             } else {
+                 setSymptomSearchError(''); // Clear error if search term is empty or all details present
+             }
+            debouncedSearchHandler.cancel(); // Cancel any pending debounce
+        }
+
+        return () => {
+             console.log(">>> NurseDashboard: useEffect cleanup - cancelling debounce.");
+            debouncedSearchHandler.cancel();
+        };
+    }, [symptomSearchTerm, patientAge, patientSex, interviewId, debouncedSearchHandler]); 
+
+
+    const handleSelectSymptom = (symptom) => {
+        console.log(">>> NurseDashboard: Selecting symptom:", symptom);
+        // Add symptom only if it's not already selected
+        if (!selectedSymptoms.some(s => s.id === symptom.id)) {
+            setSelectedSymptoms(prevSelected => [...prevSelected, symptom]);
+        }
+        // Optionally clear search term/results after selection
+        setSymptomSearchTerm('');
+        setSymptomSearchResults([]);
+    };
+
+    const handleRemoveSymptom = (symptomIdToRemove) => {
+        console.log(">>> NurseDashboard: Removing symptom ID:", symptomIdToRemove);
+        setSelectedSymptoms(prevSelected => 
+            prevSelected.filter(symptom => symptom.id !== symptomIdToRemove)
+        );
+    };
+
+    const handleGetDiagnosis = async (evidenceToUse = null) => {
+        console.log(">>> NurseDashboard: handleGetDiagnosis triggered with evidenceToUse type:", evidenceToUse ? (Array.isArray(evidenceToUse) ? 'array' : typeof evidenceToUse) : 'null');
+        // Safe logging for complex objects - avoid JSON.stringify for potentially circular structures
+        if (evidenceToUse && Array.isArray(evidenceToUse)) {
+            console.log(">>> NurseDashboard: evidenceToUse contains", evidenceToUse.length, "items");
+            try {
+                console.log(">>> Evidence items:", evidenceToUse.map(e => ({id: e.id, choice_id: e.choice_id})));
+            } catch (err) {
+                console.log(">>> NurseDashboard: Could not log evidence items:", err.message);
+            }
+        }
+        
+        const token = localStorage.getItem('userToken');
+
+        // Log all potentially relevant state values to diagnose issues
+        console.log(">>> NurseDashboard: Current state for diagnosis:", { 
+            patientAge, 
+            patientSex, 
+            interviewId, 
+            selectedSymptomsCount: selectedSymptoms.length,
+            gatheredEvidenceCount: gatheredEvidence.length,
+            hasToken: !!token,
+            isDiagnosing
+        });
+
+        if (!patientAge || !patientSex || !interviewId || !token) {
+            console.error(">>> NurseDashboard: VALIDATION FAILED - Missing required info for diagnosis:", { 
+                hasAge: !!patientAge, 
+                hasSex: !!patientSex, 
+                hasInterviewId: !!interviewId, 
+                hasToken: !!token 
+            });
+            setDiagnosisError("Missing patient age, sex, or authentication.");
+            return;
+        }
+
+        // Initialize evidence array
+        let currentEvidence = [];
+        console.log(">>> NurseDashboard: Determining evidence source...");
+
+        // Determine which evidence source to use
+        if (Array.isArray(evidenceToUse) && evidenceToUse.length > 0) {
+            // Use the directly provided evidence array
+            console.log(">>> NurseDashboard: Using provided evidence array:", 
+                evidenceToUse.map(e => `${e.id}:${e.choice_id}`));
+            currentEvidence = evidenceToUse;
+        } else if (gatheredEvidence.length > 0) {
+            // Use existing gathered evidence
+            console.log(">>> NurseDashboard: Using existing gatheredEvidence:", 
+                gatheredEvidence.map(e => `${e.id}:${e.choice_id}`));
+            currentEvidence = gatheredEvidence;
+        } else if (selectedSymptoms.length > 0) {
+            // Create new evidence from selected symptoms
+            console.log(">>> NurseDashboard: Creating initial evidence from selectedSymptoms:", 
+                selectedSymptoms.map(s => s.id));
+                
+            currentEvidence = selectedSymptoms.map(symptom => ({
+                id: symptom.id,
+                choice_id: 'present' // Assuming initial symptoms are 'present'
+            }));
+            // Store this as our gathered evidence base
+            setGatheredEvidence(currentEvidence);
+        } else {
+            // No evidence available from any source
+            console.error(">>> NurseDashboard: No evidence available!");
+            setDiagnosisError("Please select at least one symptom first.");
+            return;
+        }
+
+        // Format evidence for the API
+        const evidence = currentEvidence;
+
+        // Verify evidence format
+        if (!Array.isArray(evidence)) {
+            console.error(">>> NurseDashboard: FATAL - Evidence is not an array!", evidence);
+            setDiagnosisError("Internal error: Evidence data is invalid.");
+            return;
+        }
+        
+        if (evidence.length === 0) {
+            console.error(">>> NurseDashboard: FATAL - Evidence array is empty!");
+            setDiagnosisError("At least one symptom is required.");
+            return;
+        }
+
+        // Validate evidence item format
+        const invalidItems = evidence.filter(item => !item.id || !item.choice_id);
+        if (invalidItems.length > 0) {
+            console.error(">>> NurseDashboard: FATAL - Evidence contains invalid items:", invalidItems);
+            setDiagnosisError("Internal error: Evidence data is in wrong format.");
+            return;
+        }
+
+        console.log(">>> NurseDashboard: Calling getDiagnosisApi with:", { 
+            sex: patientSex, 
+            age: patientAge, 
+            evidence: Array.isArray(evidence) ? evidence.map(e => `${e.id}:${e.choice_id}`) : "NOT AN ARRAY", 
+            interviewId 
+        });
+        
+        setIsDiagnosing(true);
+        setDiagnosisError(null);
+        setDiagnosisResult(null); // Clear previous results
+
+        try {
+            const result = await getDiagnosisApi(patientSex, patientAge, evidence, interviewId, token);
+            console.log(">>> NurseDashboard: Diagnosis API call successful. Response contains:", {
+                hasQuestion: !!result.question,
+                questionType: result.question?.type,
+                questionItemsCount: result.question?.items?.length || 0,
+                conditionsCount: result.conditions?.length || 0,
+                shouldStop: result.should_stop
+            });
+            setDiagnosisResult(result);
+        } catch (error) {
+            console.error(">>> NurseDashboard: Diagnosis API call FAILED:", {
+                message: error.message,
+                stack: error.stack?.substring(0, 200) // Just log part of the stack trace
+            });
+            setDiagnosisError(error.message || "Failed to get diagnosis from backend");
+        } finally {
+            setIsDiagnosing(false);
+        }
+    };
+
+    const handleQuestionAnswer = async (itemId, choiceId) => {
+        console.log(`>>> NurseDashboard: handleQuestionAnswer called for item ${itemId} with choice ${choiceId}`);
+        console.log(">>> NurseDashboard: Current gatheredEvidence before answer:", 
+            Array.isArray(gatheredEvidence) ? gatheredEvidence.map(e => `${e.id}:${e.choice_id}`) : "NOT AN ARRAY");
+
+        // Validate inputs
+        if (!itemId || !choiceId) {
+            console.error(">>> NurseDashboard: ERROR - Invalid question answer parameters", { itemId, choiceId });
+            setDiagnosisError("Cannot process answer: Invalid parameters");
+            return;
+        }
+
+        // Check if we're already processing a diagnosis request
+        if (isDiagnosing) {
+            console.log(">>> NurseDashboard: Ignoring answer while previous diagnosis is in progress");
+            return;
+        }
+
+        // Create new evidence object from the answer
+        const newEvidence = { id: itemId, choice_id: choiceId };
+        console.log(">>> NurseDashboard: Created new evidence object:", newEvidence);
+
+        // Create updated evidence list with the new answer
+        let updatedEvidence;
+        
+        // Make sure we're working with a proper array of existing evidence
+        const currentEvidence = Array.isArray(gatheredEvidence) ? gatheredEvidence : [];
+        
+        // Check if we've already answered this question - if so, replace the answer
+        const existingIndex = currentEvidence.findIndex(e => e.id === itemId);
+        if (existingIndex >= 0) {
+            console.log(`>>> NurseDashboard: Replacing existing answer for ${itemId}`);
+            updatedEvidence = [...currentEvidence];
+            updatedEvidence[existingIndex] = newEvidence;
+        } else {
+            // Otherwise add as a new piece of evidence
+            console.log(`>>> NurseDashboard: Adding new answer for ${itemId}`);
+            updatedEvidence = [...currentEvidence, newEvidence];
+        }
+        
+        console.log(">>> NurseDashboard: Updated evidence array:", 
+            updatedEvidence.map(e => `${e.id}:${e.choice_id}`));
+            
+        // Update state (for future reference)
+        setGatheredEvidence(updatedEvidence);
+
+        try {
+            // Immediately trigger diagnosis with the updated evidence directly
+            // Instead of waiting for gatheredEvidence state to update
+            console.log(">>> NurseDashboard: Calling handleGetDiagnosis with updated evidence array...");
+            await handleGetDiagnosis(updatedEvidence);
+        } catch (error) {
+            console.error(">>> NurseDashboard: ERROR in handleQuestionAnswer:", error);
+            setDiagnosisError("Failed to process your answer. Please try again.");
+        }
+    };
+
+    const handleEnterSymptoms = (patientID) => {
+        // Get current patient to extract age and sex
+        const currentPatient = patients.find(patient => patient.id === patientID);
+        
+        // Clear previous symptoms/diagnosis state
+        setSymptomsInput(""); 
+        setSymptomSearchResults([]);
+        setSelectedSymptoms([]);
+        setGatheredEvidence([]);
+        setDiagnosisResult(null);
+        setDiagnosisError(null);
+        setDiagnosisSaved(false);
+        setSaveDiagnosisError(null);
+        
+        // Set patient age and sex for API calls
+        setPatientAge(currentPatient?.age || '');
+        setPatientSex(currentPatient?.sex || 'male');
+        
+        // IMPORTANT: Set both patient ID variables to ensure consistency
+        // This fixes the missing patient ID when saving the diagnosis
+        setSelectedPatientID(patientID); // For displaying patient info in UI
+        setSelectedPatientId(patientID); // For saving the diagnosis to database
+        
+        console.log(`Entering symptoms for patient ID: ${patientID}`);
+    }
+    
+    /**
+     * Save the current diagnosis to the database
+     */
+    const handleSaveDiagnosis = async (condition) => {
+        if (!selectedPatientId) {
+            setSaveDiagnosisError("No patient selected. Please select a patient first.");
+            return;
+        }
+        
+        if (!condition || !condition.id || !condition.name) {
+            setSaveDiagnosisError("Invalid condition data.");
+            return;
+        }
+        
+        // Parse and prepare symptoms from gathered evidence
+        let symptoms = [];
+        
+        // Only process symptoms that were confirmed as 'present'
+        if (gatheredEvidence && gatheredEvidence.length > 0) {
+            console.log(`Processing ${gatheredEvidence.length} evidence items to extract symptoms`);
+            
+            // Filter only present symptoms (not absent or unknown)
+            const presentSymptoms = gatheredEvidence.filter(evidence => evidence.choice_id === 'present');
+            console.log(`Found ${presentSymptoms.length} present symptoms/findings`);
+            
+            // First, let's check if any evidence item has its name in the Infermedica response
+            // This happens when we get evidence from diagnosisResult that includes name
+            const hasNamedSymptoms = presentSymptoms.some(e => e.name || e.common_name);
+            
+            symptoms = presentSymptoms.map(evidence => {
+                // Determine if this is a symptom (s_) or finding (p_)
+                const isSymptom = evidence.id.startsWith('s_');
+                
+                // Check for symptom name in multiple possible places
+                let symptomName = null;
+                
+                // 1. First try to get name directly from the evidence if available (from diagnosisResult)
+                if (evidence.name) {
+                    symptomName = evidence.name;
+                } else if (evidence.common_name) {
+                    symptomName = evidence.common_name;
+                } else {
+                    // 2. Look for the symptom in diagnosisResult question items if available
+                    if (diagnosisResult && diagnosisResult.question && diagnosisResult.question.items) {
+                        const matchingItem = diagnosisResult.question.items.find(item => item.id === evidence.id);
+                        if (matchingItem && (matchingItem.name || matchingItem.common_name)) {
+                            symptomName = matchingItem.name || matchingItem.common_name;
+                        }
+                    }
+                    
+                    // 3. Look in the original selected symptoms list
+                    if (!symptomName) {
+                        const selectedSymptom = selectedSymptoms.find(s => s.id === evidence.id);
+                        if (selectedSymptom && (selectedSymptom.name || selectedSymptom.common_name)) {
+                            symptomName = selectedSymptom.name || selectedSymptom.common_name;
+                        }
+                    }
+                }
+                
+                // Use fallback name if all else fails
+                if (!symptomName) {
+                    symptomName = `${isSymptom ? 'Symptom' : 'Finding'} ${evidence.id}`;
+                }
+                
+                // Default severity - could be enhanced to use actual severity from interview
+                let severityLevel = 'moderate';
+                
+                // Construct a clean symptom object for database storage
+                return {
+                    id: evidence.id,
+                    name: symptomName,
+                    severity: severityLevel,
+                    // Include whether this is a symptom or finding for reference
+                    type: isSymptom ? 'symptom' : 'finding'
+                };
+            });
+        } else if (selectedSymptoms && selectedSymptoms.length > 0) {
+            // Fallback to using directly selected symptoms if no interview was conducted
+            console.log(`Using ${selectedSymptoms.length} directly selected symptoms`);
+            symptoms = selectedSymptoms.map(s => ({
+                id: s.id,
+                name: s.name || s.common_name || `Symptom ${s.id}`,
+                severity: 'moderate',
+                type: s.id.startsWith('s_') ? 'symptom' : 'finding'
+            }));
+        }
+        
+        console.log(`Final symptom list for saving diagnosis:`, symptoms);
+        
+        if (symptoms.length === 0) {
+            setSaveDiagnosisError("No symptoms identified. Cannot save diagnosis without symptoms.");
+            return;
+        }
+        
+        // Get the token for authentication
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+            setSaveDiagnosisError("Authentication required. Please log in again.");
+            return;
+        }
+        
+        try {
+            setIsSavingDiagnosis(true);
+            setSaveDiagnosisError(null);
+            
+            // Determine if this is potentially critical based on probability
+            const isCritical = condition.probability > 0.7;
+            const confidenceScore = condition.probability * 100;
+
+            // Call the API to save the diagnosis
+            await saveDiagnosisApi(
+                selectedPatientId,
+                condition.id,
+                condition.name,
+                confidenceScore,
+                isCritical,
+                symptoms,
+                token
+            );
+            
+            setDiagnosisSaved(true);
+            // Optional: Show a success message or navigate
+            // navigate(`/patients/${selectedPatientId}`);
+            
+        } catch (error) {
+            console.error("Error saving diagnosis:", error);
+            setSaveDiagnosisError(error.message || "Failed to save diagnosis");
+            setDiagnosisSaved(false);
+        } finally {
+            }
+                
+            // Use fallback name if all else fails
+            if (!symptomName) {
+                symptomName = `${isSymptom ? 'Symptom' : 'Finding'} ${evidence.id}`;
+            }
+                
+            // Default severity - could be enhanced to use actual severity from interview
+            let severityLevel = 'moderate';
+                
+            // Construct a clean symptom object for database storage
+            return {
+                id: evidence.id,
+                name: symptomName,
+                severity: severityLevel,
+                // Include whether this is a symptom or finding for reference
+                type: isSymptom ? 'symptom' : 'finding'
+            };
+        });
+    } else if (selectedSymptoms && selectedSymptoms.length > 0) {
+        // Fallback to using directly selected symptoms if no interview was conducted
+        console.log(`Using ${selectedSymptoms.length} directly selected symptoms`);
+        symptoms = selectedSymptoms.map(s => ({
+            id: s.id,
+            name: s.name || s.common_name || `Symptom ${s.id}`,
+            severity: 'moderate',
+            type: s.id.startsWith('s_') ? 'symptom' : 'finding'
+        }));
+    }
+        
+    console.log(`Final symptom list for saving diagnosis:`, symptoms);
+        
+    if (symptoms.length === 0) {
+        setSaveDiagnosisError("No symptoms identified. Cannot save diagnosis without symptoms.");
+        return;
+    }
+        
+    // Get the token for authentication
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+        setSaveDiagnosisError("Authentication required. Please log in again.");
+        return;
+    }
+        
+    try {
+        setIsSavingDiagnosis(true);
+        setSaveDiagnosisError(null);
+            
+        // Determine if this is potentially critical based on probability
+        const isCritical = condition.probability > 0.7;
+        const confidenceScore = condition.probability * 100;
+
+        // Call the API to save the diagnosis
+        await saveDiagnosisApi(
+            selectedPatientId,
+            condition.id,
+            condition.name,
+            confidenceScore,
+            isCritical,
+            symptoms,
+            token
+        );
+            
+        setDiagnosisSaved(true);
+        // Optional: Show a success message or navigate
+        // navigate(`/patients/${selectedPatientId}`);
+            
+    } catch (error) {
+        console.error("Error saving diagnosis:", error);
+        setSaveDiagnosisError(error.message || "Failed to save diagnosis");
+        setDiagnosisSaved(false);
+    } finally {
+        setIsSavingDiagnosis(false);
+    }
+};
+
+const handleSubmitSymptoms = (patientID) => {
+    alert("Submitting manually entered symptoms for patient ID " + patientID + ": " + symptomsInput); 
+    const updatedPatients = patients.map(patient => {
+        if (patient.id === patientID) {
+             return { ...patient, symptoms: symptomsInput };
+        }
+        return patient;
+    });
+    setPatients(updatedPatients);
+    setSelectedPatientID(null); 
+}
+
+const handleViewDiagnoses = (patientID) => {
+    const patient = patients.find(p => p.id === patientID);
+    if (patient && patient.diagnosis) {
+        alert(`Diagnosis for ` + patient.name + `: ` + patient.diagnosis);
+    } else {
+        alert("No diagnosis available for this patient yet.");
+    }
+}
+
+const handleGenerateDiagnosis = (patientID) => {
+    // Starting the interface for infermedica interaction for a patient
+    const currentPatient = patients.find(patient => patient.id === patientID);
+
+    // Reset all diagnosis-related state
+    setGatheredEvidence([]);
+    setSelectedSymptoms([]);
+    setDiagnosisResult(null);
+    setDiagnosisError(null);
+    setDiagnosisSaved(false);
+    setSaveDiagnosisError(null);
+
+    // Set the patient information for the diagnosis
+    setPatientAge(currentPatient?.age || '')
+    setPatientSex(currentPatient?.sex || 'male');
+
+    // IMPORTANT: Set both patient ID variables to ensure consistency
+    // This fixes the missing patient ID when saving the diagnosis
+    setSelectedPatientID(patientID); // For displaying patient info
+    setSelectedPatientId(patientID); // For saving the diagnosis to database
+
+    console.log(`Starting diagnosis for patient ID: ${patientID}`);
+
+    // Update patient status in the UI
+    const updatedPatients = patients.map(patient => {
+        if (patient.id === patientID) {
+            return { ...patient, status: "Diagnosis In Progress" };
+        }
+        return patient;
+    });
+    setPatients(updatedPatients);
+}
+
+const handleExportPatients = () => {
+    alert("Exporting patient data"); 
+    const csvContent = "data:text/csv;charset=utf-8,"
+    + "Name,Status,Symptoms,Diagnosis\n"
+    + patients.map(p =>
+        `${p.name},${p.status},"${p.symptoms || "N/A"}","${p.diagnosis || "N/A"}"` 
+    ).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "patient_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+const handleSortChange = (e) => {
+    const selected = e.target.value;
+    setSortType(selected);
+    const sorted = [...patients].sort((a,b) => {
+        if(selected === "name"){
+            return a.name.localeCompare(b.name);
+        }else if(selected === "status"){
+            return a.status.localeCompare(b.status);
+        }
+        return 0;
+    });
+    setPatients(sorted); 
+}
+
+const handlePatientAgeChange = (e) => {
+    setPatientAge(e.target.value);
+}
+
+const handlePatientSexChange = (e) => {
+    setPatientSex(e.target.value);
+}
+
+return React.createElement("div", { style: { padding: '20px' } }, [ 
+    React.createElement("h2", {key: "title"},
+        userName ? "Welcome Nurse " + userName + "!" : "Welcome Nurse!"
+    ),
+
+    React.createElement("div", {key: "symptom-search-section", style: { marginTop: '20px', padding: '15px', border: '1px solid lightgrey', borderRadius: '5px' } }, [
+        // Show current patient information bar at the top of the symptom section
+        selectedPatientId && React.createElement("div", {
+            key: "current-patient-banner",
+            style: {
+                backgroundColor: '#e8f5e9', 
+                border: '1px solid #4caf50',
+                borderRadius: '5px',
+                padding: '10px 15px',
+                marginBottom: '15px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }
+        }, [
+            React.createElement("div", {key: "patient-info"}, [
+                React.createElement("strong", null, "Currently working with:"),
+                React.createElement("span", {style: {marginLeft: '8px'}}, 
+                    `Patient #${selectedPatientId}: ${patients.find(p => p.id === selectedPatientId)?.name || 'Unknown'}`
+                )
+            ]),
+            React.createElement("div", {key: "patient-demographics"}, [
+                `Age: `,
+                React.createElement("input", {
+                    type: "number",
+                    placeholder: "Age",
+                    min: "1",
+                    max: "120",
+                    value: patientAge,
+                    onChange: handlePatientAgeChange,
+                    style: { width: '50px', marginRight: '10px' }
+                }),
+                `Sex: `,
+                React.createElement("select", {
+                    value: patientSex,
+                    onChange: handlePatientSexChange,
+                    style: { width: '90px' }
+                }, [
+                    React.createElement("option", { value: "male" }, "Male"),
+                    React.createElement("option", { value: "female" }, "Female")
+                ])
+            ])
+        ]),
+        
+        // Create wrapper for symptom search/selection
+        React.createElement("div", {key: "symptom-search-container"}, [
+            React.createElement("h4", {key: "search-title"}, "Search for Symptoms:"),
+            React.createElement("input", {
+                key: "symptomSearchInput",
+                type: "text",
+                placeholder: "Search for symptoms...",
+                value: symptomSearchTerm,
+                onChange: (e) => setSymptomSearchTerm(e.target.value),
+                disabled: !patientAge || !patientSex, // Disable if age/sex missing
+                style: { width: '95%', padding: '10px', marginBottom: '5px' } 
+            }),
+
+            // RENDER SEARCH RESULTS HERE
+            isSearchingSymptoms && React.createElement("p", { key: "searching-indicator" }, "Searching..."),
+            symptomSearchError && React.createElement("p", { key: "search-error", style: { color: 'red' } }, symptomSearchError),
+            !isSearchingSymptoms && symptomSearchResults.length > 0 && React.createElement("ul", {
+                key: "symptom-results-list",
+                style: { listStyle: 'none', padding: 0, margin: 0, border: '1px solid #ccc', maxHeight: '150px', overflowY: 'auto' }
+            }, symptomSearchResults.map(symptom => (
+                React.createElement("li", {
+                    key: symptom.id,
+                    style: { padding: '8px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }
+                }, [
+                    React.createElement("span", { key: `label-${symptom.id}` }, symptom.label),
+                    React.createElement("button", {
+                        key: `add-${symptom.id}`,
+                        onClick: () => handleSelectSymptom(symptom),
+                        style: { padding: '3px 8px', cursor: 'pointer' }
+                    }, "Add")
+                ])
+            )))
+        ]),
+
+        // DISPLAY SELECTED SYMPTOMS
+        selectedSymptoms.length > 0 && React.createElement("div", {
+            key: "selected-symptoms-section",
+            style: { marginTop: '15px', padding: '10px', border: '1px solid #e0e0e0', borderRadius: '4px' }
+        }, [
+            React.createElement("h4", { key: "selected-title", style: { marginBottom: '10px'} }, "Selected Symptoms:"),
+            React.createElement("div", { key: "selected-list", style: { display: 'flex', flexWrap: 'wrap', gap: '8px' } }, 
+                selectedSymptoms.map(symptom => (
+                    React.createElement("span", {
+                        key: `selected-${symptom.id}`,
+                        style: { 
+                            backgroundColor: '#e0e0e0', 
+                            padding: '5px 10px', 
+                            borderRadius: '15px', 
+                            display: 'inline-flex', 
+                            alignItems: 'center' 
+                        }
+                    }, [
+                        React.createElement("span", { key: `text-${symptom.id}`, style: { marginRight: '8px' } }, symptom.label),
+                        React.createElement("button", {
+                            key: `remove-${symptom.id}`,
+                            onClick: () => handleRemoveSymptom(symptom.id),
+                            style: { 
+                                background: '#a0a0a0', 
+                                color: 'white', 
+                                border: 'none', 
+                                borderRadius: '50%', 
+                                width: '18px', 
+                                height: '18px', 
+                                cursor: 'pointer', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center', 
+                                fontSize: '12px', 
+                                lineHeight: '1' 
+                            }
+                        }, "x") // Simple 'x' for remove
+                    ])
+                ))
+            ),
+            React.createElement("button", {
+                key: "get-diagnosis",
+                onClick: handleGetDiagnosis,
+                disabled: isDiagnosing || selectedSymptoms.length === 0, // Disable if diagnosing or no symptoms selected
+                style: { padding: '8px', cursor: 'pointer', marginTop: '10px' } // Added margin
+            }, isDiagnosing ? "Getting Diagnosis..." : "Get Diagnosis")
+        ]),
+
+        // ---> DISPLAY DIAGNOSIS RESULTS / LOADING / ERROR
+        React.createElement("div", { 
+            key: "diagnosis-output-section",
+            style: { marginTop: '20px', padding: '15px', border: '1px solid lightblue', borderRadius: '5px', minHeight: '50px' }
+        }, [
+            isDiagnosing && React.createElement("p", {key: "diag-loading"}, "Loading diagnosis..."),
+            diagnosisError && React.createElement("p", {key: "diag-error", style: { color: 'red' } }, `Error: ${diagnosisError}`),
+            diagnosisResult && React.createElement("div", {key: "diag-result"}, [
+                // Check if the result is a question
+                diagnosisResult.question && React.createElement("div", {key: "diag-question"}, [
+                    React.createElement("h4", {key: "question-title"}, "Next Question:"),
+                    React.createElement("p", {key: "question-text"}, diagnosisResult.question.text),
+                    React.createElement("ul", {key: "question-items", style: {listStyle: 'none', paddingLeft: '10px'}}, 
+                        diagnosisResult.question.items.map(item => (
+                            React.createElement("li", {key: item.id, style: { marginBottom: '10px' } }, [
+                                React.createElement("span", {key: `item-name-${item.id}`, style: { marginRight: '10px' } }, item.name),
+                                // Render buttons for each choice provided by the API
+                                item.choices.map(choice => (
+                                    React.createElement("button", {
+                                        key: `${item.id}-${choice.id}`,
+                                        onClick: () => handleQuestionAnswer(item.id, choice.id),
+                                        disabled: isDiagnosing, // Disable buttons while waiting for API response
+                                        style: { marginLeft: '5px', padding: '5px 8px', cursor: 'pointer' }
+                                    }, choice.label) // Use the label from the API (e.g., 'Yes', 'No')
+                                ))
+                            ])
+                        ))
+                    )
+                ]),
+                // Check if the result contains conditions (final diagnosis)
+                diagnosisResult.conditions && diagnosisResult.conditions.length > 0 && React.createElement("div", {
+                    key: "diag-conditions",
+                    style: { 
+                        backgroundColor: '#f8f9fa', 
+                        border: '2px solid #28a745', 
+                        borderRadius: '8px', 
+                        padding: '15px',
+                        marginTop: '20px'
+                    }
+                }, [
+                    // Diagnosis complete banner
+                    React.createElement("div", {
+                        key: "diagnosis-complete-banner",
+                        style: {
+                            backgroundColor: '#28a745',
+                            color: 'white',
+                            padding: '10px 15px',
+                            borderRadius: '5px',
+                            marginBottom: '15px',
+                            fontWeight: 'bold',
+                            fontSize: '16px',
+                            textAlign: 'center'
+                        }
+                    }, "✅ INTERVIEW COMPLETE - Please review and save the diagnosis"),
+                    
+                    React.createElement("h4", {key: "conditions-title", style: {fontSize: '18px', marginBottom: '10px'}}, "Diagnosis Results:"),
+                    
+                    // Show top conditions
+                    React.createElement("div", {key: "top-conditions", style: {marginBottom: '20px'}}, [
+                        React.createElement("ul", {key: "conditions-list", style: {listStyle: 'disc', paddingLeft: '20px'}}, 
+                            diagnosisResult.conditions.map(condition => (
+                                React.createElement("li", 
+                                    {key: condition.id, style: { marginBottom: '12px', padding: '8px', backgroundColor: condition.probability > 0.1 ? '#f0f7ff' : '#fff', borderRadius: '5px' }}, 
+                                    [
+                                        React.createElement("div", {key: `condition-text-${condition.id}`, style: {fontWeight: condition.probability > 0.3 ? 'bold' : 'normal'}},
+                                            `${condition.name} (Confidence: ${(condition.probability * 100).toFixed(1)}%)`
+                                        )
+                                    ]
+                                )
+                            ))
+                        )
+                    ]),
+                    
+                    // PROMINENT SAVE SECTION
+                    React.createElement("div", {
+                        key: "save-diagnosis-section",
+                        style: {
+                            backgroundColor: '#e8f4f8', 
+                            border: '1px solid #007bff',
+                            borderRadius: '5px',
+                            padding: '15px',
+                            marginTop: '10px',
+                            textAlign: 'center'
+                        }
+                    }, [
+                        React.createElement("h4", {key: "save-title", style: {marginTop: '0'}}, "Save Diagnosis to Database"),
+                        React.createElement("p", {key: "save-instruction"}, "Select the most likely condition to save the diagnosis for this patient. The diagnosis and symptoms will be stored in the database for doctor review."),
+                        
+                        // Top conditions with large save buttons
+                        React.createElement("div", {key: "save-conditions-buttons", style: {marginTop: '15px', display: 'flex', flexDirection: 'column', gap: '10px'}},
+                            diagnosisResult.conditions
+                                .filter(condition => condition.probability > 0.1) // Only show conditions with >10% confidence
+                                .slice(0, 3) // Show top 3 conditions
+                                .map(condition => (
+                                    React.createElement("button", {
+                                        key: `save-condition-${condition.id}`,
+                                        onClick: () => handleSaveDiagnosis(condition),
+                                        disabled: isSavingDiagnosis || diagnosisSaved,
+                                        style: { 
+                                            padding: '12px 20px', 
+                                            backgroundColor: diagnosisSaved ? '#8bc34a' : '#2196f3',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '5px',
+                                            cursor: 'pointer',
+                                            fontSize: '16px',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center'
+                                        }
+                                    }, [
+                                        React.createElement("span", null, `${diagnosisSaved ? "Saved" : "Save Diagnosis"}: ${condition.name}`),
+                                        React.createElement("span", {style: {fontWeight: 'bold'}}, `${(condition.probability * 100).toFixed(1)}%${diagnosisSaved ? " ✓" : ""}`)
+                                    ])
+                                ))
+                        ),
+                        
+                        // Show message if no conditions meet threshold
+                        diagnosisResult.conditions.filter(c => c.probability > 0.1).length === 0 && 
+                            React.createElement("p", {style: {color: '#dc3545', marginTop: '10px'}}, 
+                                "No conditions with sufficient confidence (>10%) to save. Please continue the interview or start over."
+                            ),
+                            
+                        // Status message
+                        diagnosisSaved && React.createElement("p", {style: {color: '#28a745', marginTop: '15px', fontWeight: 'bold'}}, 
+                            "✅ Diagnosis successfully saved to database and will be reviewed by the doctor."
+                        ),
+                        
+                        isSavingDiagnosis && React.createElement("p", {style: {color: '#007bff', marginTop: '10px'}}, 
+                            "Saving diagnosis to database..."
+                        )
+                    ]),
+                    
+                    // Error message for diagnosis saving
+                    saveDiagnosisError && React.createElement("p", {
+                        key: "save-error", 
+                        style: { color: '#dc3545', marginTop: '15px', padding: '10px', backgroundColor: '#f8d7da', borderRadius: '5px' }
+                    }, `Error saving diagnosis: ${saveDiagnosisError}`)
+                ]),
+                // Handle case where API might return neither (shouldn't happen often)
+                !diagnosisResult.question && (!diagnosisResult.conditions || diagnosisResult.conditions.length === 0) && React.createElement("p", {key: "diag-unknown"}, "Received an unexpected response from the diagnosis API.")
+            ])
+        ]),
+
+        React.createElement("button", {
+            key: "exportPatitents",
+            onClick: handleExportPatients,
+            style: { marginRight: '10px' } 
+        }, "Export All Patient Data"),
+
+        React.createElement("input", {
+            key: "searchBar",
+            type: "text",
+            placeholder: "Search patients by name or status...",
+            value: searchTerm,
+            onChange: (e) => setSearchTerm(e.target.value),
+            style: { width: '300px', padding: '8px', marginRight: '10px' } 
+        }),
+
+        React.createElement("select", {
+            key: "sortDropdown",
+            value: sortType,
+            onChange: handleSortChange,
+            style: { padding: '8px' } 
+        }, [
+            React.createElement("option", { key: "name", value: "name" }, "Sort by Name"),
+            React.createElement("option", { key: "status", value: "status" }, "Sort by Status")
+        ]),
+
+
+        React.createElement("h3", { key: "patientListTitle", style: { marginTop: '20px' } }, "Patient List"), 
+
+        ...patients.filter((patient) =>
+            patient.name.toLowerCase().includes(searchTerm.toLowerCase()) || patient.status.toLowerCase().includes(searchTerm.toLowerCase())
+        ).map((patient) =>
+            React.createElement("div", {key: `patient-${patient.id}`, style: { border: '1px solid #eee', padding: '10px', marginBottom: '10px' } }, [ 
+                React.createElement("p", {key: `patient-info-${patient.id}`, style: { fontWeight: 'bold' } }, 
+                    patient.name + " - " + patient.status
+                ),
+
+                patient.symptoms && React.createElement("p", { key: `patient-symptoms-display-${patient.id}`},
+                    "Symptoms Entered: " + patient.symptoms
+                 ),
+
+                React.createElement("button", {
+                    key: `enterSymptoms-${patient.id}`,
+                    onClick: () => handleEnterSymptoms(patient.id),
+                    style: { marginRight: '5px' } 
+                }, "Enter/Edit Symptoms Manually"),
+
+                React.createElement("button", {
+                    key: `generateDiagnosis-${patient.id}`,
+                    onClick: () => handleGenerateDiagnosis(patient.id),
+                     disabled: !patient.symptoms, 
+                    style: { marginRight: '5px' } 
+                }, "Generate Diagnosis"),
+
+                React.createElement("button", {
+                    key: `viewDiagnosis-${patient.id}`,
+                    onClick: () => handleViewDiagnoses(patient.id),
+                    disabled: !patient.diagnosis, 
+                    style: { marginRight: '5px' } 
+                }, "View Diagnosis"),
+
+                patient.diagnosis && React.createElement("p", { key: `patient-diagnosis-display-${patient.id}`},
+                    "Diagnosis Result: " + patient.diagnosis
+                 ),
+
+
+                selectedPatientID === patient.id
+                ? React.createElement("div", {key: `symptomForm-${patient.id}`, style: { marginTop: '10px' } }, [ 
+                    React.createElement("input", {
+                        key: `symptomInput-${patient.id}`,
+                        type: "text",
+                        placeholder: "Enter Symptoms Manually Here...",
+                        value: symptomsInput,
+                        onChange: (e) => setSymptomsInput(e.target.value),
+                        style: { marginRight: '5px', padding: '5px' } 
+                    }),
+                    React.createElement("button", {
+                        key: `submitSymptoms-${patient.id}`,
+                        onClick: () => handleSubmitSymptoms(patient.id)
+                    }, "Submit Manual Symptoms")
+                ])
+                : null
+            ])
+        ),
+
+        handleLogout && React.createElement("button", {
+            key: "logout",
+            onClick: handleLogout,
+            style: { marginTop: '20px', display: 'block' } 
+        }, "Logout")
+
+    ]); 
+}
+
+export default NurseDashboard;

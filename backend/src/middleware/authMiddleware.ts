@@ -1,3 +1,5 @@
+// Allows for user authentication via token passing
+
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
