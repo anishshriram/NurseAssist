@@ -87,10 +87,11 @@ class InfermedicaService {
      */
     async searchSymptoms(phrase: string, age: number, sex: 'male' | 'female', interviewId: string): Promise<SearchResponseItem[]> {
         try {
+            console.log(`[InfermedicaService] Calling /search with: phrase='${phrase}' (type: ${typeof phrase}), age=${age} (type: ${typeof age}), sex='${sex}' (type: ${typeof sex}), interviewId='${interviewId}'`);
             const response = await this.apiClient.get<SearchResponseItem[]>('/search', {
                 params: {
                     phrase,
-                    age: { value: age }, //age.value – the patient's age, which should be a positive integer between 0 and 130.
+                    'age.value': age, // Use 'age.value' directly as the key
                     sex,
                 },
                 headers: {
@@ -118,6 +119,7 @@ class InfermedicaService {
         requestBody.age.unit = requestBody.age.unit || 'year'; // ran into an error here, where I didnt give a year and it freaked out so here we go
 
         try {
+            console.log(`[InfermedicaService] Calling /diagnosis with: requestBody=${JSON.stringify(requestBody)}, interviewId='${interviewId}'`);
             const response = await this.apiClient.post<DiagnosisResponse>('/diagnosis', requestBody, {
                 headers: {
                     'Interview-Id': interviewId,
@@ -143,6 +145,7 @@ class InfermedicaService {
        requestBody.age.unit = requestBody.age.unit || 'year';
 
         try {
+            console.log(`[InfermedicaService] Calling /explain with: requestBody=${JSON.stringify(requestBody)}, interviewId='${interviewId}'`);
             const response = await this.apiClient.post<ExplainResponse>('/explain', requestBody, {
                 headers: {
                     'Interview-Id': interviewId,

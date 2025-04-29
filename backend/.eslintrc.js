@@ -1,9 +1,9 @@
+//saw this online, good for linting
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    // Add other plugins/extends as needed (e.g., 'prettier')
   ],
   parserOptions: {
     ecmaVersion: 2020,
@@ -11,11 +11,10 @@ module.exports = {
   },
   env: {
     node: true,
-    jest: true, // If using Jest
+    jest: true, // I am using jest for testing
   },
   rules: {
-    // Customize rules here if needed
     '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
-    '@typescript-eslint/no-explicit-any': 'warn', // Use 'warn' instead of 'error' during development
+    '@typescript-eslint/no-explicit-any': 'warn', //change to error if needed
   },
 };

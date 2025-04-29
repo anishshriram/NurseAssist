@@ -18,6 +18,7 @@ function App(){
     function handleLogout(){
         localStorage.removeItem("userRole");
         localStorage.removeItem("userName");
+        localStorage.removeItem("userToken");
         setUserRole(null);
         setUserName(null);
     }

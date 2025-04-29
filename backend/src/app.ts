@@ -6,7 +6,7 @@ import config from './config';
 import authRoutes from './routes/authRoutes';
 import symptomRoutes from './routes/symptomRoutes';
 import diagnosisRoutes from './routes/diagnosisRoutes';
-// import patientRoutes from './routes/patientRoutes';
+import patientRoutes from './routes/patientRoutes';
 // import sessionRoutes from './routes/sessionRoutes';
 
 const app: Express = express();
@@ -37,7 +37,7 @@ app.use('/api/symptoms', symptomRoutes);
 app.use('/api/diagnosis', diagnosisRoutes); // Mount diagnosis routes
 app.use('/api/auth', authRoutes);
 // app.use('/api/sessions', sessionRoutes);
-// app.use('/api/patients', patientRoutes);
+app.use('/api/patients', patientRoutes);
 
 
 // error handling
