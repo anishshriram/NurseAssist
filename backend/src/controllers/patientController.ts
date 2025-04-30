@@ -1,6 +1,58 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from '../middleware/authMiddleware';
 import pool from '../utils/db';
+import { z } from 'zod';
+import * as patientModel from '../models/patientModel';
+
+/**
+ * Schema for validating patient creation request
+ */
+const createPatientSchema = z.object({
+    name: z.string().min(1, { message: 'Patient name is required' }),
+    age: z.number().int().positive({ message: 'Age must be a positive number' }),
+    gender: z.string().min(1, { message: 'Gender is required' }),
+    medical_history: z.string().optional(),
+    doctor_id: z.number().int().positive().optional()
+});
+
+/**
+ * Create a new patient
+ */
+export const createPatient = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        // Get the nurse's ID from the authenticated user
+        const nurseId = req.user?.userId;
+        if (!nurseId) {
+            return res.status(401).json({ message: 'Unauthorized. User ID not found.' });
+        }
+
+        // Validate the request body
+        const patientData = createPatientSchema.parse(req.body);
+        
+        // Add the nurse_id to the patient data
+        const newPatient = {
+            ...patientData,
+            nurse_id: nurseId
+        };
+        
+        // Create the patient in the database
+        const patientId = await patientModel.createPatient(pool, newPatient);
+        
+        res.status(201).json({
+            message: 'Patient created successfully',
+            patient_id: patientId
+        });
+        
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return res.status(400).json({
+                message: 'Validation failed',
+                errors: error.errors
+            });
+        }
+        next(error);
+    }
+};
 
 /**
  * Get all patients assigned to the logged-in nurse

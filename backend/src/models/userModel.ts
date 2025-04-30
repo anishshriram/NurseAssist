@@ -7,13 +7,13 @@ export const UserSchema = z.object({
     name: z.string({ required_error: 'Name is required' }).min(1, 'Name cannot be empty'), 
     email: z.string({ required_error: 'Email is required' }).email('Invalid email address'),
     password: z.string({ required_error: 'Password is required' }).min(8, 'Password must be at least 8 characters long'),
-    role: z.enum(['Nurse', 'Doctor'], {
+    role: z.enum(['Nurse', 'Doctor', 'Admin'], {
         errorMap: (issue, ctx) => {
             if (issue.code === z.ZodIssueCode.invalid_type && issue.received === 'undefined') {
                 return { message: 'Role is required' };
             }
             if (issue.code === z.ZodIssueCode.invalid_enum_value) {
-                return { message: "Role must be 'Nurse' or 'Doctor'" };
+                return { message: "Role must be 'Nurse', 'Doctor', or 'Admin'" };
             }
             return { message: ctx.defaultError };
         }
@@ -26,7 +26,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    role: 'Nurse' | 'Doctor';
+    role: 'Nurse' | 'Doctor' | 'Admin';
     createdAt: Date;
 }
 

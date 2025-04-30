@@ -1,11 +1,14 @@
 import express from 'express';
-import { getNursePatients, getPatientById, getAllPatients } from '../controllers/patientController';
+import { getNursePatients, getPatientById, getAllPatients, createPatient } from '../controllers/patientController';
 import { protect } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
 // Protect all routes with authentication
 router.use(protect);
+
+// Create a new patient (only nurses can create patients)
+router.post('/', createPatient);
 
 // Get all patients assigned to the logged-in nurse
 router.get('/', getNursePatients);
