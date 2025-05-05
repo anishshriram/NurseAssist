@@ -2,6 +2,294 @@ import React, { useState, useEffect } from "react";
 import { getDoctorDiagnosesApi, confirmDiagnosisApi } from '../services/symptomService';
 
 function DoctorDashboard({handleLogout, userName}){
+    // Define styles and theme colors for the dashboard
+    const styles = {
+        // Color palette
+        colors: {
+            primary: '#1976D2',        // Blue - primary actions
+            secondary: '#03A9F4',      // Light blue - secondary actions
+            success: '#4CAF50',        // Green - success states & actions
+            warning: '#FF9800',        // Orange - warnings & edits
+            danger: '#F44336',         // Red - destructive actions
+            info: '#673AB7',           // Purple - informational
+            lightBg: '#F5F5F5',        // Light gray - backgrounds
+            darkText: '#333333',       // Dark gray - primary text
+            lightText: '#757575',      // Medium gray - secondary text
+            border: '#E0E0E0',         // Light gray - borders
+            white: '#FFFFFF'           // White - card backgrounds, text on dark
+        },
+        // Layout
+        container: {
+            padding: '20px',
+            backgroundColor: '#f8fafc',
+            minHeight: '100vh'
+        },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px',
+            borderBottom: '1px solid #E0E0E0',
+            paddingBottom: '15px'
+        },
+        title: {
+            color: '#1976D2',
+            fontSize: '24px',
+            fontWeight: '500',
+            margin: '0'
+        },
+        userInfo: {
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '#E3F2FD',
+            padding: '8px 15px',
+            borderRadius: '20px',
+            color: '#0D47A1'
+        },
+        userIcon: {
+            backgroundColor: '#1976D2',
+            color: 'white',
+            width: '30px',
+            height: '30px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: '10px',
+            fontSize: '14px',
+            fontWeight: 'bold'
+        },
+        controls: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px'
+        },
+        searchBar: {
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            border: '1px solid #E0E0E0',
+            borderRadius: '4px',
+            padding: '8px 15px',
+            width: '300px'
+        },
+        searchInput: {
+            border: 'none',
+            outline: 'none',
+            width: '100%',
+            fontSize: '14px'
+        },
+        filterControls: {
+            display: 'flex',
+            gap: '15px'
+        },
+        select: {
+            padding: '8px 12px',
+            borderRadius: '4px',
+            border: '1px solid #E0E0E0',
+            backgroundColor: 'white',
+            outline: 'none'
+        },
+        diagnosisCard: {
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            padding: '20px',
+            marginBottom: '20px',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+            border: '1px solid #E0E0E0',
+            borderLeft: '5px solid #1976D2'
+        },
+        diagnosisCardConfirmed: {
+            borderLeft: '5px solid #4CAF50'
+        },
+        diagnosisCritical: {
+            borderLeft: '5px solid #F44336'
+        },
+        diagnosisHeader: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '15px'
+        },
+        diagnosisTitle: {
+            margin: '0',
+            fontSize: '18px',
+            fontWeight: '500',
+            color: '#333333'
+        },
+        statusBadge: {
+            padding: '5px 10px',
+            borderRadius: '20px',
+            fontSize: '12px',
+            fontWeight: '500',
+            display: 'inline-block'
+        },
+        pendingBadge: {
+            backgroundColor: '#FFF3E0',
+            color: '#E65100'
+        },
+        confirmedBadge: {
+            backgroundColor: '#E8F5E9',
+            color: '#388E3C'
+        },
+        diagnosisDetails: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '15px',
+            marginBottom: '15px',
+            fontSize: '14px'
+        },
+        detailItem: {
+            marginBottom: '5px'
+        },
+        detailLabel: {
+            fontWeight: '500',
+            color: '#757575',
+            marginRight: '5px'
+        },
+        detailValue: {
+            color: '#333333'
+        },
+        actionButtons: {
+            display: 'flex',
+            gap: '10px',
+            marginTop: '15px'
+        },
+        primaryButton: {
+            backgroundColor: '#1976D2',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px 15px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s'
+        },
+        successButton: {
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px 15px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s'
+        },
+        dangerButton: {
+            backgroundColor: '#F44336',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px 15px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s'
+        },
+        secondaryButton: {
+            backgroundColor: '#E3F2FD',
+            color: '#1976D2',
+            border: '1px solid #1976D2',
+            borderRadius: '4px',
+            padding: '8px 15px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s'
+        },
+        disabledButton: {
+            backgroundColor: '#E0E0E0',
+            color: '#9E9E9E',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '8px 15px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'not-allowed'
+        },
+        modal: {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: '1000'
+        },
+        modalContent: {
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+            padding: '25px',
+            width: '90%',
+            maxWidth: '700px',
+            maxHeight: '80vh',
+            overflow: 'auto'
+        },
+        modalHeader: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px',
+            borderBottom: '1px solid #E0E0E0',
+            paddingBottom: '15px'
+        },
+        modalTitle: {
+            margin: '0',
+            color: '#1976D2',
+            fontSize: '20px',
+            fontWeight: '500'
+        },
+        closeButton: {
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            cursor: 'pointer',
+            color: '#757575'
+        },
+        modalSection: {
+            marginBottom: '20px'
+        },
+        sectionTitle: {
+            fontSize: '16px',
+            fontWeight: '500',
+            color: '#333333',
+            marginBottom: '10px',
+            borderBottom: '1px solid #E0E0E0',
+            paddingBottom: '5px'
+        },
+        symptomsList: {
+            padding: '0 0 0 20px',
+            margin: '10px 0',
+            listStyle: 'disc'
+        },
+        symptomItem: {
+            marginBottom: '5px'
+        },
+        criticalFlag: {
+            display: 'inline-block',
+            padding: '5px 10px',
+            backgroundColor: '#FFEBEE',
+            color: '#D32F2F',
+            borderRadius: '4px',
+            fontWeight: '500',
+            marginBottom: '15px'
+        },
+        modalActions: {
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '15px',
+            marginTop: '30px'
+        }
+    };
+    
     // State for patient diagnoses data
     const [diagnoses, setDiagnoses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -169,249 +457,231 @@ function DoctorDashboard({handleLogout, userName}){
             );
         });
 
-    return React.createElement("div", { style: { padding: '20px', maxWidth: '1200px', margin: '0 auto' } }, [
-        // Title and header section
-        React.createElement("div", { key: "header", style: { marginBottom: '20px' } }, [
-            React.createElement("h2", { key: "title" }, 
-                userName ? `Welcome Dr. ${userName}!` : "Welcome Doctor!"
-            ),
-            
-            React.createElement("div", { key: "controls", style: { display: 'flex', justifyContent: 'space-between', marginTop: '15px' } }, [
-                React.createElement("button", {
-                    key: "exportData",
-                    onClick: handleExportPatients,
-                    style: { padding: '8px 16px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }
-                }, "Export Patient Data"),
-                
-                React.createElement("input", {
-                    key: "searchBar",
-                    type: "text",
-                    placeholder: "Search by patient name or condition...",
-                    value: searchTerm,
-                    onChange: (e) => setSearchTerm(e.target.value),
-                    style: { padding: '8px', width: '300px', borderRadius: '4px', border: '1px solid #ddd' }
-                }),
+    return React.createElement("div", { style: styles.container }, [
+        // Header with user info and title
+        React.createElement("div", { key: "header", style: styles.header }, [
+            React.createElement("h1", { key: "title", style: styles.title }, "NurseAssist Doctor Dashboard"),
+            React.createElement("div", { key: "user-info", style: styles.userInfo }, [
+                React.createElement("div", { key: "user-icon", style: styles.userIcon }, "Dr"),
+                React.createElement("span", { key: "user-name" }, userName ? `Dr. ${userName}` : "Doctor")
             ])
         ]),
         
-        // Display loading, error or content
-        loading ? React.createElement("p", { key: "loading" }, "Loading diagnoses...") :
-        error ? React.createElement("p", { key: "error", style: { color: 'red' } }, `Error: ${error}`) :
-        diagnoses.length === 0 ? React.createElement("p", { key: "empty" }, "No diagnoses found for your patients.") :
-        React.createElement("div", { key: "diagnoses-container" }, [
-            // Header for diagnoses list
-            React.createElement("div", { key: "diagnoses-header", style: { display: 'flex', justifyContent: 'space-between', marginBottom: '10px' } }, [
-                React.createElement("h3", { key: "diagnoses-title" }, "Patient Diagnoses"),
-                
-                // Sorting dropdown
+        // Controls section
+        React.createElement("div", { key: "controls", style: styles.controls }, [
+            // Search bar
+            React.createElement("div", { key: "search-bar", style: styles.searchBar }, [
+                React.createElement("input", {
+                    key: "searchBox", 
+                    type: "text", 
+                    placeholder: "Search by patient name or condition...", 
+                    value: searchTerm, 
+                    onChange: (e) => setSearchTerm(e.target.value),
+                    style: styles.searchInput
+                })
+            ]),
+            // Filter controls
+            React.createElement("div", { key: "filter-controls", style: styles.filterControls }, [
                 React.createElement("select", {
                     key: "sortDropdown",
                     value: sortType,
                     onChange: handleSortChange,
-                    style: { padding: '5px', borderRadius: '4px' }
+                    style: styles.select
                 }, [
                     React.createElement("option", { key: "name", value: "name" }, "Sort by Patient Name"),
                     React.createElement("option", { key: "date", value: "date" }, "Sort by Date"),
                     React.createElement("option", { key: "confidence", value: "confidence" }, "Sort by Confidence")
-                ])
-            ]),
+                ]),
+                React.createElement("button", {
+                    key: "exportButton",
+                    onClick: handleExportPatients,
+                    style: styles.secondaryButton
+                }, "Export Data")
+            ])
+        ]),
+        
+        // Display heading for diagnoses section
+        React.createElement("h3", { key: "diagnoses-section-title", style: { color: styles.colors.primary, marginTop: '30px', marginBottom: '15px' } }, "Patient Diagnoses"),
+        
+        // Display loading, error or content
+        loading ? 
+            React.createElement("div", { key: "loading", style: styles.loading }, [
+                React.createElement("span", { style: styles.loadingSpinner }),
+                React.createElement("span", null, "Loading diagnoses...")
+            ]) :
+        error ? 
+            React.createElement("div", { key: "error", style: Object.assign({}, styles.messageBox, styles.error) }, `Error: ${error}`) :
+        diagnoses.length === 0 ? 
+            React.createElement("div", { key: "empty", style: Object.assign({}, styles.messageBox, styles.info) }, "No diagnoses found for your patients.") :
+        React.createElement("div", { key: "diagnoses-container" }, [
+
             
             // Diagnoses list
             ...displayDiagnoses.map(diagnosis => 
                 React.createElement("div", {
                     key: `diagnosis-${diagnosis.id}`,
-                    style: { 
-                        padding: '15px', 
-                        marginBottom: '15px', 
-                        border: '1px solid #ddd',
-                        borderRadius: '5px',
-                        borderLeft: diagnosis.critical_flag ? '5px solid #ff4444' : '1px solid #ddd',
-                        backgroundColor: diagnosis.doctor_confirmation ? '#e8f5e9' : '#fff'
-                    }
+                    style: Object.assign({}, 
+                        styles.diagnosisCard, 
+                        diagnosis.doctor_confirmation ? styles.diagnosisCardConfirmed : {},
+                        diagnosis.critical_flag ? styles.diagnosisCritical : {}
+                    )
                 }, [
                     // Diagnosis header with patient name and status
-                    React.createElement("div", { key: `diag-header-${diagnosis.id}`, style: { display: 'flex', justifyContent: 'space-between' } }, [
-                        React.createElement("h4", { key: `patient-${diagnosis.id}`, style: { margin: '0 0 10px' } }, 
-                            `Patient: ${diagnosis.patient_name || 'Unknown'}`
+                    React.createElement("div", { key: `diag-header-${diagnosis.id}`, style: styles.diagnosisHeader }, [
+                        React.createElement("h4", { key: `patient-${diagnosis.id}`, style: styles.diagnosisTitle }, 
+                            diagnosis.patient_name || 'Unknown Patient'
                         ),
                         React.createElement("span", { 
                             key: `status-${diagnosis.id}`,
-                            style: {
-                                padding: '3px 8px',
-                                backgroundColor: diagnosis.doctor_confirmation ? '#4CAF50' : '#ff9800',
-                                color: 'white',
-                                borderRadius: '4px',
-                                fontSize: '14px'
-                            }
+                            style: Object.assign({}, 
+                                styles.statusBadge,
+                                diagnosis.doctor_confirmation ? styles.confirmedBadge : styles.pendingBadge
+                            )
                         }, 
                             diagnosis.doctor_confirmation ? "Confirmed" : "Pending Review"
                         )
                     ]),
                     
-                    // Diagnosis details
-                    React.createElement("p", { key: `condition-${diagnosis.id}` },
-                        React.createElement("strong", null, "Condition: "),
-                        `${diagnosis.condition_name || 'Unknown'}`
-                    ),
-                    React.createElement("p", { key: `confidence-${diagnosis.id}` },
-                        React.createElement("strong", null, "Confidence: "),
-                        `${parseFloat(diagnosis.confidence_score || 0).toFixed(1)}%`
-                    ),
-                    React.createElement("p", { key: `date-${diagnosis.id}` },
-                        React.createElement("strong", null, "Date: "),
-                        `${new Date(diagnosis.diagnosis_date).toLocaleDateString() || 'Unknown'}`
-                    ),
-                    React.createElement("p", { key: `nurse-${diagnosis.id}` },
-                        React.createElement("strong", null, "Nurse: "),
-                        `${diagnosis.nurse_name || 'Unknown'}`
-                    ),
+                    // Critical flag if applicable
+                    diagnosis.critical_flag && React.createElement("div", { 
+                        key: `critical-flag-${diagnosis.id}`,
+                        style: styles.criticalFlag
+                    }, "⚠️ Critical Condition"),
+                    
+                    // Diagnosis details in a grid layout
+                    React.createElement("div", { key: `details-grid-${diagnosis.id}`, style: styles.diagnosisDetails }, [
+                        React.createElement("div", { key: `condition-detail-${diagnosis.id}`, style: styles.detailItem }, [
+                            React.createElement("span", { key: `condition-label-${diagnosis.id}`, style: styles.detailLabel }, "Condition:"),
+                            React.createElement("span", { key: `condition-value-${diagnosis.id}`, style: styles.detailValue }, 
+                                diagnosis.condition_name || 'Unknown')
+                        ]),
+                        React.createElement("div", { key: `confidence-detail-${diagnosis.id}`, style: styles.detailItem }, [
+                            React.createElement("span", { key: `confidence-label-${diagnosis.id}`, style: styles.detailLabel }, "Confidence:"),
+                            React.createElement("span", { key: `confidence-value-${diagnosis.id}`, style: styles.detailValue }, 
+                                `${parseFloat(diagnosis.confidence_score || 0).toFixed(1)}%`)
+                        ]),
+                        React.createElement("div", { key: `date-detail-${diagnosis.id}`, style: styles.detailItem }, [
+                            React.createElement("span", { key: `date-label-${diagnosis.id}`, style: styles.detailLabel }, "Date:"),
+                            React.createElement("span", { key: `date-value-${diagnosis.id}`, style: styles.detailValue }, 
+                                new Date(diagnosis.diagnosis_date).toLocaleDateString() || 'Unknown')
+                        ]),
+                        React.createElement("div", { key: `nurse-detail-${diagnosis.id}`, style: styles.detailItem }, [
+                            React.createElement("span", { key: `nurse-label-${diagnosis.id}`, style: styles.detailLabel }, "Nurse:"),
+                            React.createElement("span", { key: `nurse-value-${diagnosis.id}`, style: styles.detailValue }, 
+                                diagnosis.nurse_name || 'Unknown')
+                        ])
+                    ]),
                     
                     // Buttons for actions
-                    React.createElement("div", { key: `actions-${diagnosis.id}`, style: { marginTop: '15px', display: 'flex', gap: '10px' } }, [
+                    React.createElement("div", { key: `actions-${diagnosis.id}`, style: styles.actionButtons }, [
                         React.createElement("button", {
                             key: `view-${diagnosis.id}`,
                             onClick: () => openDiagnosisDetails(diagnosis.id),
-                            style: {
-                                padding: '5px 10px',
-                                backgroundColor: '#2196F3',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }
+                            style: styles.primaryButton
                         }, "View Details"),
                         
                         !diagnosis.doctor_confirmation && React.createElement("button", {
                             key: `confirm-${diagnosis.id}`,
                             onClick: () => handleConfirmDiagnosis(diagnosis.id, true),
                             disabled: isConfirming,
-                            style: {
-                                padding: '5px 10px',
-                                backgroundColor: '#4CAF50',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                opacity: isConfirming ? 0.7 : 1
-                            }
+                            style: isConfirming ? styles.disabledButton : styles.successButton
                         }, isConfirming ? "Confirming..." : "Confirm"),
                         
                         !diagnosis.doctor_confirmation && React.createElement("button", {
                             key: `reject-${diagnosis.id}`,
                             onClick: () => handleRejectDiagnosis(diagnosis.id),
                             disabled: isConfirming,
-                            style: {
-                                padding: '5px 10px',
-                                backgroundColor: '#F44336',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                opacity: isConfirming ? 0.7 : 1
-                            }
+                            style: isConfirming ? styles.disabledButton : styles.dangerButton
                         }, isConfirming ? "Rejecting..." : "Reject")
                     ])
                 ])
             )
         ]),
         
-        // Diagnosis details popup
+        // Diagnosis details popup (modal)
         selectedDiagnosis && React.createElement("div", {
             key: "diagnosis-detail-popup",
-            style: {
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '80%',
-                maxWidth: '600px',
-                backgroundColor: 'white',
-                padding: '20px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                borderRadius: '8px',
-                zIndex: 1000
-            }
+            style: styles.modal
         }, [
-            // Popup header
-            React.createElement("div", { key: "popup-header", style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' } }, [
-                React.createElement("h3", { key: "popup-title" }, `Diagnosis Details: ${selectedDiagnosis.condition_name}`),
-                React.createElement("button", {
-                    key: "close-popup",
-                    onClick: () => setSelectedDiagnosis(null),
-                    style: {
-                        background: 'none',
-                        border: 'none',
-                        fontSize: '24px',
-                        cursor: 'pointer'
-                    }
-                }, "×")
-            ]),
-            
-            // Patient and diagnosis info
-            React.createElement("div", { key: "popup-patient-info", style: { marginBottom: '15px' } }, [
-                React.createElement("p", null, [
-                    React.createElement("strong", null, "Patient: "),
-                    selectedDiagnosis.patient_name
+            React.createElement("div", { key: "modal-content", style: styles.modalContent }, [
+                // Modal header
+                React.createElement("div", { key: "modal-header", style: styles.modalHeader }, [
+                    React.createElement("h3", { key: "modal-title", style: styles.modalTitle }, 
+                        `Diagnosis Details: ${selectedDiagnosis.condition_name}`
+                    ),
+                    React.createElement("button", {
+                        key: "close-modal",
+                        onClick: () => setSelectedDiagnosis(null),
+                        style: styles.closeButton
+                    }, "×")
                 ]),
-                React.createElement("p", null, [
-                    React.createElement("strong", null, "Diagnosed by: "),
-                    selectedDiagnosis.nurse_name
-                ]),
-                React.createElement("p", null, [
-                    React.createElement("strong", null, "Date: "),
-                    new Date(selectedDiagnosis.diagnosis_date).toLocaleDateString()
-                ]),
-                React.createElement("p", null, [
-                    React.createElement("strong", null, "Confidence Score: "),
-                    `${selectedDiagnosis.confidence_score?.toFixed(1)}%`
-                ]),
-                selectedDiagnosis.critical_flag && React.createElement("p", { style: { color: '#ff4444', fontWeight: 'bold' } }, "⚠️ Critical Condition")
-            ]),
-            
-            // Symptoms section
-            React.createElement("div", { key: "popup-symptoms", style: { marginBottom: '15px' } }, [
-                React.createElement("h4", null, "Symptoms"),
-                selectedDiagnosis.symptoms && selectedDiagnosis.symptoms.length > 0 ?
-                    React.createElement("ul", { style: { paddingLeft: '20px' } },
-                        selectedDiagnosis.symptoms.map((symptom, index) =>
-                            React.createElement("li", { key: `symptom-${index}` },
-                                `${symptom.name} (${symptom.severity || 'moderate'})${symptom.duration ? ` - Duration: ${symptom.duration}` : ''}`
-                            )
-                        )
-                    ) :
-                    React.createElement("p", null, "No detailed symptoms available")
-            ]),
-            
-            // Action buttons
-            !selectedDiagnosis.doctor_confirmation && React.createElement("div", { key: "popup-actions", style: { display: 'flex', justifyContent: 'space-between', marginTop: '20px' } }, [
-                React.createElement("button", {
-                    onClick: () => handleConfirmDiagnosis(selectedDiagnosis.id, true),
-                    disabled: isConfirming,
-                    style: {
-                        padding: '8px 16px',
-                        backgroundColor: '#4CAF50',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        flex: 1,
-                        marginRight: '10px'
-                    }
-                }, isConfirming ? "Processing..." : "Confirm Diagnosis"),
                 
-                React.createElement("button", {
-                    onClick: () => handleRejectDiagnosis(selectedDiagnosis.id),
-                    disabled: isConfirming,
-                    style: {
-                        padding: '8px 16px',
-                        backgroundColor: '#F44336',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        flex: 1
-                    }
-                }, isConfirming ? "Processing..." : "Reject Diagnosis")
+                // Critical flag if applicable
+                selectedDiagnosis.critical_flag && React.createElement("div", { 
+                    key: "modal-critical-flag",
+                    style: styles.criticalFlag
+                }, "⚠️ Critical Condition"),
+                
+                // Patient and diagnosis info section
+                React.createElement("div", { key: "modal-patient-section", style: styles.modalSection }, [
+                    React.createElement("h4", { key: "patient-section-title", style: styles.sectionTitle }, "Patient Information"),
+                    React.createElement("div", { key: "modal-details-grid", style: styles.diagnosisDetails }, [
+                        React.createElement("div", { key: "modal-patient", style: styles.detailItem }, [
+                            React.createElement("span", { key: "modal-patient-label", style: styles.detailLabel }, "Patient:"),
+                            React.createElement("span", { key: "modal-patient-value", style: styles.detailValue }, 
+                                selectedDiagnosis.patient_name || 'Unknown')
+                        ]),
+                        React.createElement("div", { key: "modal-nurse", style: styles.detailItem }, [
+                            React.createElement("span", { key: "modal-nurse-label", style: styles.detailLabel }, "Diagnosed by:"),
+                            React.createElement("span", { key: "modal-nurse-value", style: styles.detailValue }, 
+                                selectedDiagnosis.nurse_name || 'Unknown')
+                        ]),
+                        React.createElement("div", { key: "modal-date", style: styles.detailItem }, [
+                            React.createElement("span", { key: "modal-date-label", style: styles.detailLabel }, "Date:"),
+                            React.createElement("span", { key: "modal-date-value", style: styles.detailValue }, 
+                                new Date(selectedDiagnosis.diagnosis_date).toLocaleDateString())
+                        ]),
+                        React.createElement("div", { key: "modal-confidence", style: styles.detailItem }, [
+                            React.createElement("span", { key: "modal-confidence-label", style: styles.detailLabel }, "Confidence Score:"),
+                            React.createElement("span", { key: "modal-confidence-value", style: styles.detailValue }, 
+                                `${selectedDiagnosis.confidence_score?.toFixed(1)}%`)
+                        ])
+                    ])
+                ]),
+                
+                // Symptoms section
+                React.createElement("div", { key: "modal-symptoms-section", style: styles.modalSection }, [
+                    React.createElement("h4", { key: "symptoms-section-title", style: styles.sectionTitle }, "Symptoms"),
+                    selectedDiagnosis.symptoms && selectedDiagnosis.symptoms.length > 0 ?
+                        React.createElement("ul", { key: "symptoms-list", style: styles.symptomsList },
+                            selectedDiagnosis.symptoms.map((symptom, index) =>
+                                React.createElement("li", { key: `symptom-${index}`, style: styles.symptomItem },
+                                    React.createElement("span", { key: `symptom-name-${index}`, style: { fontWeight: '500' } }, symptom.name),
+                                    React.createElement("span", { key: `symptom-details-${index}` }, 
+                                        ` (${symptom.severity || 'moderate'})${symptom.duration ? ` - Duration: ${symptom.duration}` : ''}`
+                                    )
+                                )
+                            )
+                        ) :
+                        React.createElement("p", { key: "no-symptoms" }, "No detailed symptoms available")
+                ]),
+                
+                // Action buttons
+                !selectedDiagnosis.doctor_confirmation && React.createElement("div", { key: "modal-actions", style: styles.modalActions }, [
+                    React.createElement("button", {
+                        key: "modal-confirm",
+                        onClick: () => handleConfirmDiagnosis(selectedDiagnosis.id, true),
+                        disabled: isConfirming,
+                        style: isConfirming ? styles.disabledButton : styles.successButton
+                    }, isConfirming ? "Processing..." : "Confirm Diagnosis"),
+                    
+                    React.createElement("button", {
+                        key: "modal-reject",
+                        onClick: () => handleRejectDiagnosis(selectedDiagnosis.id),
+                        disabled: isConfirming,
+                        style: isConfirming ? styles.disabledButton : styles.dangerButton
+                    }, isConfirming ? "Processing..." : "Reject Diagnosis")
+                ])
             ])
         ]),
         
@@ -419,17 +689,8 @@ function DoctorDashboard({handleLogout, userName}){
         React.createElement("button", {
             key: "logoutButton",
             onClick: handleLogout,
-            style: {
-                position: 'absolute',
-                top: '20px',
-                right: '20px',
-                padding: '8px 16px',
-                backgroundColor: '#f0f0f0',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                cursor: 'pointer'
-            }
-        }, "Logout")
+            style: Object.assign({}, styles.dangerButton, { marginTop: '30px' })
+        }, "Sign Out")
         
     ]);
 }

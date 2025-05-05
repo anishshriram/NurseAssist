@@ -42,7 +42,7 @@ def init_db():
         Column("email", Text, nullable=False, unique=True),
         Column("password_hash", Text, nullable=False),
         Column("created_at", DateTime, server_default=text("CURRENT_TIMESTAMP")),
-        CheckConstraint("role IN ('Nurse', 'Doctor')", name="check_role_valid"),
+        CheckConstraint("role IN ('Nurse', 'Doctor', 'Admin')", name="check_role_valid"),
     )
 
     # patients table

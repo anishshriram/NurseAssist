@@ -10,7 +10,7 @@ export interface AuthenticatedRequest extends Request {
     user?: {
         userId: number;
         email: string;
-        role: 'Nurse' | 'Doctor';
+        role: 'Nurse' | 'Doctor' | 'Admin';
     };
 }
 
