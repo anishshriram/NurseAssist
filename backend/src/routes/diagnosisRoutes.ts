@@ -15,6 +15,10 @@ const router = Router();
 // X-Interview-ID header
 router.post('/', protect, performDiagnosis);
 
+// Special demo route that doesn't require authentication for the demo dashboard
+// Same parameters as the protected route
+router.post('/demo', performDiagnosis);
+
 // POST /api/diagnosis/save - Save diagnosis to database
 // Body: { patient_id, condition_id, condition_name, confidence_score, symptoms: [...] }
 router.post('/save', protect, saveDiagnosis);

@@ -8,6 +8,9 @@ const router = Router();
 // interview Id is required, generate a random uuid
 router.get('/search', protect, searchSymptoms);
 
+// Special demo route that doesn't require authentication for the demo dashboard
+router.get('/search/demo', searchSymptoms);
+
 // access evidence via /evidence later
 
 export default router;

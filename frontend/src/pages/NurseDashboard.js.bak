@@ -11,364 +11,12 @@ const mockPatients = [
 ]
 
 function NurseDashboard({handleLogout, userName}){
-    // Define styles and theme colors for the dashboard
-    const styles = {
-        // Color palette
-        colors: {
-            primary: '#1976D2',        // Blue - primary actions
-            secondary: '#03A9F4',      // Light blue - secondary actions
-            success: '#4CAF50',        // Green - success states & actions
-            warning: '#FF9800',        // Orange - warnings & edits
-            danger: '#F44336',         // Red - destructive actions
-            info: '#673AB7',           // Purple - informational
-            lightBg: '#F5F5F5',        // Light gray - backgrounds
-            darkText: '#333333',       // Dark gray - primary text
-            lightText: '#757575',      // Medium gray - secondary text
-            border: '#E0E0E0',         // Light gray - borders
-            white: '#FFFFFF'           // White - card backgrounds, text on dark
-        },
-        // Layout
-        container: {
-            padding: '20px',
-            backgroundColor: '#f8fafc',
-            minHeight: '100vh'
-        },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '20px',
-            borderBottom: '1px solid #E0E0E0',
-            paddingBottom: '15px'
-        },
-        title: {
-            color: '#1976D2',
-            fontSize: '24px',
-            fontWeight: '500',
-            margin: '0'
-        },
-        userInfo: {
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: '#E3F2FD',
-            padding: '8px 15px',
-            borderRadius: '20px',
-            color: '#0D47A1'
-        },
-        userIcon: {
-            backgroundColor: '#1976D2',
-            color: 'white',
-            width: '30px',
-            height: '30px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: '10px',
-            fontSize: '14px',
-            fontWeight: 'bold'
-        },
-        controls: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '20px'
-        },
-        searchBar: {
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            border: '1px solid #E0E0E0',
-            borderRadius: '4px',
-            padding: '8px 15px',
-            width: '300px'
-        },
-        searchInput: {
-            border: 'none',
-            outline: 'none',
-            width: '100%',
-            fontSize: '14px'
-        },
-        filterControls: {
-            display: 'flex',
-            gap: '15px'
-        },
-        select: {
-            padding: '8px 12px',
-            borderRadius: '4px',
-            border: '1px solid #E0E0E0',
-            backgroundColor: 'white',
-            outline: 'none'
-        },
-        // Patient List
-        patientList: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '20px',
-            marginBottom: '30px'
-        },
-        patientCard: {
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            padding: '15px',
-            display: 'flex',
-            flexDirection: 'column',
-            transition: 'transform 0.2s, box-shadow 0.2s',
-            border: '1px solid #E0E0E0'
-        },
-        patientCardHover: {
-            transform: 'translateY(-3px)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.12)'
-        },
-        patientHeader: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '10px'
-        },
-        patientName: {
-            fontWeight: 'bold',
-            color: '#333333',
-            fontSize: '16px',
-            margin: '0'
-        },
-        statusBadge: {
-            padding: '4px 8px',
-            borderRadius: '12px',
-            fontSize: '12px',
-            fontWeight: '500'
-        },
-        patientDetails: {
-            marginBottom: '15px',
-            fontSize: '14px',
-            color: '#757575'
-        },
-        actionButtons: {
-            display: 'flex',
-            gap: '10px',
-            marginTop: 'auto'
-        },
-        primaryButton: {
-            backgroundColor: '#1976D2',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            fontSize: '14px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-        },
-        primaryButtonHover: {
-            backgroundColor: '#1565C0'
-        },
-        secondaryButton: {
-            backgroundColor: '#E3F2FD',
-            color: '#1976D2',
-            border: '1px solid #1976D2',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            fontSize: '14px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s'
-        },
-        secondaryButtonHover: {
-            backgroundColor: '#BBDEFB'
-        },
-        successButton: {
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            fontSize: '14px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s'
-        },
-        successButtonHover: {
-            backgroundColor: '#388E3C'
-        },
-        warningButton: {
-            backgroundColor: '#FF9800',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            fontSize: '14px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s'
-        },
-        dangerButton: {
-            backgroundColor: '#F44336',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            fontSize: '14px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s'
-        },
-        disabledButton: {
-            backgroundColor: '#E0E0E0',
-            color: '#9E9E9E',
-            border: 'none',
-            borderRadius: '4px',
-            padding: '8px 12px',
-            fontSize: '14px',
-            fontWeight: '500',
-            cursor: 'not-allowed'
-        },
-        // Diagnosis Workspace
-        diagnosisWorkspace: {
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            padding: '20px',
-            marginTop: '20px'
-        },
-        workspaceTitle: {
-            color: '#1976D2',
-            fontSize: '18px',
-            fontWeight: '500',
-            marginBottom: '15px',
-            borderBottom: '1px solid #E0E0E0',
-            paddingBottom: '10px'
-        },
-        inputGroup: {
-            marginBottom: '15px'
-        },
-        inputLabel: {
-            display: 'block',
-            marginBottom: '8px',
-            color: '#333333',
-            fontSize: '14px',
-            fontWeight: '500'
-        },
-        inputField: {
-            width: '100%',
-            padding: '10px',
-            borderRadius: '4px',
-            border: '1px solid #E0E0E0',
-            fontSize: '14px',
-            transition: 'border-color 0.2s',
-            boxSizing: 'border-box'
-        },
-        messageBox: {
-            padding: '10px 15px',
-            borderRadius: '4px',
-            marginBottom: '15px',
-            fontSize: '14px'
-        },
-        success: {
-            backgroundColor: '#E8F5E9',
-            color: '#388E3C',
-            border: '1px solid #C8E6C9'
-        },
-        error: {
-            backgroundColor: '#FFEBEE',
-            color: '#D32F2F',
-            border: '1px solid #FFCDD2'
-        },
-        info: {
-            backgroundColor: '#E3F2FD',
-            color: '#1976D2',
-            border: '1px solid #BBDEFB'
-        },
-        warning: {
-            backgroundColor: '#FFF3E0',
-            color: '#E65100',
-            border: '1px solid #FFE0B2'
-        },
-        tag: {
-            backgroundColor: '#E3F2FD',
-            color: '#1976D2',
-            padding: '5px 10px',
-            borderRadius: '16px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            margin: '3px',
-            fontSize: '14px'
-        },
-        tagLabel: {
-            marginRight: '5px'
-        },
-        tagDelete: {
-            width: '16px',
-            height: '16px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(0,0,0,0.1)',
-            borderRadius: '50%',
-            cursor: 'pointer',
-            fontSize: '10px'
-        },
-        // Diagnosis Results
-        diagnosisResults: {
-            backgroundColor: '#F8FAFC',
-            border: '1px solid #BBDEFB',
-            borderRadius: '8px',
-            padding: '15px',
-            marginTop: '20px'
-        },
-        diagnosisConditions: {
-            borderLeft: '4px solid #4CAF50',
-            backgroundColor: '#E8F5E9',
-            padding: '10px 15px',
-            borderRadius: '4px',
-            marginTop: '10px'
-        },
-        questionBox: {
-            backgroundColor: '#E3F2FD',
-            borderRadius: '8px',
-            padding: '15px',
-            marginBottom: '15px',
-            border: '1px solid #BBDEFB'
-        },
-        questionText: {
-            color: '#0D47A1',
-            marginBottom: '10px',
-            fontWeight: '500'
-        },
-        choiceButtons: {
-            display: 'flex',
-            gap: '8px',
-            marginTop: '10px',
-            flexWrap: 'wrap'
-        },
-        // Loading
-        loadingSpinner: {
-            display: 'inline-block',
-            width: '20px',
-            height: '20px',
-            border: '3px solid rgba(0,0,0,0.1)',
-            borderRadius: '50%',
-            borderTopColor: '#1976D2',
-            animation: 'spin 1s linear infinite',
-            marginRight: '10px'
-        },
-        loading: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '10px',
-            color: '#1976D2'
-        }
-    };
-
     const [patients, setPatients] = useState([]); 
     const [sortType, setSortType] = useState("name");
     const [searchTerm, setSearchTerm] = useState(""); 
     const [selectedPatientID, setSelectedPatientID] = useState(null); 
     const [symptomsInput, setSymptomsInput] = useState(""); 
+    const [showDoctorPatients, setShowDoctorPatients] = useState(true); // Default to showing all patients
 
     const [symptomSearchTerm, setSymptomSearchTerm] = useState('');
     const [symptomSearchResults, setSymptomSearchResults] = useState([]);
@@ -403,9 +51,9 @@ function NurseDashboard({handleLogout, userName}){
                     return;
                 }
                 
-                // Get all patients assigned to this nurse
-                const patientsData = await getPatients(token);
-                console.log('Fetched patients:', patientsData);
+                // Get all patients assigned to this nurse, including those with doctor assignments if enabled
+                const patientsData = await getPatients(token, showDoctorPatients);
+                console.log(`Fetched patients (showing doctor patients: ${showDoctorPatients}):`, patientsData);
                 setPatients(patientsData);
             } catch (error) {
                 console.error('Error fetching patients:', error);
@@ -415,7 +63,7 @@ function NurseDashboard({handleLogout, userName}){
         };
         
         fetchPatients();
-    }, []);
+    }, [showDoctorPatients]); // Re-run when the toggle changes
 
     useEffect(() => {
         const newId = uuidv4();
@@ -931,99 +579,25 @@ function NurseDashboard({handleLogout, userName}){
     }
 
     function handlePatientAgeChange(e){
-        setPatientAge(e.target.value);
-    }
-
-    function handlePatientSexChange(e){
-        setPatientSex(e.target.value);
-    }
-
-    return React.createElement("div", { style: styles.container }, [
-        // Header with user info and title
-        React.createElement("div", { key: "header", style: styles.header }, [
-            React.createElement("h1", { key: "title", style: styles.title }, "NurseAssist Dashboard"),
-            React.createElement("div", { key: "user-info", style: styles.userInfo }, [
-                React.createElement("div", { key: "user-icon", style: styles.userIcon }, userName?.charAt(0) || "N"),
-                React.createElement("span", { key: "user-name" }, userName ? `Welcome, ${userName}` : "Nurse")
-            ])
-        ]),
-
-        React.createElement("div", {key: "symptom-search-section", style: { marginTop: '20px', padding: '15px', border: '1px solid lightgrey', borderRadius: '5px' } }, [
-            React.createElement("h3", { key: "symptom-search-title" }, "Symptom Search"),
-            
-            // Active Patient Banner - clearly shows which patient is selected
-            selectedPatientId && React.createElement("div", {
-                key: "active-patient-banner",
-                style: {
-                    backgroundColor: '#e3f2fd',
-                    padding: '10px 15px',
-                    borderRadius: '5px',
-                    marginBottom: '15px',
-                    border: '1px solid #2196f3',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }
-            }, [
-                React.createElement("div", {key: "patient-identifier"}, [
-                    React.createElement("strong", null, "Currently Working With: "),
-                    React.createElement("span", {style: {fontWeight: 'bold'}}, 
-                        patients.find(p => p.id === parseInt(selectedPatientId))?.name || `Patient #${selectedPatientId}`
-                    )
                 ]),
                 React.createElement("button", {
-                    key: "change-patient-button",
-                    onClick: () => {
-                        // Reset patient selection
-                        setSelectedPatientId(null);
-                        setSelectedPatientID(null);
-                        setSelectedSymptoms([]);
-                        setGatheredEvidence([]);
-                        setDiagnosisResult(null);
-                        setDiagnosisError(null);
-                        setDiagnosisSaved(false);
-                        setSaveDiagnosisError(null);
-                    },
+                    key: "exportButton",
+                    onClick: handleExportPatients,
                     style: {
-                        padding: '5px 10px',
-                        backgroundColor: '#f5f5f5',
-                        border: '1px solid #ddd',
-                        borderRadius: '3px',
+                        padding: '8px 16px',
+                        backgroundColor: '#4CAF50',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
                         cursor: 'pointer'
                     }
-                }, "Change Patient")
-            ]),
-            
-            React.createElement("div", {key: "patient-context", style: { marginBottom: '10px'} }, [
-                React.createElement("label", { htmlFor: "patientAgeInput", style: { marginRight: '5px'} }, "Patient Age:"),
-                React.createElement("input", {
-                    id: "patientAgeInput",
-                    key: "patientAgeInput",
-                    type: "number",
-                    placeholder: "e.g., 30",
-                    value: patientAge,
-                    onChange: handlePatientAgeChange,
-                    style: { width: '80px', padding: '8px', marginRight: '15px' } 
-                }),
-                React.createElement("label", { htmlFor: "patientSexInput", style: { marginRight: '5px'} }, "Patient Sex:"),
-                React.createElement("select", {
-                    id: "patientSexInput",
-                    key: "patientSexSelect",
-                    value: patientSex,
-                    onChange: handlePatientSexChange,
-                    style: { padding: '8px' }
-                }, [
-                    React.createElement("option", { key: "sex-blank", value: "" }, "Select..."),
-                    React.createElement("option", { key: "sex-male", value: "male" }, "Male"),
-                    React.createElement("option", { key: "sex-female", value: "female" }, "Female")
-                ]),
-                 // Display error if age/sex missing
-                 (!patientAge || !patientSex) && symptomSearchTerm && React.createElement("p", {key: "age-sex-warning", style: { color: 'orange', fontSize: '0.9em', marginTop: '5px'}}, "Please enter patient age and sex to enable search.")
+                }, "Export Patients")
             ]),
             React.createElement("input", {
                 key: "symptomSearchInput",
                 type: "text",
                 placeholder: "Search for symptoms...",
+                // ... (rest of the code remains the same)
                 value: symptomSearchTerm,
                 onChange: (e) => setSymptomSearchTerm(e.target.value),
                 disabled: !patientAge || !patientSex, // Disable if age/sex missing
@@ -1263,190 +837,194 @@ function NurseDashboard({handleLogout, userName}){
             ])
         ]),
 
-        // Controls section
-        React.createElement("div", { key: "controls", style: styles.controls }, [
-            // Search bar
-            React.createElement("div", { key: "search-bar", style: styles.searchBar }, [
-                React.createElement("input", {
-                    key: "searchBox", 
-                    type: "text", 
-                    placeholder: "Search patients...", 
-                    value: searchTerm, 
-                    onChange: (e) => setSearchTerm(e.target.value),
-                    style: styles.searchInput
-                })
-            ]),
-            // Filter controls
-            React.createElement("div", { key: "filter-controls", style: styles.filterControls }, [
-                React.createElement("select", {
-                    key: "sortSelector",
-                    value: sortType,
-                    onChange: handleSortChange,
-                    style: styles.select
-                }, [
-                    React.createElement("option", { key: "sort-name", value: "name" }, "Sort by Name"),
-                    React.createElement("option", { key: "sort-status", value: "status" }, "Sort by Status")
-                ]),
-                React.createElement("button", {
-                    key: "exportButton",
-                    onClick: handleExportPatients,
-                    style: styles.secondaryButton
-                }, "Export Data")
-            ])
+        React.createElement("button", {
+            key: "exportPatitents",
+            onClick: handleExportPatients,
+            style: { marginRight: '10px' } 
+        }, "Export All Patient Data"),
+
+        React.createElement("input", {
+            key: "searchBar",
+            type: "text",
+            placeholder: "Search patients by name or status...",
+            value: searchTerm,
+            onChange: (e) => setSearchTerm(e.target.value),
+            style: { width: '300px', padding: '8px', marginRight: '10px' } 
+        }),
+
+        React.createElement("select", {
+            key: "sortDropdown",
+            value: sortType,
+            onChange: handleSortChange,
+            style: { padding: '8px' } 
+        }, [
+            React.createElement("option", { key: "name", value: "name" }, "Sort by Name"),
+            React.createElement("option", { key: "status", value: "status" }, "Sort by Status")
         ]),
 
-        // Patients List
-        React.createElement("h3", { key: "patient-section-title", style: { color: styles.colors.primary, marginTop: '30px', marginBottom: '15px' } }, "My Patients"),
-            
-        React.createElement("div", { key: "patients-list", style: styles.patientList },
+
+        React.createElement("h3", { key: "patientListTitle", style: { marginTop: '20px' } }, "Patient List"), 
+
+        React.createElement("div", { key: "patients-list", style: { marginTop: '20px', display: 'flex', flexWrap: 'wrap', gap: '15px' } },
             // Display a message if no patients are loaded
             patients.length === 0 ? 
-                React.createElement("div", { style: styles.loading }, [
-                    React.createElement("span", { style: styles.loadingSpinner }),
-                    React.createElement("span", null, "Loading patients...")
-                ]) :
+                React.createElement("p", null, "Loading patients...") :
                 patients.filter((patient) =>
                     patient.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
                     (patient.status?.toLowerCase().includes(searchTerm.toLowerCase()))
                 ).map((patient) =>
-                    // Patient Card
                     React.createElement("div", {
                         key: `patient-${patient.id}`, 
-                        style: Object.assign({}, 
-                            styles.patientCard, 
-                            selectedPatientId === patient.id ? { borderColor: styles.colors.primary, borderWidth: '2px' } : {}
-                        )
+                        style: { 
+                            border: '1px solid #ddd', 
+                            borderRadius: '5px',
+                            padding: '15px', 
+                            marginBottom: '10px',
+                            width: '300px',
+                            backgroundColor: selectedPatientId === patient.id ? '#e3f2fd' : '#fff',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        } 
                     }, [ 
-                        // Patient header with name and status badge
+                        // Patient ID and name with highlight if selected
                         React.createElement("div", {
                             key: `patient-header-${patient.id}`,
-                            style: styles.patientHeader
+                            style: { 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center',
+                                marginBottom: '10px'
+                            }
                         }, [
                             React.createElement("h4", {
                                 key: `patient-name-${patient.id}`,
-                                style: styles.patientName
-                            }, patient.name),
-                            
-                            // Status badge with color based on status
+                                style: { margin: 0, fontWeight: 'bold' } 
+                            }, 
+                                patient.name
+                            ),
                             React.createElement("span", {
-                                key: `patient-status-${patient.id}`,
-                                style: Object.assign({}, 
-                                    styles.statusBadge, 
-                                    {
-                                        backgroundColor: 
-                                            patient.status === "Diagnosis Confirmed" ? '#E8F5E9' : 
-                                            patient.status === "Pending Diagnosis" ? '#FFF3E0' : 
-                                            '#E3F2FD',
-                                        color: 
-                                            patient.status === "Diagnosis Confirmed" ? '#388E3C' : 
-                                            patient.status === "Pending Diagnosis" ? '#E65100' : 
-                                            '#0D47A1'
-                                    }
-                                )
-                            }, patient.status)
+                                key: `patient-id-badge-${patient.id}`,
+                                style: {
+                                    backgroundColor: '#f5f5f5',
+                                    padding: '3px 6px',
+                                    borderRadius: '3px',
+                                    fontSize: '0.8em'
+                                }
+                            }, `ID: ${patient.id}`)
                         ]),
                         
                         // Patient details
                         React.createElement("div", {
                             key: `patient-details-${patient.id}`,
-                            style: styles.patientDetails
+                            style: { marginBottom: '15px' }
                         }, [
-                            // Display patient demographics
-                            React.createElement("div", { 
-                                key: `patient-demographics-${patient.id}`, 
-                                style: { display: 'flex', alignItems: 'center', marginBottom: '8px' } 
-                            }, [
-                                React.createElement("span", { 
-                                    key: `patient-age-${patient.id}`,
-                                    style: { 
-                                        backgroundColor: '#E3F2FD', 
-                                        color: '#1976D2',
-                                        padding: '3px 8px',
-                                        borderRadius: '12px',
-                                        fontSize: '12px',
-                                        marginRight: '8px'
-                                    }
-                                }, patient.age ? `${patient.age} yrs` : 'Age: N/A'),
-                                
-                                React.createElement("span", { 
-                                    key: `patient-gender-${patient.id}`,
-                                    style: { 
-                                        backgroundColor: '#F3E5F5', 
-                                        color: '#9C27B0',
-                                        padding: '3px 8px',
-                                        borderRadius: '12px',
-                                        fontSize: '12px'
-                                    }
-                                }, patient.gender || patient.sex || 'Sex: N/A')
-                            ]),
-                            
-                            // Symptoms preview
-                            React.createElement("p", { 
-                                key: `patient-symptoms-${patient.id}`, 
-                                style: { margin: '5px 0', fontSize: '14px', color: styles.colors.lightText } 
-                            }, [
-                                React.createElement("strong", { key: `symptoms-label-${patient.id}`, style: { color: styles.colors.darkText } }, "Symptoms: "),
-                                patient.symptoms ? 
-                                    patient.symptoms.substring(0, 50) + (patient.symptoms.length > 50 ? '...' : '') : 
-                                    React.createElement("span", { key: `no-symptoms-${patient.id}`, style: { fontStyle: 'italic' } }, "Not recorded")
-                            ])
+                            React.createElement("p", { key: `patient-age-gender-${patient.id}`, style: { margin: '5px 0' } }, 
+                                `${patient.age} years old, ${patient.gender}`
+                            ),
+                            patient.symptoms && React.createElement("p", { 
+                                key: `patient-symptoms-display-${patient.id}`,
+                                style: { margin: '5px 0' }
+                            },
+                                "Symptoms: " + patient.symptoms
+                            )
                         ]),
 
-                        // Action buttons
+                        // Buttons for patient actions
                         React.createElement("div", {
                             key: `patient-actions-${patient.id}`,
-                            style: styles.actionButtons
+                            style: { display: 'flex', flexDirection: 'column', gap: '8px' }
                         }, [
-                            // Primary action - Enter symptoms
-                            React.createElement("button", {
-                                key: `enterSymptoms-${patient.id}`,
-                                onClick: () => handleEnterSymptoms(patient.id),
-                                style: styles.primaryButton
-                            }, "Enter Symptoms"),
-                            
-                            // Generate diagnosis
-                            React.createElement("button", {
-                                key: `generateDiagnosis-${patient.id}`,
-                                onClick: () => handleGenerateDiagnosis(patient.id),
-                                disabled: !patient.symptoms,
-                                style: patient.symptoms ? styles.successButton : styles.disabledButton
-                            }, "Generate Diagnosis"),
-                            
+                            // Primary action buttons in a row
+                            React.createElement("div", {
+                                key: `primary-actions-${patient.id}`,
+                                style: { display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }
+                            }, [
+                                React.createElement("button", {
+                                    key: `enterSymptoms-${patient.id}`,
+                                    onClick: () => handleEnterSymptoms(patient.id),
+                                    style: { 
+                                        padding: '8px 12px',
+                                        backgroundColor: '#4CAF50',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        flex: '1',
+                                        marginRight: '5px'
+                                    }
+                                }, "Enter Symptoms"),
+                                
+                                React.createElement("button", {
+                                    key: `generateDiagnosis-${patient.id}`,
+                                    onClick: () => handleGenerateDiagnosis(patient.id),
+                                    disabled: !patient.symptoms, 
+                                    style: { 
+                                        padding: '8px 12px',
+                                        backgroundColor: '#2196F3',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: patient.symptoms ? 'pointer' : 'not-allowed',
+                                        flex: '1',
+                                        opacity: patient.symptoms ? '1' : '0.6'
+                                    }
+                                }, "Generate Diagnosis")
+                            ]),
+
                             // Secondary action - View diagnosis
                             React.createElement("button", {
                                 key: `viewDiagnosis-${patient.id}`,
                                 onClick: () => handleViewDiagnoses(patient.id),
-                                disabled: !patient.diagnosis,
-                                style: patient.diagnosis ? styles.secondaryButton : styles.disabledButton
+                                disabled: !patient.diagnosis, 
+                                style: { 
+                                    padding: '6px 10px',
+                                    backgroundColor: '#9E9E9E',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: patient.diagnosis ? 'pointer' : 'not-allowed',
+                                    opacity: patient.diagnosis ? '1' : '0.5'
+                                } 
                             }, "View Diagnosis"),
-                            
+
+                            // Diagnosis result display if available
+                            patient.diagnosis && React.createElement("p", { 
+                                key: `patient-diagnosis-display-${patient.id}`,
+                                style: { margin: '5px 0', fontSize: '0.9em', color: '#555' }
+                            }, "Diagnosis: " + patient.diagnosis),
+
                             // Symptom input form when patient is selected
                             selectedPatientID === patient.id
                             ? React.createElement("div", {
-                                key: `symptomForm-${patient.id}`,
-                                style: {
-                                    marginTop: '15px',
+                                key: `symptomForm-${patient.id}`, 
+                                style: { 
+                                    marginTop: '10px',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '10px',
-                                    padding: '15px',
+                                    gap: '8px',
+                                    padding: '8px',
                                     backgroundColor: '#f9f9f9',
-                                    borderRadius: '8px',
-                                    border: '1px solid #E0E0E0'
-                                }
-                            }, [
+                                    borderRadius: '4px'
+                                } 
+                            }, [ 
                                 React.createElement("input", {
                                     key: `symptomInput-${patient.id}`,
                                     type: "text",
                                     placeholder: "Enter symptoms manually...",
                                     value: symptomsInput,
                                     onChange: (e) => setSymptomsInput(e.target.value),
-                                    style: styles.inputField
+                                    style: { padding: '8px', borderRadius: '4px', border: '1px solid #ddd' } 
                                 }),
                                 React.createElement("button", {
                                     key: `submitSymptoms-${patient.id}`,
                                     onClick: () => handleSubmitSymptoms(patient.id),
-                                    style: styles.successButton
+                                    style: {
+                                        padding: '8px',
+                                        backgroundColor: '#4CAF50',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer'
+                                    }
                                 }, "Submit Symptoms")
                             ])
                             : null
@@ -1458,8 +1036,8 @@ function NurseDashboard({handleLogout, userName}){
         handleLogout && React.createElement("button", {
             key: "logout",
             onClick: handleLogout,
-            style: Object.assign({}, styles.dangerButton, { marginTop: '30px' })
-        }, "Sign Out")
+            style: { marginTop: '20px', display: 'block' } 
+        }, "Logout")
 
     ]); 
 }

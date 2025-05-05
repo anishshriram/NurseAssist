@@ -80,3 +80,35 @@ export const findUserByEmail = async (email: string): Promise<(User & { password
         throw new Error('Failed to retrieve user due to a database error.');
     }
 };
+
+/**
+ * Get all doctors from the database
+ * @returns {Promise<Array>} - List of doctors with basic info
+ */
+export const getAllDoctors = async (): Promise<{ id: number; name: string }[]> => {
+    const sql = `
+        SELECT id, name
+        FROM nurses_doctors
+        WHERE role = 'Doctor'
+        ORDER BY name;
+    `;
+
+    const result = await query(sql, []);
+    return result.rows;
+};
+
+/**
+ * Get all nurses from the database
+ * @returns {Promise<Array>} - List of nurses with basic info
+ */
+export const getAllNurses = async (): Promise<{ id: number; name: string }[]> => {
+    const sql = `
+        SELECT id, name
+        FROM nurses_doctors
+        WHERE role = 'Nurse'
+        ORDER BY name;
+    `;
+
+    const result = await query(sql, []);
+    return result.rows;
+};
